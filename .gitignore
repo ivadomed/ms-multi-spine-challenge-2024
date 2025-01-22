@@ -1,6 +1,10 @@
 #Data
 ms-multi-spine-challenge-2024
 histograms
+dataset_split
+models
+default.nii.gz
+check
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
