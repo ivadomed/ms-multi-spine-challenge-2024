@@ -131,7 +131,7 @@ for epoch in range(max_epochs):
         segmentation_output = segmentation_output.view(batch_size, 1, *spatial_shape)
 
         
-        loss = loss_function(labels, output)
+        loss = loss_function(labels, outputs)
         loss.backward()
         optimizer.step()
         epoch_loss += loss.item()
