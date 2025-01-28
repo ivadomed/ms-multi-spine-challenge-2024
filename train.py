@@ -84,8 +84,8 @@ def validation(epoch_iterator_val):
             
             if counter%10 == 0 : 
                 val_image= val_inputs[0].detach().cpu().squeeze()
-                val_gt= val_labels_convert[0].detach().cpu().squeeze()
-                val_pred= val_output_convert[0].detach().cpu().squeeze()
+                val_gt= val_labels[0].detach().cpu().squeeze()
+                val_pred= val_outputs[0].detach().cpu().squeeze()
 
                 fig = plot_slices(image=val_image,
                             gt=val_gt,
@@ -249,7 +249,7 @@ train_transforms = Compose(
     [
         LoadImaged(keys=["image", "label"]),
         EnsureChannelFirstd(keys=["image", "label"]),
-        Orientationd(keys=["image", "label"], axcodes="RAS"),
+        Orientationd(keys=["image", "label"], axcodes="RPI"),
         Spacingd(
             keys=["image", "label"],
             pixdim=(3.0, 0.7, 0.7),
@@ -264,7 +264,7 @@ train_transforms = Compose(
 val_transforms = train_transforms
 
 data_dir = ""
-split_json = "augmented_dataset_info.json"
+split_json = "dataset_split.json"
 
 datasets = data_dir + split_json
 datalist = load_decathlon_datalist(datasets, True, "training")
