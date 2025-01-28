@@ -70,6 +70,7 @@ import matplotlib.pyplot as plt
 
 def validation(epoch_iterator_val):
     model.eval()
+    counter = 0 
     with torch.no_grad():
         for batch in epoch_iterator_val:
             val_inputs, val_labels = (batch["image"].cuda(), batch["label"].cuda())
@@ -80,6 +81,22 @@ def validation(epoch_iterator_val):
             val_output_convert = [post_pred(val_pred_tensor) for val_pred_tensor in val_outputs_list]
             dice_metric(y_pred=val_output_convert, y=val_labels_convert)
             epoch_iterator_val.set_description("Validate (%d / %d Steps)" % (global_step, 10.0))  # noqa: B038
+            
+            if counter%10 == 0 : 
+                val_image= val_inputs[0].detach().cpu().squeeze()
+                val_gt= val_labels_convert[0].detach().cpu().squeeze()
+                val_pred= val_output_convert[0].detach().cpu().squeeze()
+
+                fig = plot_slices(image=val_image,
+                            gt=val_gt,
+                            pred=val_pred,
+                                    )
+
+                wandb.log({"validation images": wandb.Image(fig)})
+                plt.close(fig)
+            
+            counter+=1 
+        
         mean_dice_val = dice_metric.aggregate().item()
         dice_metric.reset()
     return mean_dice_val
