@@ -4,9 +4,7 @@ import json
 
 # Define the root directory of your dataset and target folders
 bids_root = "ms-multi-spine-challenge-2024"
-seg_root = os.path.join(bids_root, "derivatives")
-output_dir = "dataset_split"
-output_seg_dir = os.path.join(output_dir, "derivatives")
+output_dir = "augment_dataset_split"
 
 # Define the target directories for train, validation, and test
 train_dir = os.path.join(output_dir, "train")
@@ -28,7 +26,6 @@ splits = [
 # Prepare a dictionary to save the split info
 split_info = {
     "description": "ms-multi-spine-challenge-2024",
-    "labels": {"0": "background", "1": "vertebrae"},
     "licence": "custom",
     "modality": {"0": "MRI"},
     "name": "ms-multi-spine",
@@ -43,19 +40,36 @@ split_info = {
 }
 
 
-# Helper function to copy subjects and their segmentations
+# Helper function to copy subjects without segmentation or preproc files
 def process_subjects(subject_range, target_dir, split_key):
     for subject_id in subject_range:
         subject_name = f"sub-{subject_id:03d}"  # Ensure format is sub-001, sub-002, etc.
         subject_path = os.path.join(bids_root, subject_name)
-        seg_path = os.path.join(seg_root, subject_name, "anat")
 
         if os.path.exists(subject_path):
-            # Copy subject folder
+            # Copy subject folder excluding files with "preproc"
             subject_goal = os.path.join(target_dir, subject_name)
-            shutil.copytree(subject_path, subject_goal)
+            os.makedirs(subject_goal, exist_ok=True)
 
-            
+            for root, dirs, files in os.walk(subject_path):
+                relative_path = os.path.relpath(root, subject_path)
+                target_root = os.path.join(subject_goal, relative_path)
+
+                for file in files:
+                    if "preproc" not in file:
+                        os.makedirs(target_root, exist_ok=True)
+                        shutil.copy(os.path.join(root, file), os.path.join(target_root, file))
+
+            # Add subject to the split info (optional, without labels)
+            if split_key == "training":
+                split_info["training"].append(subject_name)
+            elif split_key == "validation":
+                split_info["validation"].append(subject_name)
+            elif split_key == "test":
+                split_info["test"].append(subject_name)
+        else:
+            print(f"Warning: {subject_name} not found in {bids_root}")
+
 
 # Process each split
 for split in splits:
@@ -63,6 +77,10 @@ for split in splits:
     process_subjects(split["val"], val_dir, "validation")
     process_subjects(split["test"], test_dir, "test")
 
-shutil.copytree(seg_root,output_seg_dir)
+# Save split info to a JSON file
+split_json_path = os.path.join(output_dir, "dataset_split.json")
+with open(split_json_path, "w") as json_file:
+    json.dump(split_info, json_file, indent=4)
 
-
+print("Data split completed. Subjects copied to train, val, and test folders.")
+print(f"Split information saved to {split_json_path}")

@@ -22,6 +22,7 @@ from monai.transforms import (
     RandRotate90d,
     ResizeWithPadOrCropd,
     ScaleIntensityd,
+    ConcatItemsd,
 )
 from monai.networks.nets import ViT, UNETR
 from monai.losses import DiceCELoss
@@ -30,8 +31,7 @@ from monai.optimizers import Novograd
 from monai.inferers import sliding_window_inference
 import nibabel as nib
 from tqdm import tqdm
-import matplotlib.pyplot as plt 
-
+import matplotlib.pyplot as plt
 
 # Paths
 train_dir = "dataset_split/train"
@@ -42,33 +42,35 @@ os.makedirs(root_dir, exist_ok=True)
 # Specifications
 target_specs = {
     "T2": {"resolution": (3.0, 0.7, 0.7), "shape": (16, 512, 528)},
-    "seg": {"resolution": (3.0, 0.7, 0.7), "shape": (16, 512, 528)}  # Same as T2
+    "PSIR": {"resolution": (3.15, 0.34, 0.34), "shape": (15, 640, 640)},
+    "STIR": {"resolution": (3.30, 0.57, 0.57), "shape": (15, 512, 544)},
+    "MP2RAGE": {"resolution": (1.0, 0.94, 0.94), "shape": (176, 260, 180)},
+    "seg": {"resolution": (3.0, 0.49, 0.49), "shape": (16, 512, 528)},  # Same as T2
 }
 
 train_transforms = Compose(
     [
-        LoadImaged(keys=["image", "label"]),
-        EnsureChannelFirstd(keys=["image", "label"]),
-        Orientationd(keys=["image", "label"], axcodes="RAS"),
+        LoadImaged(keys=["image1", "image2", "label"]),
+        EnsureChannelFirstd(keys=["image1", "image2", "label"]),
+        Orientationd(keys=["image1", "image2", "label"], axcodes="RAS"),
         Spacingd(
-            keys=["image", "label"],
+            keys=["image1", "image2", "label"],
             pixdim=(3.0, 0.7, 0.7),
-            mode=("bilinear", "nearest"),
+            mode=("bilinear", "bilinear", "nearest"),
         ),
-        ScaleIntensityd(
-            keys=["image"],
-        ),
-        ResizeWithPadOrCropd(keys=["image", "label"], spatial_size=target_specs["T2"]["shape"]),
+        ScaleIntensityd(keys=["image1", "image2"]),
+        ResizeWithPadOrCropd(keys=["image1", "image2", "label"], spatial_size=target_specs["T2"]["shape"]),
+        ConcatItemsd(keys=["image1", "image2"], name="image", dim=0),  # Concatenate after resizing
     ]
 )
+
 val_transforms = train_transforms
 
 data_dir = ""
-split_json = "dataset_split.json"
+split_json = "dataset_split_image2.json"
 
 datasets = data_dir + split_json
 datalist = load_decathlon_datalist(datasets, True, "training")
-
 val_files = load_decathlon_datalist(datasets, True, "validation")
 
 train_ds = CacheDataset(
@@ -78,59 +80,14 @@ train_ds = CacheDataset(
     cache_rate=1.0,
     num_workers=8,
 )
-
 train_loader = DataLoader(train_ds, batch_size=1, shuffle=True, num_workers=8, pin_memory=True)
 val_ds = CacheDataset(data=val_files, transform=val_transforms, cache_num=6, cache_rate=1.0, num_workers=4)
 val_loader = DataLoader(val_ds, batch_size=1, shuffle=False, num_workers=4, pin_memory=True)
 
-"""os.makedirs('check', exist_ok=True)
-for case_num in range(17): 
-    img_name = os.path.split(val_ds[case_num]["image"].meta["filename_or_obj"])[1]
-    img = val_ds[case_num]["image"]
-    label = val_ds[case_num]["label"]
-    img_shape = img.shape
-    label_shape = label.shape
-    print(f"image shape: {img_shape}, label shape: {label_shape}")
-    plt.figure("image", (18, 6))
-    plt.subplot(1, 2, 1)
-    plt.title("image")
-    plt.imshow(img[0, 9, :, :].detach().cpu(), cmap="gray")
-    plt.subplot(1, 2, 2)
-    plt.title("label")
-    plt.imshow(label[0, 9, :, :].detach().cpu())
-    plt.savefig(f'check/check_{case_num}.png')"""
-
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-"""model = ViT(
-    in_channels=1,  # Number of input modalities
-    img_size=target_specs["T2"]["shape"],  # Input image shape
-    patch_size=(4, 16, 16),
-    hidden_size=768,
-    mlp_dim=3072,
-    num_heads=12,
-    pos_embed_type="sincos",
-    classification=False,
-    num_classes=1,  # Output channel for segmentation
-    dropout_rate=0.1
-).to(device)"""
-
-"""model = ViT(
-in_channels=1,
-img_size=target_specs["T2"]["shape"],
-patch_size=(4,16,16),
-hidden_size=768,
-mlp_dim=3072,
-num_layers=12,
-num_heads=12,
-pos_embed_type="sincos",
-classification=False,
-dropout_rate=0.0,
-spatial_dims=3
-).to(device)"""
-
 model = UNETR(
-    in_channels=1,
+    in_channels=2,  # Updated to handle two input images
     out_channels=1,
     img_size=(16, 512, 528),
     feature_size=4,
@@ -152,7 +109,7 @@ def validation(epoch_iterator_val):
     with torch.no_grad():
         for batch in epoch_iterator_val:
             val_inputs, val_labels = (batch["image"].cuda(), batch["label"].cuda())
-            val_outputs = sliding_window_inference(val_inputs, (15, 512, 532), 4, model)
+            val_outputs = sliding_window_inference(val_inputs, target_specs["T2"]["shape"], 4, model)
             val_labels_list = decollate_batch(val_labels)
             val_labels_convert = [post_label(val_label_tensor) for val_label_tensor in val_labels_list]
             val_outputs_list = decollate_batch(val_outputs)
@@ -162,7 +119,6 @@ def validation(epoch_iterator_val):
         mean_dice_val = dice_metric.aggregate().item()
         dice_metric.reset()
     return mean_dice_val
-
 
 def train(global_step, train_loader, dice_val_best, global_step_best):
     model.train()
@@ -178,7 +134,7 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
         epoch_loss += loss.item()
         optimizer.step()
         optimizer.zero_grad()
-        epoch_iterator.set_description(  # noqa: B038
+        epoch_iterator.set_description(
             "Training (%d / %d Steps) (loss=%2.5f)" % (global_step, max_iterations, loss)
         )
         if (global_step % eval_num == 0 and global_step != 0) or global_step == max_iterations:
@@ -202,7 +158,6 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
                 )
         global_step += 1
     return global_step, dice_val_best, global_step_best
-
 
 max_iterations = 25000
 eval_num = 500

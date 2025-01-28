@@ -5,7 +5,9 @@ dataset_split
 models
 default.nii.gz
 check
-
+augment_dataset_split
+output_path
+*.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

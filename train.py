@@ -1,93 +1,277 @@
 import os
 import torch
 import numpy as np
-from monai.data import DataLoader, Dataset
-from monai.transforms import (
-    Compose, LoadImaged, EnsureChannelFirstd, Spacingd, Orientationd,
-    ScaleIntensityd, ResizeWithPadOrCropd, EnsureTyped,
-    ConcatItemsd, ToTensord
+import argparse
+from datetime import datetime
+from loguru import logger
+import yaml
+import nibabel as nib
+from datetime import datetime
+import numpy as np
+import wandb
+import torch
+import pytorch_lightning as pl
+import torch.nn.functional as F
+import matplotlib.pyplot as plt
+import time
+import torch.multiprocessing
+from monai.data import (
+    DataLoader,
+    CacheDataset,
+    load_decathlon_datalist,
+    decollate_batch,
 )
-from monai.networks.nets import ViT
-from monai.losses import DiceCELoss
+from monai.transforms import (
+    AsDiscrete,
+    EnsureChannelFirstd,
+    Compose,
+    LoadImaged,
+    Orientationd,
+    RandFlipd,
+    RandShiftIntensityd,
+    Spacingd,
+    RandRotate90d,
+    NormalizeIntensityd,
+    RandCropByPosNegLabeld,
+    BatchInverseTransform,
+    RandAdjustContrastd,
+    AsDiscreted,
+    RandHistogramShiftd,
+    ResizeWithPadOrCropd,
+    EnsureTyped,
+    RandLambdad,
+    CropForegroundd,
+    RandGaussianNoised,
+    LabelToContourd,
+    Invertd,
+    SaveImage,
+    EnsureType,
+    Rand3DElasticd,
+    RandSimulateLowResolutiond,
+    RandBiasFieldd,
+    RandAffined, 
+    RandRotated, 
+    RandZoomd,
+    RandGaussianSmoothd,
+    RandScaleIntensityd,
+    ScaleIntensityd
+)
+from monai.networks.nets import ViT,  UNet, BasicUNet, AttentionUnet, SwinUNETR, UNETR
+from monai.losses import DiceCELoss, DiceLoss
 from monai.metrics import DiceMetric
 from monai.optimizers import Novograd
 from monai.inferers import sliding_window_inference
 import nibabel as nib
+from tqdm import tqdm
+import matplotlib.pyplot as plt 
 
 
+
+
+def validation(epoch_iterator_val):
+    model.eval()
+    with torch.no_grad():
+        for batch in epoch_iterator_val:
+            val_inputs, val_labels = (batch["image"].cuda(), batch["label"].cuda())
+            val_outputs = sliding_window_inference(val_inputs, target_specs["T2"]["shape"], 4, model)
+            val_labels_list = decollate_batch(val_labels)
+            val_labels_convert = [post_label(val_label_tensor) for val_label_tensor in val_labels_list]
+            val_outputs_list = decollate_batch(val_outputs)
+            val_output_convert = [post_pred(val_pred_tensor) for val_pred_tensor in val_outputs_list]
+            dice_metric(y_pred=val_output_convert, y=val_labels_convert)
+            epoch_iterator_val.set_description("Validate (%d / %d Steps)" % (global_step, 10.0))  # noqa: B038
+        mean_dice_val = dice_metric.aggregate().item()
+        dice_metric.reset()
+    return mean_dice_val
+
+
+def train(global_step, train_loader, dice_val_best, global_step_best):
+    model.train()
+    epoch_loss = 0
+    step = 0
+    epoch_iterator = tqdm(train_loader, desc="Training (X / X Steps) (loss=X.X)", dynamic_ncols=True)
+    
+    for step, batch in enumerate(epoch_iterator):
+        step += 1
+        x, y = (batch["image"].cuda(), batch["label"].cuda())
+
+        logit_map = model(x)
+        output = F.relu(logit_map) / F.relu(logit_map).max() if bool(F.relu(logit_map).max()) else F.relu(logit_map)
+        
+        loss = loss_function(output, y)
+        loss.backward()
+        epoch_loss += loss.item()
+        optimizer.step()
+        optimizer.zero_grad()
+        epoch_iterator.set_description(  # noqa: B038
+            "Training (%d / %d Steps) (loss=%2.5f)" % (global_step, max_iterations, loss)
+        )
+        global_step += 1
+
+        
+        if global_step%10 == 0 : 
+            train_image= x[0].detach().cpu().squeeze()
+            train_gt= y[0].detach().cpu().squeeze()
+            train_pred= output[0].detach().cpu().squeeze()
+
+            fig = plot_slices(image=train_image,
+                        gt=train_gt,
+                        pred=train_pred,
+                                )
+
+            wandb.log({"training images": wandb.Image(fig)})
+            plt.close(fig)
+            
+            
+
+    
+    epoch_iterator_val = tqdm(val_loader, desc="Validate (X / X Steps) (dice=X.X)", dynamic_ncols=True)
+    dice_val = validation(epoch_iterator_val)
+    epoch_loss /= step
+    epoch_loss_values.append(epoch_loss)
+    metric_values.append(dice_val)
+    if dice_val > dice_val_best:
+        dice_val_best = dice_val
+        global_step_best = global_step
+        torch.save(model.state_dict(), os.path.join(root_dir, "best_metric_model.pth"))
+        print(
+            "Model Was Saved ! Current Best Avg. Dice: {} Current Avg. Dice: {}".format(dice_val_best, dice_val)
+        )
+    else:
+        print(
+            "Model Was Not Saved ! Current Best Avg. Dice: {} Current Avg. Dice: {}".format(
+                dice_val_best, dice_val
+            )
+        )
+       
+    wandb_logs = {
+                "train_loss": epoch_loss,
+                
+            }
+    
+    wandb_logs.clear()
+    
+    
+
+    return global_step, dice_val_best, global_step_best
+
+
+
+
+
+def plot_slices(image, gt, pred, debug=False):
+    """
+    Plot the image, ground truth and prediction of the mid-sagittal axial slice
+    The orientaion is assumed to RPI
+    """
+
+    # bring everything to numpy 
+    ## added the .float() because of issue : TypeError: Got unsupported ScalarType BFloat16
+    image = image.float().numpy()
+    gt = gt.float().numpy()
+    pred = pred.float().numpy()
+
+
+    mid_sagittal = image.shape[0]//2
+    # plot X slices before and after the mid-sagittal slice in a grid
+    fig, axs = plt.subplots(3, 6, figsize=(10, 6))
+    fig.suptitle('Original Image --> Ground Truth --> Prediction')
+    for i in range(6):
+        axs[0, i].imshow(image[mid_sagittal-3+i,:,:].T, cmap='gray'); axs[0, i].axis('off') 
+        axs[1, i].imshow(gt[mid_sagittal-3+i,:,:].T); axs[1, i].axis('off')
+        axs[2, i].imshow(pred[mid_sagittal-3+i,:,:].T); axs[2, i].axis('off')
+
+    # fig, axs = plt.subplots(1, 3, figsize=(10, 8))
+    # fig.suptitle('Original Image --> Ground Truth --> Prediction')
+    # slice = image.shape[2]//2
+
+    # axs[0].imshow(image[:, :, slice].T, cmap='gray'); axs[0].axis('off') 
+    # axs[1].imshow(gt[:, :, slice].T); axs[1].axis('off')
+    # axs[2].imshow(pred[:, :, slice].T); axs[2].axis('off')
+    
+    plt.tight_layout()
+    fig.show()
+    return fig
+
+
+
+
+
+
+     
+config = None  
+output_path = os.path.join("output_path", str(datetime.now().date()) +"_" +str(datetime.now().time()))
+os.makedirs(output_path, exist_ok=True)
+
+wandb.init(project=f'monai-ms-lesion-seg-unetr', config=config, save_code=True, dir=output_path)
+
+
+exp_logger = pl.loggers.WandbLogger(
+                    name="test",
+                    save_dir=output_path,
+                    group="ms-seg-challenge",
+                    log_model=True, # save best model using checkpoint callback
+                    config=config)
+
+# Saving training script to wandb
+wandb.save(config)
 
 # Paths
 train_dir = "dataset_split/train"
 val_dir = "dataset_split/val"
-model_dir = "models"
-os.makedirs(model_dir, exist_ok=True)
+root_dir = "models"
+os.makedirs(root_dir, exist_ok=True)
 
 # Specifications
 target_specs = {
-    "T2": {"resolution": (3.0, 0.7, 0.7), "shape": (15, 512, 532)},
-    "PSIR": {"resolution": (3.15, 0.34, 0.34), "shape": (15, 640, 640)},
-    "STIR": {"resolution": (3.30, 0.57, 0.57), "shape": (15, 512, 544)},
-    "MP2RAGE": {"resolution": (1.0, 0.94, 0.94), "shape": (176, 260, 180)},
-    "seg": {"resolution": (3.0, 0.49, 0.49), "shape": (15, 512, 532)}  # Same as T2
+    "T2": {"resolution": (3.0, 0.7, 0.7), "shape": (16, 512, 528)},
+    "seg": {"resolution": (3.0, 0.7, 0.7), "shape": (16, 512, 528)}  # Same as T2
 }
 
-# Data Preparation
-def prepare_data(data_dir, transform):
-    data = []
-    labels = ["T2", "PSIR", "STIR", "MP2RAGE", "seg"]
-    count = 0 
-    for subject in os.listdir(data_dir):
-        if "sub" in subject:
-            subject_dir = os.path.join(data_dir, subject, "anat")
-            if os.path.isdir(subject_dir):
-                label_dict = {label: "default.nii.gz" for label in labels}
-                for file in os.listdir(subject_dir):
-                    if file.endswith(".nii.gz") and "preproc" not in file:
-                        file_path = os.path.join(subject_dir, file)
-                        for label in labels:
-                            if label in file:
-                                label_dict[label] = file_path
-                count += 1
-                data.append(label_dict)
-    print(f'donnees chargees: {count}')
-    return Dataset(data=data, transform=transform)
+train_transforms = Compose(
+    [
+        LoadImaged(keys=["image", "label"]),
+        EnsureChannelFirstd(keys=["image", "label"]),
+        Orientationd(keys=["image", "label"], axcodes="RAS"),
+        Spacingd(
+            keys=["image", "label"],
+            pixdim=(3.0, 0.7, 0.7),
+            mode=("bilinear", "nearest"),
+        ),
+        ScaleIntensityd(
+            keys=["image"],
+        ),
+        ResizeWithPadOrCropd(keys=["image", "label"], spatial_size=target_specs["T2"]["shape"]),
+    ]
+)
+val_transforms = train_transforms
 
-# Train Transforms
-train_transforms = Compose([
-    LoadImaged(keys=["T2", "PSIR", "STIR", "MP2RAGE", "seg"]),
-    EnsureChannelFirstd(keys=["T2", "PSIR", "STIR", "MP2RAGE", "seg"]),
-    Orientationd(keys=["T2", "PSIR", "STIR", "MP2RAGE", "seg"], axcodes="RAS"),
-    Spacingd(keys=["T2", "seg"], pixdim=target_specs["T2"]["resolution"], mode=("bilinear", "nearest")),
-    Spacingd(keys=["PSIR"], pixdim=target_specs["T2"]["resolution"], mode="bilinear"),
-    Spacingd(keys=["STIR"], pixdim=target_specs["T2"]["resolution"], mode="bilinear"),
-    Spacingd(keys=["MP2RAGE"], pixdim=target_specs["T2"]["resolution"], mode="bilinear"),
-    
-    ResizeWithPadOrCropd(keys=["T2", "seg"], spatial_size=target_specs["T2"]["shape"]),
-    ResizeWithPadOrCropd(keys=["PSIR"], spatial_size=target_specs["T2"]["shape"]),
-    ResizeWithPadOrCropd(keys=["STIR"], spatial_size=target_specs["T2"]["shape"]),
-    ResizeWithPadOrCropd(keys=["MP2RAGE"], spatial_size=target_specs["T2"]["shape"]),
-    ScaleIntensityd(keys=["T2", "PSIR", "STIR", "MP2RAGE"]),
-    #EnsureTyped(keys=["T2", "PSIR", "STIR", "MP2RAGE", "seg"], nonzero=True, channel_wise=True),
-    ConcatItemsd(keys=["T2", "PSIR", "STIR", "MP2RAGE"], name="comb"),
-    ToTensord(keys=["comb"] )   
-])
+data_dir = ""
+split_json = "augmented_dataset_info.json"
 
-# Validation Transforms
-val_transforms = train_transforms  # Use the same transforms as train for consistency
+datasets = data_dir + split_json
+datalist = load_decathlon_datalist(datasets, True, "training")
 
-# Datasets and Loaders
-train_ds = prepare_data(data_dir=train_dir, transform=train_transforms)
-train_loader = DataLoader(train_ds, batch_size=2, shuffle=True, num_workers=4)
+val_files = load_decathlon_datalist(datasets, True, "validation")
 
-val_ds = prepare_data(data_dir=val_dir, transform=val_transforms)
-val_loader = DataLoader(val_ds, batch_size=1, shuffle=False, num_workers=4)
+train_ds = CacheDataset(
+    data=datalist,
+    transform=train_transforms,
+    cache_num=24,
+    cache_rate=1.0,
+    num_workers=8,
+)
 
-# Define Model
+train_loader = DataLoader(train_ds, batch_size=1, shuffle=True, num_workers=8, pin_memory=True)
+val_ds = CacheDataset(data=val_files, transform=val_transforms, cache_num=6, cache_rate=1.0, num_workers=4)
+val_loader = DataLoader(val_ds, batch_size=1, shuffle=False, num_workers=4, pin_memory=True)
+
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-device = torch.device("cpu") 
-model = ViT(
-    in_channels=4,  # Number of input modalities
+
+"""model = ViT(
+    in_channels=1,  # Number of input modalities
     img_size=target_specs["T2"]["shape"],  # Input image shape
     patch_size=(4, 16, 16),
     hidden_size=768,
@@ -97,65 +281,41 @@ model = ViT(
     classification=False,
     num_classes=1,  # Output channel for segmentation
     dropout_rate=0.1
+).to(device)"""
+
+model = UNETR(
+    in_channels=1,
+    out_channels=1,
+    img_size=(16, 512, 528),
+    feature_size=4,
+    hidden_size=768,
+    mlp_dim=3072,
+    num_heads=12,
+    proj_type="perceptron",
+    norm_name="instance",
+    res_block=True,
+    dropout_rate=0.0,
 ).to(device)
 
+loss_function = DiceCELoss(to_onehot_y=True, softmax=True, smooth_dr=1e-4)
+torch.backends.cudnn.benchmark = True
+optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=1e-5)
 
-# Loss and Optimizer
-loss_function = DiceCELoss(to_onehot_y=True, softmax=True)
-optimizer = Novograd(model.parameters(), lr=1e-4, weight_decay=1e-5)
-dice_metric = DiceMetric(include_background=False, reduction="mean", get_not_nans=False)
-
-# Training Loop
-max_epochs = 50
-val_interval = 2
-best_metric = -1
-best_metric_epoch = -1
+max_iterations = 25000
+post_label = AsDiscrete(to_onehot=14)
+post_pred = AsDiscrete(argmax=True, to_onehot=14)
+dice_metric = DiceMetric(include_background=True, reduction="mean", get_not_nans=False)
+global_step = 0
+dice_val_best = 0.0
+global_step_best = 0
 epoch_loss_values = []
+metric_values = []
+while global_step < max_iterations:
+    global_step, dice_val_best, global_step_best = train(global_step, train_loader, dice_val_best, global_step_best)
+model.load_state_dict(torch.load(os.path.join(root_dir, "best_metric_model.pth")))
 
-for epoch in range(max_epochs):
-    print(f"Epoch {epoch + 1}/{max_epochs}")
-    model.train()
-    epoch_loss = 0
-    for batch_data in train_loader:
-        inputs = batch_data["comb"].to(device)
-        labels = batch_data["seg"].to(device)
-        optimizer.zero_grad()
-        outputs = model(inputs)
-        outputs = outputs[0]
-        batch_size = labels.size(0)
-        spatial_shape = target_specs["T2"]["shape"]  # (15, 512, 532)
+wandb.finish()  
 
-        # Reshape outputs to match label dimensions
-        outputs = outputs.view(batch_size, 1, *spatial_shape)
 
-        segmentation_output = segmentation_output.view(batch_size, 1, *spatial_shape)
-
-        
-        loss = loss_function(labels, outputs)
-        loss.backward()
-        optimizer.step()
-        epoch_loss += loss.item()
-    epoch_loss /= len(train_loader)
-    epoch_loss_values.append(epoch_loss)
-    print(f"Epoch {epoch + 1}, Loss: {epoch_loss:.4f}")
-
-    # Validation
-    if (epoch + 1) % val_interval == 0:
-        model.eval()
-        with torch.no_grad():
-            dice_metric.reset()
-            for val_data in val_loader:
-                val_inputs = val_data["comb"].to(device)
-                val_labels = val_data["seg"].to(device)
-                val_outputs = sliding_window_inference(val_inputs, target_specs["T2"]["shape"], 4, model)
-                dice_metric(y_pred=val_outputs, y=val_labels)
-            metric = dice_metric.aggregate().item()
-            dice_metric.reset()
-            print(f"Validation Dice: {metric:.4f}")
-            if metric > best_metric:
-                best_metric = metric
-                best_metric_epoch = epoch + 1
-                torch.save(model.state_dict(), os.path.join(model_dir, "best_metric_model.pth"))
-                print("Saved new best model!")
-
-print(f"Best metric: {best_metric:.4f} at epoch {best_metric_epoch}")
+if __name__ == "__main__":
+    main()
