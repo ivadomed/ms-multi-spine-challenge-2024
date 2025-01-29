@@ -38,6 +38,7 @@ from monai.transforms import (
     RandAdjustContrastd,
     AsDiscreted,
     RandHistogramShiftd,
+    ToTensord,
     ResizeWithPadOrCropd,
     EnsureTyped,
     RandLambdad,
@@ -55,7 +56,8 @@ from monai.transforms import (
     RandZoomd,
     RandGaussianSmoothd,
     RandScaleIntensityd,
-    ScaleIntensityd
+    ScaleIntensityd,
+    EnsureChannelFirstd,
 )
 from monai.networks.nets import ViT,  UNet, BasicUNet, AttentionUnet, SwinUNETR, UNETR
 from monai.losses import DiceCELoss, DiceLoss
@@ -69,15 +71,50 @@ import matplotlib.pyplot as plt
 
 config = {
     "max_iteration": 5000,
-    "batch_size": 4,
+    "batch_size": 1,
     "learning_rate": 1e-4,
     "model": UNETR ,
     "weight_decay": 1e-5, 
-
 }
 
 
-def plot_slices(combined, gt, pred, debug=False):
+def plot_slices(image, gt, pred, debug=False):
+    """
+    Plot the image, ground truth and prediction of the mid-sagittal axial slice
+    The orientaion is assumed to RPI
+    """
+
+    # bring everything to numpy 
+    ## added the .float() because of issue : TypeError: Got unsupported ScalarType BFloat16
+    image = image.float().numpy()
+    gt = gt.float().numpy()
+    pred = pred.float().numpy()
+
+
+    mid_sagittal = image.shape[0]//2
+    # plot X slices before and after the mid-sagittal slice in a grid
+    fig, axs = plt.subplots(3, 6, figsize=(10, 6))
+    fig.suptitle('Original Image --> Ground Truth --> Prediction')
+    for i in range(6):
+        axs[0, i].imshow(image[mid_sagittal-3+i,:,:].T, cmap='gray'); axs[0, i].axis('off') 
+        axs[1, i].imshow(gt[mid_sagittal-3+i,:,:].T); axs[1, i].axis('off')
+        axs[2, i].imshow(pred[mid_sagittal-3+i,:,:].T); axs[2, i].axis('off')
+
+    # fig, axs = plt.subplots(1, 3, figsize=(10, 8))
+    # fig.suptitle('Original Image --> Ground Truth --> Prediction')
+    # slice = image.shape[2]//2
+
+    # axs[0].imshow(image[:, :, slice].T, cmap='gray'); axs[0].axis('off') 
+    # axs[1].imshow(gt[:, :, slice].T); axs[1].axis('off')
+    # axs[2].imshow(pred[:, :, slice].T); axs[2].axis('off')
+    
+    plt.tight_layout()
+    fig.show()
+    return fig
+
+
+
+def plot_slices_combined(combined, gt, pred, debug=False):
     """
     Plot the image, ground truth and prediction of the mid-sagittal axial slice
     The orientaion is assumed to RPI
@@ -89,11 +126,14 @@ def plot_slices(combined, gt, pred, debug=False):
     gt = gt.float().numpy()
     pred = pred.float().numpy()
 
-
-    mid_sagittal = combined.shape[0]//2
+    
+    mid_sagittal = combined.shape[1]//2
+    
     # plot X slices before and after the mid-sagittal slice in a grid
     fig, axs = plt.subplots(4, 6, figsize=(10, 6))
     fig.suptitle('Original Image --> Ground Truth --> Prediction')
+    if np.all(combined == 0):
+        print("Array contains only zeros")
     for i in range(6):
         axs[0, i].imshow(combined[0,mid_sagittal-3+i,:,:].T, cmap='gray'); axs[0, i].axis('off') 
         axs[1, i].imshow(gt[mid_sagittal-3+i,:,:].T); axs[1, i].axis('off')
@@ -111,7 +151,7 @@ def validation(epoch_iterator_val):
     with torch.no_grad():
         for batch in epoch_iterator_val:
             val_inputs, val_labels = (batch["combined"].cuda(), batch["label"].cuda())
-            val_outputs = sliding_window_inference(val_inputs, target_specs["T2"]["shape"], 4, model)
+            val_outputs = sliding_window_inference(val_inputs, target_specs["image"]["shape"], 4, model)
             val_labels_list = decollate_batch(val_labels)
             val_labels_convert = [post_label(val_label_tensor) for val_label_tensor in val_labels_list]
             val_outputs_list = decollate_batch(val_outputs)
@@ -124,7 +164,7 @@ def validation(epoch_iterator_val):
                 val_gt= val_labels[0].detach().cpu().squeeze()
                 val_pred= val_outputs[0].detach().cpu().squeeze()
 
-                fig = plot_slices(image=val_image,
+                fig = plot_slices_combined(combined=val_image,
                             gt=val_gt,
                             pred=val_pred,
                                     )
@@ -164,11 +204,32 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
 
         
         if global_step%10 == 0 : 
+            train_gt= y[0].detach().cpu().squeeze()
+            train_pred= output[0].detach().cpu().squeeze()
+
+            t2_image = batch["image1"][0].detach().cpu().squeeze()
+            fig = plot_slices(image=t2_image,
+                        gt=train_gt,
+                        pred=train_pred,
+                                )
+            
+            wandb.log({"t2 images": wandb.Image(fig)})
+            plt.close(fig)
+
+            image = batch["image2"][0].detach().cpu().squeeze()
+            fig = plot_slices(image=image,
+                        gt=train_gt,
+                        pred=train_pred,
+                                )
+            
+            wandb.log({"other images": wandb.Image(fig)})
+            plt.close(fig)
+
             train_image= x[0].detach().cpu().squeeze()
             train_gt= y[0].detach().cpu().squeeze()
             train_pred= output[0].detach().cpu().squeeze()
 
-            fig = plot_slices(image=train_image,
+            fig = plot_slices_combined(combined=train_image,
                         gt=train_gt,
                         pred=train_pred,
                                 )
@@ -230,7 +291,7 @@ exp_logger = pl.loggers.WandbLogger(
                     config=config)
 
 # Saving training script to wandb
-wandb.save(config)
+wandb.save(str(config))
 
 # Paths
 train_dir = "dataset_split/train"
@@ -248,26 +309,28 @@ train_transforms = Compose(
     [
         LoadImaged(keys=["image1", "image2", "label"]),
         EnsureChannelFirstd(keys=["image1",'image2', "label"]),
-        Orientationd(keys=["image1","image2", "label"], axcodes="RPS"),
+        Orientationd(keys=["image1","image2", "label"], axcodes="RPI"),
         Spacingd(
             keys=["image1",'image2', "label"],
-            pixdim=target_specs["image"]["shape"],
+            pixdim=target_specs["image"]["resolution"],
             mode=("bilinear", "bilinear", "nearest"),
         ),
         ScaleIntensityd(
             keys=["image1","image2"],
         ),
         ResizeWithPadOrCropd(keys=["image1","image2", "label"], spatial_size=target_specs["image"]["shape"]),
-        ConcatItemsd(keys=["image1","image2"], name="combined")
+        ConcatItemsd(keys=["image1","image2"], name="combined"),
+        ToTensord(keys=["combined"])
     ]
 )
 val_transforms = train_transforms
 
 data_dir = ""
-split_json = "dataset_split.json"
+split_json = "dataset_split_image2.json"
 
 datasets = data_dir + split_json
 datalist = load_decathlon_datalist(datasets, True, "training")
+
 
 val_files = load_decathlon_datalist(datasets, True, "validation")
 
@@ -309,7 +372,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = UNETR(
     in_channels=2,
     out_channels=1,
-    img_size=target_specs["image"]["size"],
+    img_size=target_specs["image"]["shape"],
     feature_size=4,
     hidden_size=768,
     mlp_dim=3072,
@@ -340,5 +403,3 @@ model.load_state_dict(torch.load(os.path.join(root_dir, "best_metric_model.pth")
 wandb.finish()  
 
 
-if __name__ == "__main__":
-    main()
