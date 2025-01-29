@@ -204,7 +204,7 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
 
         
         if global_step%10 == 0 : 
-            train_gt= y[0].detach().cpu().squeeze()
+            """train_gt= y[0].detach().cpu().squeeze()
             train_pred= output[0].detach().cpu().squeeze()
 
             t2_image = batch["image1"][0].detach().cpu().squeeze()
@@ -223,7 +223,7 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
                                 )
             
             wandb.log({"other images": wandb.Image(fig)})
-            plt.close(fig)
+            plt.close(fig)"""
 
             train_image= x[0].detach().cpu().squeeze()
             train_gt= y[0].detach().cpu().squeeze()
