@@ -73,7 +73,7 @@ config = {
     "learning_rate": 1e-4,
     "model": UNETR ,
     "weight_decay": 1e-5, 
-    
+
 }
 
 
@@ -110,7 +110,7 @@ def validation(epoch_iterator_val):
     counter = 0 
     with torch.no_grad():
         for batch in epoch_iterator_val:
-            val_inputs, val_labels = (batch["image"].cuda(), batch["label"].cuda())
+            val_inputs, val_labels = (batch["combined"].cuda(), batch["label"].cuda())
             val_outputs = sliding_window_inference(val_inputs, target_specs["T2"]["shape"], 4, model)
             val_labels_list = decollate_batch(val_labels)
             val_labels_convert = [post_label(val_label_tensor) for val_label_tensor in val_labels_list]
@@ -147,7 +147,7 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
     
     for step, batch in enumerate(epoch_iterator):
         step += 1
-        x, y = (batch["image"].cuda(), batch["label"].cuda())
+        x, y = (batch["combined"].cuda(), batch["label"].cuda())
 
         logit_map = model(x)
         output = F.relu(logit_map) / F.relu(logit_map).max() if bool(F.relu(logit_map).max()) else F.relu(logit_map)
@@ -252,7 +252,7 @@ train_transforms = Compose(
         Spacingd(
             keys=["image1",'image2', "label"],
             pixdim=target_specs["image"]["shape"],
-            mode=("bilinear", "nearest"),
+            mode=("bilinear", "bilinear", "nearest"),
         ),
         ScaleIntensityd(
             keys=["image1","image2"],
@@ -278,10 +278,16 @@ train_ds = CacheDataset(
     cache_rate=1.0,
     num_workers=8,
 )
+train_loader = DataLoader(train_ds, batch_size=config["batch_size"], shuffle=True, num_workers=8, pin_memory=True)
 
-train_loader = DataLoader(train_ds, batch_size=1, shuffle=True, num_workers=8, pin_memory=True)
-val_ds = CacheDataset(data=val_files, transform=val_transforms, cache_num=6, cache_rate=1.0, num_workers=4)
-val_loader = DataLoader(val_ds, batch_size=1, shuffle=False, num_workers=4, pin_memory=True)
+val_ds = CacheDataset(
+    data=val_files,
+    transform=val_transforms, 
+    cache_num=6, 
+    cache_rate=1.0, 
+    num_workers=4
+)
+val_loader = DataLoader(val_ds, batch_size=config["batch_size"], shuffle=False, num_workers=4, pin_memory=True)
 
 
 
