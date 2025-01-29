@@ -66,7 +66,15 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt 
 
 
-def plot_slices(image1, image2, gt, pred, debug=False):
+config = {
+    "epoch": 60,
+    "batch_size": 4,
+    "learning_rate": 1e-4,
+    "model": UNETR 
+}
+
+
+def plot_slices(combined, gt, pred, debug=False):
     """
     Plot the image, ground truth and prediction of the mid-sagittal axial slice
     The orientaion is assumed to RPI
@@ -74,27 +82,20 @@ def plot_slices(image1, image2, gt, pred, debug=False):
 
     # bring everything to numpy 
     ## added the .float() because of issue : TypeError: Got unsupported ScalarType BFloat16
-    image1 = image1.float().numpy()
+    combined = combined.float().numpy()
     gt = gt.float().numpy()
     pred = pred.float().numpy()
 
 
-    mid_sagittal = image1.shape[0]//2
+    mid_sagittal = combined.shape[0]//2
     # plot X slices before and after the mid-sagittal slice in a grid
-    fig, axs = plt.subplots(3, 6, figsize=(10, 6))
+    fig, axs = plt.subplots(4, 6, figsize=(10, 6))
     fig.suptitle('Original Image --> Ground Truth --> Prediction')
     for i in range(6):
-        axs[0, i].imshow(image1[mid_sagittal-3+i,:,:].T, cmap='gray'); axs[0, i].axis('off') 
+        axs[0, i].imshow(combined[0,mid_sagittal-3+i,:,:].T, cmap='gray'); axs[0, i].axis('off') 
         axs[1, i].imshow(gt[mid_sagittal-3+i,:,:].T); axs[1, i].axis('off')
         axs[2, i].imshow(pred[mid_sagittal-3+i,:,:].T); axs[2, i].axis('off')
-
-    # fig, axs = plt.subplots(1, 3, figsize=(10, 8))
-    # fig.suptitle('Original Image --> Ground Truth --> Prediction')
-    # slice = image.shape[2]//2
-
-    # axs[0].imshow(image[:, :, slice].T, cmap='gray'); axs[0].axis('off') 
-    # axs[1].imshow(gt[:, :, slice].T); axs[1].axis('off')
-    # axs[2].imshow(pred[:, :, slice].T); axs[2].axis('off')
+        axs[3, i].imshow(combined[1,mid_sagittal-3+i,:,:].T, cmap='gray'); axs[3, i].axis('off') 
     
     plt.tight_layout()
     fig.show()
@@ -196,7 +197,7 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
        
     wandb_logs = {
                 "train_loss": epoch_loss,
-                
+                "val_loss": dice_val,
             }
     
     wandb_logs.clear()
@@ -211,7 +212,7 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
 
 
      
-config = None  
+
 output_path = os.path.join("output_path", str(datetime.now().date()) +"_" +str(datetime.now().time()))
 os.makedirs(output_path, exist_ok=True)
 
@@ -236,14 +237,14 @@ os.makedirs(root_dir, exist_ok=True)
 
 # Specifications
 target_specs = {
-    "T2": {"resolution": (3.0, 0.7, 0.7), "shape": (16, 512, 528)},
+    "image": {"resolution": (3.0, 0.7, 0.7), "shape": (16, 512, 528)},
     "seg": {"resolution": (3.0, 0.7, 0.7), "shape": (16, 512, 528)}  # Same as T2
 }
 
 train_transforms = Compose(
     [
-        LoadImaged(keys=["image", "label"]),
-        EnsureChannelFirstd(keys=["image", "label"]),
+        LoadImaged(keys=["image1", "image2", "label"]),
+        EnsureChannelFirstd(keys=["image1",'image2', "label"]),
         Orientationd(keys=["image", "label"], axcodes="RPS"),
         Spacingd(
             keys=["image", "label"],
@@ -254,6 +255,7 @@ train_transforms = Compose(
             keys=["image"],
         ),
         ResizeWithPadOrCropd(keys=["image", "label"], spatial_size=target_specs["T2"]["shape"]),
+        
     ]
 )
 val_transforms = train_transforms
