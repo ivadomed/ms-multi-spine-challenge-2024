@@ -23,6 +23,7 @@ from monai.data import (
 )
 from monai.transforms import (
     AsDiscrete,
+    ConcatItemsd,
     EnsureChannelFirstd,
     Compose,
     LoadImaged,
@@ -67,10 +68,12 @@ import matplotlib.pyplot as plt
 
 
 config = {
-    "epoch": 60,
+    "max_iteration": 5000,
     "batch_size": 4,
     "learning_rate": 1e-4,
-    "model": UNETR 
+    "model": UNETR ,
+    "weight_decay": 1e-5, 
+    
 }
 
 
@@ -245,17 +248,17 @@ train_transforms = Compose(
     [
         LoadImaged(keys=["image1", "image2", "label"]),
         EnsureChannelFirstd(keys=["image1",'image2', "label"]),
-        Orientationd(keys=["image", "label"], axcodes="RPS"),
+        Orientationd(keys=["image1","image2", "label"], axcodes="RPS"),
         Spacingd(
-            keys=["image", "label"],
-            pixdim=(3.0, 0.7, 0.7),
+            keys=["image1",'image2', "label"],
+            pixdim=target_specs["image"]["shape"],
             mode=("bilinear", "nearest"),
         ),
         ScaleIntensityd(
-            keys=["image"],
+            keys=["image1","image2"],
         ),
-        ResizeWithPadOrCropd(keys=["image", "label"], spatial_size=target_specs["T2"]["shape"]),
-        
+        ResizeWithPadOrCropd(keys=["image1","image2", "label"], spatial_size=target_specs["image"]["shape"]),
+        ConcatItemsd(keys=["image1","image2"], name="combined")
     ]
 )
 val_transforms = train_transforms
@@ -298,9 +301,9 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 ).to(device)"""
 
 model = UNETR(
-    in_channels=1,
+    in_channels=2,
     out_channels=1,
-    img_size=(16, 512, 528),
+    img_size=target_specs["image"]["size"],
     feature_size=4,
     hidden_size=768,
     mlp_dim=3072,
@@ -313,9 +316,9 @@ model = UNETR(
 
 loss_function = DiceCELoss(to_onehot_y=True, softmax=True, smooth_dr=1e-4)
 torch.backends.cudnn.benchmark = True
-optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=1e-5)
+optimizer = torch.optim.AdamW(model.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"])
 
-max_iterations = 25000
+max_iterations = config["max_iteration"]
 post_label = AsDiscrete(to_onehot=14)
 post_pred = AsDiscrete(argmax=True, to_onehot=14)
 dice_metric = DiceMetric(include_background=True, reduction="mean", get_not_nans=False)
