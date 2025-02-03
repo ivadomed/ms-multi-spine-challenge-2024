@@ -321,16 +321,71 @@ train_transforms = Compose(
         ),
         ResizeWithPadOrCropd(keys=["image1","image2", "label"], spatial_size=target_specs["image"]["shape"]),
         RandLambdad(
-            keys=["image1", "image2"],
-            func= aug_inverse,
-            prob=1,
+            keys=["image1","image2"],
+            func=aug_log,
+            prob=0.1,
         ),
+
+        RandLambdad(
+            keys=["image1","image2"],
+            func=aug_sqrt,
+            prob=0.1,
+        ),
+
+        RandLambdad(
+            keys=["image1","image2"],
+            func=aug_sin,
+            prob=0.1,
+        ),
+
+        RandLambdad(
+            keys=["image1","image2"],
+            func=aug_exp,
+            prob=0.1,
+        ),
+
+        RandLambdad(
+            keys=["image1","image2"],
+            func=aug_sig,
+            prob=0.1,
+        ),
+
+        RandLambdad(
+            keys=["image1","image2"],
+            func=aug_laplace,
+            prob=0.1,
+        ),
+
+        RandLambdad(
+            keys=["image1","image2"],
+            func=aug_inverse,
+            prob=0.1,
+        ),
+
         ConcatItemsd(keys=["image1","image2"], name="combined"),
         ToTensord(keys=["combined"])
     ]
 )
-val_transforms = train_transforms
 
+
+val_transforms = Compose(
+    [
+        LoadImaged(keys=["image1", "image2", "label"]),
+        EnsureChannelFirstd(keys=["image1",'image2', "label"]),
+        Orientationd(keys=["image1","image2", "label"], axcodes="RPI"),
+        Spacingd(
+            keys=["image1",'image2', "label"],
+            pixdim=target_specs["image"]["resolution"],
+            mode=("bilinear", "bilinear", "nearest"),
+        ),
+        ScaleIntensityd(
+            keys=["image1","image2"],
+        ),
+        ResizeWithPadOrCropd(keys=["image1","image2", "label"], spatial_size=target_specs["image"]["shape"]),
+        ConcatItemsd(keys=["image1","image2"], name="combined"),
+        ToTensord(keys=["combined"])
+    ]
+)
 data_dir = ""
 split_json = "dataset_split_image2.json"
 

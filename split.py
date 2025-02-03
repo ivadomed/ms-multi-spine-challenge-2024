@@ -48,7 +48,7 @@ def process_subjects(subject_range, target_dir, split_key):
     for subject_id in subject_range:
         subject_name = f"sub-{subject_id:03d}"  # Ensure format is sub-001, sub-002, etc.
         subject_path = os.path.join(bids_root, subject_name)
-        seg_path = os.path.join(seg_root, subject_name, "anat")
+        
 
         if os.path.exists(subject_path):
             # Copy subject folder

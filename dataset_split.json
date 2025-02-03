@@ -1,414 +1,420 @@
 {
-    "description": "ms-multi-spine-challenge-2024",
-    "labels": {
-        "0": "background",
-        "1": "vertebrae"
-    },
+    "description": "ms-multi-spine-challenge-2024-augmented",
     "licence": "custom",
     "modality": {
         "0": "MRI"
     },
-    "name": "ms-multi-spine",
-    "numTest": 20,
+    "name": "ms-multi-spine-augmented",
+    "numTest": 3,
     "numTraining": 80,
+    "numValidation": 17,
     "reference": "Custom Dataset",
     "release": "1.0 01/01/2024",
     "tensorImageSize": "3D",
-    "test": [
-        "dataset_split/test/sub-050/anat/sub-050_T2w.nii.gz",
-        "dataset_split/test/sub-075/anat/sub-075_T2w.nii.gz",
-        "dataset_split/test/sub-100/anat/sub-100_T2w.nii.gz"
-    ],
     "training": [
         {
-            "image": "dataset_split/train/sub-001/anat/sub-001_T2w.nii.gz",
-            "label": "dataset_split/train/sub-001/anat/sub-001_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-002/anat/sub-002_T2w.nii.gz",
-            "label": "dataset_split/train/sub-002/anat/sub-002_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-003/anat/sub-003_T2w.nii.gz",
-            "label": "dataset_split/train/sub-003/anat/sub-003_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-004/anat/sub-004_T2w.nii.gz",
-            "label": "dataset_split/train/sub-004/anat/sub-004_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-005/anat/sub-005_T2w.nii.gz",
-            "label": "dataset_split/train/sub-005/anat/sub-005_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-006/anat/sub-006_T2w.nii.gz",
-            "label": "dataset_split/train/sub-006/anat/sub-006_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-007/anat/sub-007_T2w.nii.gz",
-            "label": "dataset_split/train/sub-007/anat/sub-007_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-008/anat/sub-008_T2w.nii.gz",
-            "label": "dataset_split/train/sub-008/anat/sub-008_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-009/anat/sub-009_T2w.nii.gz",
-            "label": "dataset_split/train/sub-009/anat/sub-009_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-010/anat/sub-010_T2w.nii.gz",
-            "label": "dataset_split/train/sub-010/anat/sub-010_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-011/anat/sub-011_T2w.nii.gz",
-            "label": "dataset_split/train/sub-011/anat/sub-011_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-012/anat/sub-012_T2w.nii.gz",
-            "label": "dataset_split/train/sub-012/anat/sub-012_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-013/anat/sub-013_T2w.nii.gz",
-            "label": "dataset_split/train/sub-013/anat/sub-013_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-014/anat/sub-014_T2w.nii.gz",
-            "label": "dataset_split/train/sub-014/anat/sub-014_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-015/anat/sub-015_T2w.nii.gz",
-            "label": "dataset_split/train/sub-015/anat/sub-015_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-016/anat/sub-016_T2w.nii.gz",
-            "label": "dataset_split/train/sub-016/anat/sub-016_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-017/anat/sub-017_T2w.nii.gz",
-            "label": "dataset_split/train/sub-017/anat/sub-017_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-018/anat/sub-018_T2w.nii.gz",
-            "label": "dataset_split/train/sub-018/anat/sub-018_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-019/anat/sub-019_T2w.nii.gz",
-            "label": "dataset_split/train/sub-019/anat/sub-019_T2w_label-lesion_seg.nii.gz"
+            "image": "dataset_split/train/sub-028/anat/sub-028_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-028/anat/sub-028_T2w_label-lesion_seg.nii.gz"
         },
         {
             "image": "dataset_split/train/sub-020/anat/sub-020_T2w.nii.gz",
-            "label": "dataset_split/train/sub-020/anat/sub-020_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-021/anat/sub-021_T2w.nii.gz",
-            "label": "dataset_split/train/sub-021/anat/sub-021_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-022/anat/sub-022_T2w.nii.gz",
-            "label": "dataset_split/train/sub-022/anat/sub-022_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-023/anat/sub-023_T2w.nii.gz",
-            "label": "dataset_split/train/sub-023/anat/sub-023_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-024/anat/sub-024_T2w.nii.gz",
-            "label": "dataset_split/train/sub-024/anat/sub-024_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-025/anat/sub-025_T2w.nii.gz",
-            "label": "dataset_split/train/sub-025/anat/sub-025_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-026/anat/sub-026_T2w.nii.gz",
-            "label": "dataset_split/train/sub-026/anat/sub-026_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-027/anat/sub-027_T2w.nii.gz",
-            "label": "dataset_split/train/sub-027/anat/sub-027_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-028/anat/sub-028_T2w.nii.gz",
-            "label": "dataset_split/train/sub-028/anat/sub-028_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-029/anat/sub-029_T2w.nii.gz",
-            "label": "dataset_split/train/sub-029/anat/sub-029_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-030/anat/sub-030_T2w.nii.gz",
-            "label": "dataset_split/train/sub-030/anat/sub-030_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-031/anat/sub-031_T2w.nii.gz",
-            "label": "dataset_split/train/sub-031/anat/sub-031_T2w_label-lesion_seg.nii.gz"
+            "label": "dataset_split/derivatives/labels/sub-020/anat/sub-020_T2w_label-lesion_seg.nii.gz"
         },
         {
             "image": "dataset_split/train/sub-032/anat/sub-032_T2w.nii.gz",
-            "label": "dataset_split/train/sub-032/anat/sub-032_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-033/anat/sub-033_T2w.nii.gz",
-            "label": "dataset_split/train/sub-033/anat/sub-033_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-034/anat/sub-034_T2w.nii.gz",
-            "label": "dataset_split/train/sub-034/anat/sub-034_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-035/anat/sub-035_T2w.nii.gz",
-            "label": "dataset_split/train/sub-035/anat/sub-035_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-036/anat/sub-036_T2w.nii.gz",
-            "label": "dataset_split/train/sub-036/anat/sub-036_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-037/anat/sub-037_T2w.nii.gz",
-            "label": "dataset_split/train/sub-037/anat/sub-037_T2w_label-lesion_seg.nii.gz"
+            "label": "dataset_split/derivatives/labels/sub-032/anat/sub-032_T2w_label-lesion_seg.nii.gz"
         },
         {
             "image": "dataset_split/train/sub-038/anat/sub-038_T2w.nii.gz",
-            "label": "dataset_split/train/sub-038/anat/sub-038_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-039/anat/sub-039_T2w.nii.gz",
-            "label": "dataset_split/train/sub-039/anat/sub-039_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-040/anat/sub-040_T2w.nii.gz",
-            "label": "dataset_split/train/sub-040/anat/sub-040_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-041/anat/sub-041_T2w.nii.gz",
-            "label": "dataset_split/train/sub-041/anat/sub-041_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-042/anat/sub-042_T2w.nii.gz",
-            "label": "dataset_split/train/sub-042/anat/sub-042_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-051/anat/sub-051_T2w.nii.gz",
-            "label": "dataset_split/train/sub-051/anat/sub-051_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-052/anat/sub-052_T2w.nii.gz",
-            "label": "dataset_split/train/sub-052/anat/sub-052_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-053/anat/sub-053_T2w.nii.gz",
-            "label": "dataset_split/train/sub-053/anat/sub-053_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-054/anat/sub-054_T2w.nii.gz",
-            "label": "dataset_split/train/sub-054/anat/sub-054_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-055/anat/sub-055_T2w.nii.gz",
-            "label": "dataset_split/train/sub-055/anat/sub-055_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-056/anat/sub-056_T2w.nii.gz",
-            "label": "dataset_split/train/sub-056/anat/sub-056_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-057/anat/sub-057_T2w.nii.gz",
-            "label": "dataset_split/train/sub-057/anat/sub-057_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-058/anat/sub-058_T2w.nii.gz",
-            "label": "dataset_split/train/sub-058/anat/sub-058_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-059/anat/sub-059_T2w.nii.gz",
-            "label": "dataset_split/train/sub-059/anat/sub-059_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-060/anat/sub-060_T2w.nii.gz",
-            "label": "dataset_split/train/sub-060/anat/sub-060_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-061/anat/sub-061_T2w.nii.gz",
-            "label": "dataset_split/train/sub-061/anat/sub-061_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-062/anat/sub-062_T2w.nii.gz",
-            "label": "dataset_split/train/sub-062/anat/sub-062_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-063/anat/sub-063_T2w.nii.gz",
-            "label": "dataset_split/train/sub-063/anat/sub-063_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-064/anat/sub-064_T2w.nii.gz",
-            "label": "dataset_split/train/sub-064/anat/sub-064_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-065/anat/sub-065_T2w.nii.gz",
-            "label": "dataset_split/train/sub-065/anat/sub-065_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-066/anat/sub-066_T2w.nii.gz",
-            "label": "dataset_split/train/sub-066/anat/sub-066_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-067/anat/sub-067_T2w.nii.gz",
-            "label": "dataset_split/train/sub-067/anat/sub-067_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-068/anat/sub-068_T2w.nii.gz",
-            "label": "dataset_split/train/sub-068/anat/sub-068_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-069/anat/sub-069_T2w.nii.gz",
-            "label": "dataset_split/train/sub-069/anat/sub-069_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-076/anat/sub-076_T2w.nii.gz",
-            "label": "dataset_split/train/sub-076/anat/sub-076_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-077/anat/sub-077_T2w.nii.gz",
-            "label": "dataset_split/train/sub-077/anat/sub-077_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-078/anat/sub-078_T2w.nii.gz",
-            "label": "dataset_split/train/sub-078/anat/sub-078_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-079/anat/sub-079_T2w.nii.gz",
-            "label": "dataset_split/train/sub-079/anat/sub-079_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-080/anat/sub-080_T2w.nii.gz",
-            "label": "dataset_split/train/sub-080/anat/sub-080_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-081/anat/sub-081_T2w.nii.gz",
-            "label": "dataset_split/train/sub-081/anat/sub-081_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-082/anat/sub-082_T2w.nii.gz",
-            "label": "dataset_split/train/sub-082/anat/sub-082_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-083/anat/sub-083_T2w.nii.gz",
-            "label": "dataset_split/train/sub-083/anat/sub-083_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-084/anat/sub-084_T2w.nii.gz",
-            "label": "dataset_split/train/sub-084/anat/sub-084_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-085/anat/sub-085_T2w.nii.gz",
-            "label": "dataset_split/train/sub-085/anat/sub-085_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-086/anat/sub-086_T2w.nii.gz",
-            "label": "dataset_split/train/sub-086/anat/sub-086_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-087/anat/sub-087_T2w.nii.gz",
-            "label": "dataset_split/train/sub-087/anat/sub-087_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/train/sub-088/anat/sub-088_T2w.nii.gz",
-            "label": "dataset_split/train/sub-088/anat/sub-088_T2w_label-lesion_seg.nii.gz"
+            "label": "dataset_split/derivatives/labels/sub-038/anat/sub-038_T2w_label-lesion_seg.nii.gz"
         },
         {
             "image": "dataset_split/train/sub-089/anat/sub-089_T2w.nii.gz",
-            "label": "dataset_split/train/sub-089/anat/sub-089_T2w_label-lesion_seg.nii.gz"
+            "label": "dataset_split/derivatives/labels/sub-089/anat/sub-089_T2w_label-lesion_seg.nii.gz"
         },
         {
-            "image": "dataset_split/train/sub-090/anat/sub-090_T2w.nii.gz",
-            "label": "dataset_split/train/sub-090/anat/sub-090_T2w_label-lesion_seg.nii.gz"
+            "image": "dataset_split/train/sub-057/anat/sub-057_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-057/anat/sub-057_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-013/anat/sub-013_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-013/anat/sub-013_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-060/anat/sub-060_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-060/anat/sub-060_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-010/anat/sub-010_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-010/anat/sub-010_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-081/anat/sub-081_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-081/anat/sub-081_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-035/anat/sub-035_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-035/anat/sub-035_T2w_label-lesion_seg.nii.gz"
         },
         {
             "image": "dataset_split/train/sub-091/anat/sub-091_T2w.nii.gz",
-            "label": "dataset_split/train/sub-091/anat/sub-091_T2w_label-lesion_seg.nii.gz"
+            "label": "dataset_split/derivatives/labels/sub-091/anat/sub-091_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-066/anat/sub-066_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-066/anat/sub-066_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-036/anat/sub-036_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-036/anat/sub-036_T2w_label-lesion_seg.nii.gz"
         },
         {
             "image": "dataset_split/train/sub-092/anat/sub-092_T2w.nii.gz",
-            "label": "dataset_split/train/sub-092/anat/sub-092_T2w_label-lesion_seg.nii.gz"
+            "label": "dataset_split/derivatives/labels/sub-092/anat/sub-092_T2w_label-lesion_seg.nii.gz"
         },
         {
-            "image": "dataset_split/train/sub-093/anat/sub-093_T2w.nii.gz",
-            "label": "dataset_split/train/sub-093/anat/sub-093_T2w_label-lesion_seg.nii.gz"
+            "image": "dataset_split/train/sub-039/anat/sub-039_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-039/anat/sub-039_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-063/anat/sub-063_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-063/anat/sub-063_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-037/anat/sub-037_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-037/anat/sub-037_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-026/anat/sub-026_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-026/anat/sub-026_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-056/anat/sub-056_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-056/anat/sub-056_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-076/anat/sub-076_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-076/anat/sub-076_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-054/anat/sub-054_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-054/anat/sub-054_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-012/anat/sub-012_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-012/anat/sub-012_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-011/anat/sub-011_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-011/anat/sub-011_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-083/anat/sub-083_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-083/anat/sub-083_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-068/anat/sub-068_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-068/anat/sub-068_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-021/anat/sub-021_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-021/anat/sub-021_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-002/anat/sub-002_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-002/anat/sub-002_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-061/anat/sub-061_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-061/anat/sub-061_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-053/anat/sub-053_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-053/anat/sub-053_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-042/anat/sub-042_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-042/anat/sub-042_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-078/anat/sub-078_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-078/anat/sub-078_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-007/anat/sub-007_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-007/anat/sub-007_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-029/anat/sub-029_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-029/anat/sub-029_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-084/anat/sub-084_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-084/anat/sub-084_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-016/anat/sub-016_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-016/anat/sub-016_T2w_label-lesion_seg.nii.gz"
         },
         {
             "image": "dataset_split/train/sub-094/anat/sub-094_T2w.nii.gz",
-            "label": "dataset_split/train/sub-094/anat/sub-094_T2w_label-lesion_seg.nii.gz"
+            "label": "dataset_split/derivatives/labels/sub-094/anat/sub-094_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-090/anat/sub-090_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-090/anat/sub-090_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-014/anat/sub-014_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-014/anat/sub-014_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-055/anat/sub-055_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-055/anat/sub-055_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-065/anat/sub-065_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-065/anat/sub-065_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-025/anat/sub-025_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-025/anat/sub-025_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-022/anat/sub-022_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-022/anat/sub-022_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-087/anat/sub-087_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-087/anat/sub-087_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-034/anat/sub-034_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-034/anat/sub-034_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-069/anat/sub-069_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-069/anat/sub-069_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-062/anat/sub-062_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-062/anat/sub-062_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-023/anat/sub-023_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-023/anat/sub-023_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-030/anat/sub-030_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-030/anat/sub-030_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-051/anat/sub-051_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-051/anat/sub-051_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-088/anat/sub-088_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-088/anat/sub-088_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-031/anat/sub-031_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-031/anat/sub-031_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-086/anat/sub-086_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-086/anat/sub-086_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-080/anat/sub-080_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-080/anat/sub-080_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-059/anat/sub-059_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-059/anat/sub-059_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-015/anat/sub-015_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-015/anat/sub-015_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-067/anat/sub-067_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-067/anat/sub-067_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-004/anat/sub-004_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-004/anat/sub-004_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-093/anat/sub-093_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-093/anat/sub-093_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-079/anat/sub-079_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-079/anat/sub-079_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-024/anat/sub-024_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-024/anat/sub-024_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-001/anat/sub-001_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-001/anat/sub-001_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-085/anat/sub-085_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-085/anat/sub-085_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-018/anat/sub-018_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-018/anat/sub-018_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-009/anat/sub-009_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-009/anat/sub-009_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-052/anat/sub-052_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-052/anat/sub-052_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-027/anat/sub-027_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-027/anat/sub-027_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-006/anat/sub-006_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-006/anat/sub-006_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-005/anat/sub-005_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-005/anat/sub-005_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-017/anat/sub-017_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-017/anat/sub-017_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-041/anat/sub-041_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-041/anat/sub-041_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-082/anat/sub-082_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-082/anat/sub-082_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-033/anat/sub-033_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-033/anat/sub-033_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-040/anat/sub-040_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-040/anat/sub-040_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-058/anat/sub-058_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-058/anat/sub-058_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-003/anat/sub-003_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-003/anat/sub-003_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-064/anat/sub-064_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-064/anat/sub-064_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-019/anat/sub-019_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-019/anat/sub-019_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-077/anat/sub-077_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-077/anat/sub-077_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/train/sub-008/anat/sub-008_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-008/anat/sub-008_T2w_label-lesion_seg.nii.gz"
         }
     ],
     "validation": [
         {
-            "image": "dataset_split/val/sub-043/anat/sub-043_T2w.nii.gz",
-            "label": "dataset_split/val/sub-043/anat/sub-043_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-044/anat/sub-044_T2w.nii.gz",
-            "label": "dataset_split/val/sub-044/anat/sub-044_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-045/anat/sub-045_T2w.nii.gz",
-            "label": "dataset_split/val/sub-045/anat/sub-045_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-046/anat/sub-046_T2w.nii.gz",
-            "label": "dataset_split/val/sub-046/anat/sub-046_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-047/anat/sub-047_T2w.nii.gz",
-            "label": "dataset_split/val/sub-047/anat/sub-047_T2w_label-lesion_seg.nii.gz"
-        },
-        {
             "image": "dataset_split/val/sub-048/anat/sub-048_T2w.nii.gz",
-            "label": "dataset_split/val/sub-048/anat/sub-048_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-049/anat/sub-049_T2w.nii.gz",
-            "label": "dataset_split/val/sub-049/anat/sub-049_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-070/anat/sub-070_T2w.nii.gz",
-            "label": "dataset_split/val/sub-070/anat/sub-070_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-071/anat/sub-071_T2w.nii.gz",
-            "label": "dataset_split/val/sub-071/anat/sub-071_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-072/anat/sub-072_T2w.nii.gz",
-            "label": "dataset_split/val/sub-072/anat/sub-072_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-073/anat/sub-073_T2w.nii.gz",
-            "label": "dataset_split/val/sub-073/anat/sub-073_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-074/anat/sub-074_T2w.nii.gz",
-            "label": "dataset_split/val/sub-074/anat/sub-074_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-095/anat/sub-095_T2w.nii.gz",
-            "label": "dataset_split/val/sub-095/anat/sub-095_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-096/anat/sub-096_T2w.nii.gz",
-            "label": "dataset_split/val/sub-096/anat/sub-096_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-097/anat/sub-097_T2w.nii.gz",
-            "label": "dataset_split/val/sub-097/anat/sub-097_T2w_label-lesion_seg.nii.gz"
-        },
-        {
-            "image": "dataset_split/val/sub-098/anat/sub-098_T2w.nii.gz",
-            "label": "dataset_split/val/sub-098/anat/sub-098_T2w_label-lesion_seg.nii.gz"
+            "label": "dataset_split/derivatives/labels/sub-048/anat/sub-048_T2w_label-lesion_seg.nii.gz"
         },
         {
             "image": "dataset_split/val/sub-099/anat/sub-099_T2w.nii.gz",
-            "label": "dataset_split/val/sub-099/anat/sub-099_T2w_label-lesion_seg.nii.gz"
+            "label": "dataset_split/derivatives/labels/sub-099/anat/sub-099_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-070/anat/sub-070_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-070/anat/sub-070_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-096/anat/sub-096_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-096/anat/sub-096_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-046/anat/sub-046_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-046/anat/sub-046_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-097/anat/sub-097_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-097/anat/sub-097_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-072/anat/sub-072_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-072/anat/sub-072_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-073/anat/sub-073_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-073/anat/sub-073_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-095/anat/sub-095_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-095/anat/sub-095_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-043/anat/sub-043_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-043/anat/sub-043_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-047/anat/sub-047_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-047/anat/sub-047_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-049/anat/sub-049_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-049/anat/sub-049_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-044/anat/sub-044_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-044/anat/sub-044_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-098/anat/sub-098_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-098/anat/sub-098_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-045/anat/sub-045_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-045/anat/sub-045_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-071/anat/sub-071_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-071/anat/sub-071_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/val/sub-074/anat/sub-074_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-074/anat/sub-074_T2w_label-lesion_seg.nii.gz"
+        }
+    ],
+    "test": [
+        {
+            "image": "dataset_split/test/sub-075/anat/sub-075_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-075/anat/sub-075_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/test/sub-050/anat/sub-050_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-050/anat/sub-050_T2w_label-lesion_seg.nii.gz"
+        },
+        {
+            "image": "dataset_split/test/sub-100/anat/sub-100_T2w.nii.gz",
+            "label": "dataset_split/derivatives/labels/sub-100/anat/sub-100_T2w_label-lesion_seg.nii.gz"
         }
     ]
 }

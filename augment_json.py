@@ -2,7 +2,7 @@ import os
 import json
 
 # Define the root directory of your dataset and label directory
-bids_root = "augment_dataset_split"
+bids_root = "dataset_split"
 derivatives_label = os.path.join(bids_root, "derivatives/labels")
 
 # Prepare a dictionary to save the updated dataset info
@@ -37,29 +37,29 @@ def process_subjects(subject_dir, dataset_key):
 
                 # Loop through files in the subject's directory
                 for file in os.listdir(subject_path):
-                    
-                    if file.endswith("T2w.nii.gz"):
-                        file_path = os.path.join(subject_path, file)
-                        seg_file = file.replace(".nii.gz", "_label-lesion_seg.nii.gz")
-                        seg_path = os.path.join(derivatives_label,subject_folder,'anat', seg_file)
-                        if os.path.exists(seg_path):
-                            
-                            dataset_info[dataset_key].append({
-                                "image": file_path,
-                                "label": seg_path
-                            })
+                    if "preproc" not in file : 
+                        if file.endswith("T2w.nii.gz"):
+                            file_path = os.path.join(subject_path, file)
+                            seg_file = file.replace(".nii.gz", "_label-lesion_seg.nii.gz")
+                            seg_path = os.path.join(derivatives_label,subject_folder,'anat', seg_file)
+                            if os.path.exists(seg_path):
+                                
+                                dataset_info[dataset_key].append({
+                                    "image": file_path,
+                                    "label": seg_path
+                                })
 
-                    # Process augmented T2w_a files
-                    if "T2w_a" in file :
-                        file_path = os.path.join(subject_path, file)
-                        seg_file = file.replace(".nii.gz", "_seg.nii.gz")
-                        seg_path = os.path.join(derivatives_label,subject_folder,'anat', seg_file)
-                        
-                        if os.path.exists(seg_path):
-                            dataset_info[dataset_key].append({
-                                "image": file_path,
-                                "label": seg_path
-                            })
+                        # Process augmented T2w_a files
+                        if "T2w_a" in file :
+                            file_path = os.path.join(subject_path, file)
+                            seg_file = file.replace(".nii.gz", "_seg.nii.gz")
+                            seg_path = os.path.join(derivatives_label,subject_folder,'anat', seg_file)
+                            
+                            if os.path.exists(seg_path):
+                                dataset_info[dataset_key].append({
+                                    "image": file_path,
+                                    "label": seg_path
+                                })
 
 # Process subjects in each split
 def update_dataset_info():
