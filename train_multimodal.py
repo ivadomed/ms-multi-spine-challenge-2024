@@ -67,6 +67,7 @@ from monai.inferers import sliding_window_inference
 import nibabel as nib
 from tqdm import tqdm
 import matplotlib.pyplot as plt 
+from augment import *
 
 
 config = {
@@ -319,6 +320,11 @@ train_transforms = Compose(
             keys=["image1","image2"],
         ),
         ResizeWithPadOrCropd(keys=["image1","image2", "label"], spatial_size=target_specs["image"]["shape"]),
+        RandLambdad(
+            keys=["image1", "image2"],
+            func= aug_inverse,
+            prob=1,
+        ),
         ConcatItemsd(keys=["image1","image2"], name="combined"),
         ToTensord(keys=["combined"])
     ]
