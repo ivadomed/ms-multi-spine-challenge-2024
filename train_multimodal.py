@@ -42,6 +42,7 @@ from monai.transforms import (
     ResizeWithPadOrCropd,
     EnsureTyped,
     RandLambdad,
+    RandLambda,
     CropForegroundd,
     RandGaussianNoised,
     LabelToContourd,
@@ -74,7 +75,7 @@ config = {
     "max_iteration": 5000,
     "batch_size": 1,
     "learning_rate": 1e-4,
-    "model": UNETR ,
+    "model": SwinUNETR ,
     "weight_decay": 1e-5, 
 }
 
@@ -101,14 +102,6 @@ def plot_slices(image, gt, pred, debug=False):
         axs[1, i].imshow(gt[mid_sagittal-3+i,:,:].T); axs[1, i].axis('off')
         axs[2, i].imshow(pred[mid_sagittal-3+i,:,:].T); axs[2, i].axis('off')
 
-    # fig, axs = plt.subplots(1, 3, figsize=(10, 8))
-    # fig.suptitle('Original Image --> Ground Truth --> Prediction')
-    # slice = image.shape[2]//2
-
-    # axs[0].imshow(image[:, :, slice].T, cmap='gray'); axs[0].axis('off') 
-    # axs[1].imshow(gt[:, :, slice].T); axs[1].axis('off')
-    # axs[2].imshow(pred[:, :, slice].T); axs[2].axis('off')
-    
     plt.tight_layout()
     fig.show()
     return fig
@@ -149,21 +142,20 @@ def plot_slices_combined(combined, gt, pred, debug=False):
 def validation(epoch_iterator_val):
     model.eval()
     counter = 0 
+    epoch_loss = 0 
     with torch.no_grad():
         for batch in epoch_iterator_val:
             val_inputs, val_labels = (batch["combined"].cuda(), batch["label"].cuda())
             val_outputs = sliding_window_inference(val_inputs, target_specs["image"]["shape"], 4, model)
-            val_labels_list = decollate_batch(val_labels)
-            val_labels_convert = [post_label(val_label_tensor) for val_label_tensor in val_labels_list]
-            val_outputs_list = decollate_batch(val_outputs)
-            val_output_convert = [post_pred(val_pred_tensor) for val_pred_tensor in val_outputs_list]
-            dice_metric(y_pred=val_output_convert, y=val_labels_convert)
+            val_outputs = [post_pred(i) for i in decollate_batch(val_outputs)]
+            val_labels = [post_label(i) for i in decollate_batch(val_labels)]
+            dice_metric(y_pred=val_outputs, y=val_labels)
             epoch_iterator_val.set_description("Validate (%d / %d Steps)" % (global_step, 10.0))  # noqa: B038
             
-            if counter%10 == 0 : 
+            if counter%1 == 0 : 
                 val_image= val_inputs[0].detach().cpu().squeeze()
-                val_gt= val_labels[0].detach().cpu().squeeze()
-                val_pred= val_outputs[0].detach().cpu().squeeze()
+                val_gt= val_labels[0][0].detach().cpu().squeeze()
+                val_pred= val_outputs[0][0].detach().cpu().squeeze()
 
                 fig = plot_slices_combined(combined=val_image,
                             gt=val_gt,
@@ -178,6 +170,7 @@ def validation(epoch_iterator_val):
         mean_dice_val = dice_metric.aggregate().item()
         dice_metric.reset()
     return mean_dice_val
+    
 
 
 def train(global_step, train_loader, dice_val_best, global_step_best):
@@ -189,7 +182,8 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
     for step, batch in enumerate(epoch_iterator):
         step += 1
         x, y = (batch["combined"].cuda(), batch["label"].cuda())
-
+        #added this line of code because RandLambdad generated this error : RuntimeError: mat1 and mat2 must have the same dtype, but got Double and Float
+        x = x.to(torch.float32)
         logit_map = model(x)
         output = F.relu(logit_map) / F.relu(logit_map).max() if bool(F.relu(logit_map).max()) else F.relu(logit_map)
         
@@ -202,30 +196,8 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
             "Training (%d / %d Steps) (loss=%2.5f)" % (global_step, max_iterations, loss)
         )
         global_step += 1
-
-        
         if global_step%10 == 0 : 
-            """train_gt= y[0].detach().cpu().squeeze()
-            train_pred= output[0].detach().cpu().squeeze()
-
-            t2_image = batch["image1"][0].detach().cpu().squeeze()
-            fig = plot_slices(image=t2_image,
-                        gt=train_gt,
-                        pred=train_pred,
-                                )
-            
-            wandb.log({"t2 images": wandb.Image(fig)})
-            plt.close(fig)
-
-            image = batch["image2"][0].detach().cpu().squeeze()
-            fig = plot_slices(image=image,
-                        gt=train_gt,
-                        pred=train_pred,
-                                )
-            
-            wandb.log({"other images": wandb.Image(fig)})
-            plt.close(fig)"""
-
+           
             train_image= x[0].detach().cpu().squeeze()
             train_gt= y[0].detach().cpu().squeeze()
             train_pred= output[0].detach().cpu().squeeze()
@@ -238,9 +210,7 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
             wandb.log({"training images": wandb.Image(fig)})
             plt.close(fig)
             
-            
 
-    
     epoch_iterator_val = tqdm(val_loader, desc="Validate (X / X Steps) (dice=X.X)", dynamic_ncols=True)
     dice_val = validation(epoch_iterator_val)
     epoch_loss /= step
@@ -302,8 +272,8 @@ os.makedirs(root_dir, exist_ok=True)
 
 # Specifications
 target_specs = {
-    "image": {"resolution": (3.0, 0.7, 0.7), "shape": (16, 512, 528)},
-    "seg": {"resolution": (3.0, 0.7, 0.7), "shape": (16, 512, 528)}  # Same as T2
+    "image": {"resolution": (3.0, 0.7, 0.7), "shape": (32, 512, 512)},
+    "seg": {"resolution": (3.0, 0.7, 0.7), "shape": (32512)}  # Same as T2
 }
 
 train_transforms = Compose(
@@ -361,6 +331,8 @@ train_transforms = Compose(
             func=aug_inverse,
             prob=0.1,
         ),
+        
+    
 
         ConcatItemsd(keys=["image1","image2"], name="combined"),
         ToTensord(keys=["combined"])
@@ -430,7 +402,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     dropout_rate=0.1
 ).to(device)"""
 
-model = UNETR(
+"""model = UNETR(
     in_channels=2,
     out_channels=1,
     img_size=target_specs["image"]["shape"],
@@ -442,16 +414,25 @@ model = UNETR(
     norm_name="instance",
     res_block=True,
     dropout_rate=0.0,
-).to(device)
+).to(device)"""
+
+model = SwinUNETR(
+    in_channels=2,
+    out_channels=1,
+    img_size=target_specs["image"]["shape"],
+    
+    feature_size=48,
+    use_checkpoint=True,
+)
 
 loss_function = DiceCELoss(to_onehot_y=True, softmax=True, smooth_dr=1e-4)
 torch.backends.cudnn.benchmark = True
 optimizer = torch.optim.AdamW(model.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"])
 
 max_iterations = config["max_iteration"]
-post_label = AsDiscrete(to_onehot=14)
-post_pred = AsDiscrete(argmax=True, to_onehot=14)
-dice_metric = DiceMetric(include_background=True, reduction="mean", get_not_nans=False)
+post_label = AsDiscrete()
+post_pred = AsDiscrete(argmax=True)
+dice_metric = DiceMetric(include_background=False, reduction="mean", get_not_nans=False)
 global_step = 0
 dice_val_best = 0.0
 global_step_best = 0
