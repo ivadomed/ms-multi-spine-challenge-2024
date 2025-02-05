@@ -70,6 +70,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt 
 from augment import *
 
+rs = np.random.RandomState()
 
 config = {
     "max_iteration": 5000,
@@ -146,16 +147,21 @@ def validation(epoch_iterator_val):
     with torch.no_grad():
         for batch in epoch_iterator_val:
             val_inputs, val_labels = (batch["combined"].cuda(), batch["label"].cuda())
-            val_outputs = sliding_window_inference(val_inputs, target_specs["image"]["shape"], 4, model)
-            val_outputs = [post_pred(i) for i in decollate_batch(val_outputs)]
+            outputs = sliding_window_inference(val_inputs, target_specs["image"]["shape"], mode="gaussian",
+                                           sw_batch_size=4, predictor=model, overlap=0.5,) 
+             # get probabilities from logits
+            outputs = F.relu(outputs) / F.relu(outputs).max() if bool(F.relu(outputs).max()) else F.relu(outputs)
+        
+            loss = loss_function(outputs, val_labels)
+            val_outputs = [post_pred(i) for i in decollate_batch(outputs)]
             val_labels = [post_label(i) for i in decollate_batch(val_labels)]
             dice_metric(y_pred=val_outputs, y=val_labels)
             epoch_iterator_val.set_description("Validate (%d / %d Steps)" % (global_step, 10.0))  # noqa: B038
             
-            if counter%1 == 0 : 
+            if True or counter%10 == 0 : 
                 val_image= val_inputs[0].detach().cpu().squeeze()
                 val_gt= val_labels[0][0].detach().cpu().squeeze()
-                val_pred= val_outputs[0][0].detach().cpu().squeeze()
+                val_pred= outputs[0].detach().cpu().squeeze()
 
                 fig = plot_slices_combined(combined=val_image,
                             gt=val_gt,
@@ -273,7 +279,7 @@ os.makedirs(root_dir, exist_ok=True)
 # Specifications
 target_specs = {
     "image": {"resolution": (3.0, 0.7, 0.7), "shape": (32, 512, 512)},
-    "seg": {"resolution": (3.0, 0.7, 0.7), "shape": (32512)}  # Same as T2
+    "seg": {"resolution": (3.0, 0.7, 0.7), "shape": (32,512,512)}  # Same as T2
 }
 
 train_transforms = Compose(
@@ -417,21 +423,23 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 ).to(device)"""
 
 model = SwinUNETR(
+    img_size=target_specs["image"]["shape"],
     in_channels=2,
     out_channels=1,
-    img_size=target_specs["image"]["shape"],
-    
     feature_size=48,
+    drop_rate=0.0,
+    attn_drop_rate=0.0,
+    dropout_path_rate=0.0,
     use_checkpoint=True,
-)
+).to(device)
 
 loss_function = DiceCELoss(to_onehot_y=True, softmax=True, smooth_dr=1e-4)
 torch.backends.cudnn.benchmark = True
 optimizer = torch.optim.AdamW(model.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"])
 
 max_iterations = config["max_iteration"]
-post_label = AsDiscrete()
-post_pred = AsDiscrete(argmax=True)
+post_label = Compose([EnsureType()])
+post_pred = Compose([EnsureType()])
 dice_metric = DiceMetric(include_background=False, reduction="mean", get_not_nans=False)
 global_step = 0
 dice_val_best = 0.0
