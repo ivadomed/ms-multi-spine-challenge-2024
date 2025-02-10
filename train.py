@@ -72,7 +72,86 @@ import resource
 rlimit = resource.getrlimit(resource.RLIMIT_NOFILE)
 resource.setrlimit(resource.RLIMIT_NOFILE, (4096, rlimit[1]))
 
+config = {
+    "max_iteration": 5000,
+    "batch_size": 1,
+    "learning_rate": 1e-3,  
+    "model": UNETR ,
+    "weight_decay": 1e-5, 
+}
 
+
+def train(global_step, train_loader, dice_val_best, global_step_best):
+    model.train()
+    epoch_loss = 0
+    step = 0
+    epoch_iterator = tqdm(train_loader, desc="Training (X / X Steps) (loss=X.X)", dynamic_ncols=True)
+    
+    for step, batch in enumerate(epoch_iterator):
+        step += 1
+        x, y = (batch["image"].cuda(), batch["label"].cuda())
+
+        logit_map = model(x)
+        output = F.relu(logit_map) / F.relu(logit_map).max() if bool(F.relu(logit_map).max()) else F.relu(logit_map)
+        
+        loss = loss_function(output, y)
+        loss.backward()
+        epoch_loss += loss.item()
+        optimizer.step()
+        optimizer.zero_grad()
+        epoch_iterator.set_description(  # noqa: B038
+            "Training (%d / %d Steps) (loss=%2.5f)" % (global_step, max_iterations, loss)
+        )
+        global_step += 1
+
+        dice_metric(y_pred=output, y=y)
+        
+        if global_step%30 == 0 : 
+            train_image= x[0].detach().cpu().squeeze()
+            train_gt= y[0].detach().cpu().squeeze()
+            train_pred= output[0].detach().cpu().squeeze()
+
+            fig = plot_slices(image=train_image,
+                        gt=train_gt,
+                        pred=train_pred,
+                                )
+
+            wandb.log({"training images": wandb.Image(fig)})
+            plt.close(fig)
+            
+        
+    
+    epoch_iterator_val = tqdm(val_loader, desc="Validate (X / X Steps) (dice=X.X)", dynamic_ncols=True)
+    dice_val = validation(epoch_iterator_val)
+    epoch_loss /= step
+    wandb.log({"train_loss": loss.item(), "epoch": global_step//80})  # Log training loss
+    mean_dice_val = dice_metric.aggregate().item()
+    wandb.log({"train_dice": mean_dice_val, "epoch": global_step//80})
+    dice_metric.reset()
+    wandb.log({"val_dice": dice_val, "epoch": global_step//80})  # Log training loss
+       
+    epoch_loss_values.append(epoch_loss)
+    metric_values.append(dice_val)
+    if dice_val > dice_val_best:
+        dice_val_best = dice_val
+        global_step_best = global_step
+        torch.save(model.state_dict(), os.path.join(root_dir, "best_metric_model.pth"))
+        print(
+            "Model Was Saved ! Current Best Avg. Dice: {} Current Avg. Dice: {}".format(dice_val_best, dice_val)
+        )
+    else:
+        print(
+            "Model Was Not Saved ! Current Best Avg. Dice: {} Current Avg. Dice: {}".format(
+                dice_val_best, dice_val
+            )
+        )
+       
+   
+    
+    
+    
+
+    return global_step, dice_val_best, global_step_best
 
 
 def validation(epoch_iterator_val):
@@ -109,80 +188,6 @@ def validation(epoch_iterator_val):
     return mean_dice_val
 
 
-def train(global_step, train_loader, dice_val_best, global_step_best):
-    model.train()
-    epoch_loss = 0
-    step = 0
-    epoch_iterator = tqdm(train_loader, desc="Training (X / X Steps) (loss=X.X)", dynamic_ncols=True)
-    
-    for step, batch in enumerate(epoch_iterator):
-        step += 1
-        x, y = (batch["image"].cuda(), batch["label"].cuda())
-
-        logit_map = model(x)
-        output = F.relu(logit_map) / F.relu(logit_map).max() if bool(F.relu(logit_map).max()) else F.relu(logit_map)
-        
-        loss = loss_function(output, y)
-        loss.backward()
-        epoch_loss += loss.item()
-        optimizer.step()
-        optimizer.zero_grad()
-        epoch_iterator.set_description(  # noqa: B038
-            "Training (%d / %d Steps) (loss=%2.5f)" % (global_step, max_iterations, loss)
-        )
-        global_step += 1
-
-        
-        if global_step%10 == 0 : 
-            train_image= x[0].detach().cpu().squeeze()
-            train_gt= y[0].detach().cpu().squeeze()
-            train_pred= output[0].detach().cpu().squeeze()
-
-            fig = plot_slices(image=train_image,
-                        gt=train_gt,
-                        pred=train_pred,
-                                )
-
-            wandb.log({"training images": wandb.Image(fig)})
-            plt.close(fig)
-            
-            
-
-    
-    epoch_iterator_val = tqdm(val_loader, desc="Validate (X / X Steps) (dice=X.X)", dynamic_ncols=True)
-    dice_val = validation(epoch_iterator_val)
-    epoch_loss /= step
-    epoch_loss_values.append(epoch_loss)
-    metric_values.append(dice_val)
-    if dice_val > dice_val_best:
-        dice_val_best = dice_val
-        global_step_best = global_step
-        torch.save(model.state_dict(), os.path.join(root_dir, "best_metric_model.pth"))
-        print(
-            "Model Was Saved ! Current Best Avg. Dice: {} Current Avg. Dice: {}".format(dice_val_best, dice_val)
-        )
-    else:
-        print(
-            "Model Was Not Saved ! Current Best Avg. Dice: {} Current Avg. Dice: {}".format(
-                dice_val_best, dice_val
-            )
-        )
-       
-    wandb_logs = {
-                "train_loss": epoch_loss,
-                
-            }
-    
-    wandb_logs.clear()
-    
-    
-
-    return global_step, dice_val_best, global_step_best
-
-
-
-
-
 def plot_slices(image, gt, pred, debug=False):
     """
     Plot the image, ground truth and prediction of the mid-sagittal axial slice
@@ -205,13 +210,7 @@ def plot_slices(image, gt, pred, debug=False):
         axs[1, i].imshow(gt[mid_sagittal-3+i,:,:].T); axs[1, i].axis('off')
         axs[2, i].imshow(pred[mid_sagittal-3+i,:,:].T); axs[2, i].axis('off')
 
-    # fig, axs = plt.subplots(1, 3, figsize=(10, 8))
-    # fig.suptitle('Original Image --> Ground Truth --> Prediction')
-    # slice = image.shape[2]//2
-
-    # axs[0].imshow(image[:, :, slice].T, cmap='gray'); axs[0].axis('off') 
-    # axs[1].imshow(gt[:, :, slice].T); axs[1].axis('off')
-    # axs[2].imshow(pred[:, :, slice].T); axs[2].axis('off')
+    
     
     plt.tight_layout()
     fig.show()
@@ -294,18 +293,7 @@ val_loader = DataLoader(val_ds, batch_size=1, shuffle=False, num_workers=4, pin_
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-"""model = ViT(
-    in_channels=1,  # Number of input modalities
-    img_size=target_specs["T2"]["shape"],  # Input image shape
-    patch_size=(4, 16, 16),
-    hidden_size=768,
-    mlp_dim=3072,
-    num_heads=12,
-    pos_embed_type="sincos",
-    classification=False,
-    num_classes=1,  # Output channel for segmentation
-    dropout_rate=0.1
-).to(device)"""
+
 
 model = UNETR(
     in_channels=1,
@@ -321,14 +309,17 @@ model = UNETR(
     dropout_rate=0.0,
 ).to(device)
 
-loss_function = DiceCELoss(to_onehot_y=True, softmax=True, smooth_dr=1e-4)
-torch.backends.cudnn.benchmark = True
-optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=1e-5)
 
-max_iterations = 25000
-post_label = AsDiscrete(to_onehot=14)
-post_pred = AsDiscrete(argmax=True, to_onehot=14)
-dice_metric = DiceMetric(include_background=True, reduction="mean", get_not_nans=False)
+
+
+loss_function = DiceCELoss(sigmoid = False, smooth_dr=1e-4) #added sigmoid=False discussion with PL
+torch.backends.cudnn.benchmark = True
+optimizer = torch.optim.AdamW(model.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"])
+
+max_iterations = config["max_iteration"]
+post_label = Compose([EnsureType()])
+post_pred = Compose([EnsureType()])
+dice_metric = DiceMetric(include_background=False, reduction="mean", get_not_nans=False)
 global_step = 0
 dice_val_best = 0.0
 global_step_best = 0
@@ -339,5 +330,3 @@ while global_step < max_iterations:
 model.load_state_dict(torch.load(os.path.join(root_dir, "best_metric_model.pth")))
 
 wandb.finish()  
-
-
