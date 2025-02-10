@@ -75,15 +75,17 @@ resource.setrlimit(resource.RLIMIT_NOFILE, (4096, rlimit[1]))
 config = {
     "max_iteration": 5000,
     "batch_size": 1,
-    "learning_rate": 1e-3,  
+    "learning_rate": 1e-4,  
     "model": UNETR ,
     "weight_decay": 1e-5, 
+    "feature_size": 16
 }
 
 
 def train(global_step, train_loader, dice_val_best, global_step_best):
     model.train()
     epoch_loss = 0
+    dice_epoch = 0 
     step = 0
     epoch_iterator = tqdm(train_loader, desc="Training (X / X Steps) (loss=X.X)", dynamic_ncols=True)
     
@@ -104,7 +106,10 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
         )
         global_step += 1
 
-        dice_metric(y_pred=output, y=y)
+        train_outputs = [post_pred(i) for i in decollate_batch(output)]
+        train_labels = [post_label(i) for i in decollate_batch(y)]
+            
+        dice_metric(y_pred=train_outputs, y=train_labels)
         
         if global_step%30 == 0 : 
             train_image= x[0].detach().cpu().squeeze()
@@ -119,16 +124,21 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
             wandb.log({"training images": wandb.Image(fig)})
             plt.close(fig)
             
-        
     
+    
+    mean_dice_train = dice_metric.aggregate().item()
+    wandb.log({"train_dice": mean_dice_train, "epoch": global_step//80})
+    print(mean_dice_train)
+    dice_metric.reset()
+
     epoch_iterator_val = tqdm(val_loader, desc="Validate (X / X Steps) (dice=X.X)", dynamic_ncols=True)
     dice_val = validation(epoch_iterator_val)
     epoch_loss /= step
-    wandb.log({"train_loss": loss.item(), "epoch": global_step//80})  # Log training loss
-    mean_dice_val = dice_metric.aggregate().item()
-    wandb.log({"train_dice": mean_dice_val, "epoch": global_step//80})
-    dice_metric.reset()
+    wandb.log({"train_loss": epoch_loss, "epoch": global_step//80})  # Log training loss
+    print(epoch_loss)
+    
     wandb.log({"val_dice": dice_val, "epoch": global_step//80})  # Log training loss
+    print(dice_val)
        
     epoch_loss_values.append(epoch_loss)
     metric_values.append(dice_val)
@@ -159,15 +169,19 @@ def validation(epoch_iterator_val):
     counter = 0 
     with torch.no_grad():
         for batch in epoch_iterator_val:
-            val_inputs, val_labels = (batch["image"].cuda(), batch["label"].cuda())
-            val_outputs = sliding_window_inference(val_inputs, target_specs["T2"]["shape"], 4, model)
-            val_labels_list = decollate_batch(val_labels)
-            val_labels_convert = [post_label(val_label_tensor) for val_label_tensor in val_labels_list]
-            val_outputs_list = decollate_batch(val_outputs)
-            val_output_convert = [post_pred(val_pred_tensor) for val_pred_tensor in val_outputs_list]
-            dice_metric(y_pred=val_output_convert, y=val_labels_convert)
-            epoch_iterator_val.set_description("Validate (%d / %d Steps)" % (global_step, 10.0))  # noqa: B038
             
+            val_inputs, val_labels = (batch["image"].cuda(), batch["label"].cuda())
+            outputs = sliding_window_inference(val_inputs, target_specs["T2"]["shape"], mode="gaussian",
+                                           sw_batch_size=4, predictor=model, overlap=0.5,) 
+             # get probabilities from logits
+            outputs = F.relu(outputs) / F.relu(outputs).max() if bool(F.relu(outputs).max()) else F.relu(outputs)
+        
+            loss = loss_function(outputs, val_labels)
+            val_outputs = [post_pred(i) for i in decollate_batch(outputs)]
+            val_labels = [post_label(i) for i in decollate_batch(val_labels)]
+            dice_metric(y_pred=val_outputs, y=val_labels)
+            epoch_iterator_val.set_description("Validate (%d / %d Steps)" % (global_step, 20.0))  # noqa: B038
+
             if counter%10 == 0 : 
                 val_image= val_inputs[0].detach().cpu().squeeze()
                 val_gt= val_labels[0].detach().cpu().squeeze()
@@ -222,11 +236,12 @@ def plot_slices(image, gt, pred, debug=False):
 
 
      
-config = None  
+
 output_path = os.path.join("output_path", str(datetime.now().date()) +"_" +str(datetime.now().time()))
 os.makedirs(output_path, exist_ok=True)
 
 wandb.init(project=f'monai-ms-lesion-seg-unetr', config=config, save_code=True, dir=output_path)
+
 
 
 exp_logger = pl.loggers.WandbLogger(
@@ -237,7 +252,7 @@ exp_logger = pl.loggers.WandbLogger(
                     config=config)
 
 # Saving training script to wandb
-wandb.save(config)
+wandb.save(str(config))
 
 # Paths
 train_dir = "dataset_split/train"
@@ -299,7 +314,7 @@ model = UNETR(
     in_channels=1,
     out_channels=1,
     img_size=(16, 512, 528),
-    feature_size=4,
+    feature_size=config["feature_size"],
     hidden_size=768,
     mlp_dim=3072,
     num_heads=12,

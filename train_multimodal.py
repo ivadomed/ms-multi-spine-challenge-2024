@@ -83,7 +83,7 @@ rs = np.random.RandomState()
 config = {
     "max_iteration": 5000,
     "batch_size": 1,
-    "learning_rate": 1e-4,
+    "learning_rate": 1e-4, #1e-3 ? 
     "model": UNETR ,
     "weight_decay": 1e-5, 
 }
@@ -319,9 +319,7 @@ def train_transforms_totalspineseg():
         RandLambdad(keys=["image1","image2"],func=aug_exp,prob=0.1,),
         RandLambdad(keys=["image1","image2"],func=aug_sig,prob=0.1, ),
         RandLambdad(keys=["image1","image2"],func=aug_laplace,prob=0.1,),
-        RandLambdad(keys=["image1","image2"],func=aug_inverse,prob=0.1, ),
-
-        
+        RandLambdad(keys=["image1","image2"],func=aug_inverse,prob=0.1, ),        
     ]
     
     # artifacts augmentation
@@ -420,7 +418,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     dropout_rate=0.1
 ).to(device)"""
 
-model = UNETR(
+"""model = UNETR(
     in_channels=2,
     out_channels=1,
     img_size=target_specs["image"]["shape"],
@@ -432,9 +430,9 @@ model = UNETR(
     norm_name="instance",
     res_block=True,
     dropout_rate=0.0,
-).to(device)
+).to(device)"""
 
-"""model = SwinUNETR(
+model = SwinUNETR(
     img_size=target_specs["image"]["shape"],
     in_channels=2,
     out_channels=1,
@@ -443,9 +441,9 @@ model = UNETR(
     attn_drop_rate=0.0,
     dropout_path_rate=0.0,
     use_checkpoint=True,
-).to(device)"""
+).to(device)
 
-loss_function = DiceCELoss(to_onehot_y=True, softmax=True, smooth_dr=1e-4)
+loss_function = DiceCELoss(sigmoid = False, smooth_dr=1e-4) #added sigmoid=False discussion with PL
 torch.backends.cudnn.benchmark = True
 optimizer = torch.optim.AdamW(model.parameters(), lr=config["learning_rate"], weight_decay=config["weight_decay"])
 
