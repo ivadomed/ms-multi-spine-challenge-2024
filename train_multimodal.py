@@ -165,9 +165,9 @@ def validation(epoch_iterator_val):
             val_outputs = [post_pred(i) for i in decollate_batch(outputs)]
             val_labels = [post_label(i) for i in decollate_batch(val_labels)]
             dice_metric(y_pred=val_outputs, y=val_labels)
-            epoch_iterator_val.set_description("Validate (%d / %d Steps)" % (global_step, 10.0))  # noqa: B038
+            epoch_iterator_val.set_description("Validate (%d / %d Steps)" % (global_step, 20.0))  # noqa: B038
             
-            if True or counter%10 == 0 : 
+            if  True or counter%20 == 0 : 
                 val_image= val_inputs[0].detach().cpu().squeeze()
                 val_gt= val_labels[0][0].detach().cpu().squeeze()
                 val_pred= outputs[0].detach().cpu().squeeze()
@@ -184,7 +184,7 @@ def validation(epoch_iterator_val):
         
         mean_dice_val = dice_metric.aggregate().item()
         dice_metric.reset()
-        wandb.log({"val_dice": mean_dice_val, "global_step": global_step}) 
+        wandb.log({"val_dice": mean_dice_val, "epoch": global_step//80}) 
 
     return mean_dice_val
     
@@ -215,7 +215,7 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
         global_step += 1
         wandb.log({"train_loss": loss.item(), "global_step": global_step})  # Log training loss
        
-        if True or global_step%10 == 0 : 
+        if global_step%50 == 0 : 
            
             train_image= x[0].detach().cpu().squeeze()
             train_gt= y[0].detach().cpu().squeeze()
