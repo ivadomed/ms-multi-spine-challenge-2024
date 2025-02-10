@@ -34,44 +34,41 @@ def aug_histogram_equalization(image1, seg, image2):
 
     return image1, seg, image2
 
-def aug_transform(image1, seg, image2, transform):
+def aug_transform(image1, transform):
     img_min1, img_max1 = image1.min(), image1.max()
-    img_min2, img_max2 = image2.min(), image2.max()
+
 
     image1 = (image1 - image1.mean()) / image1.std()
     image1 = np.interp(image1, (image1.min(), image1.max()), (0, 1))
-    image2 = (image2 - image2.mean()) / image2.std()
-    image2 = np.interp(image2, (image2.min(), image2.max()), (0, 1))
 
     image1 = transform(image1)
-    image2 = transform(image2)
+    
 
     image1 = np.interp(image1, (image1.min(), image1.max()), (img_min1, img_max1))
-    image2 = np.interp(image2, (image2.min(), image2.max()), (img_min2, img_max2))
+    
 
-    return image1, seg, image2
+    return image1
 
-def aug_log(image1, seg, image2):
-    return aug_transform(image1, seg, image2, lambda x: np.log(1 + x))
+def aug_log(image1):
+    return aug_transform(image1, lambda x: np.log(1 + x))
 
-def aug_sqrt(image1, seg, image2):
-    return aug_transform(image1, seg, image2, np.sqrt)
+def aug_sqrt(image1 ):
+    return aug_transform(image1,  np.sqrt)
 
-def aug_sin(image1, seg, image2):
-    return aug_transform(image1, seg, image2, np.sin)
+def aug_sin(image1):
+    return aug_transform(image1,  np.sin)
 
-def aug_exp(image1, seg, image2):
-    return aug_transform(image1, seg, image2, np.exp)
+def aug_exp(image1):
+    return aug_transform(image1, np.exp)
 
-def aug_sig(image1, seg, image2):
-    return aug_transform(image1, seg, image2, lambda x: 1 / (1 + np.exp(-x)))
+def aug_sig(image1):
+    return aug_transform(image1, lambda x: 1 / (1 + np.exp(-x)))
 
-def aug_laplace(image1, seg, image2):
-    return aug_transform(image1, seg, image2, lambda x: np.abs(ndi.laplace(x)))
+def aug_laplace(image1):
+    return aug_transform(image1,  lambda x: np.abs(ndi.laplace(x)))
 
 def aug_inverse(image1):
     image1 = image1.min() + image1.max() - image1
-    
     return image1
 
 def aug_bspline(image1, seg, image2):
@@ -139,7 +136,7 @@ def aug_spike(image1, seg, image2):
     ))
     return subject.image.data.squeeze().numpy().astype(np.float64), subject.seg.data.squeeze().numpy().astype(np.uint8), subject.image2.data.squeeze().numpy().astype(np.float64)
 
-def aug_bias_field(image1, seg, image2):
+def aug_bias_field(image1, image2, seg):
     subject = tio.RandomBiasField()(tio.Subject(
         image=tio.ScalarImage(tensor=np.expand_dims(image1, axis=0)),
         seg=tio.LabelMap(tensor=np.expand_dims(seg, axis=0)),

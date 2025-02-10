@@ -59,6 +59,8 @@ from monai.transforms import (
     RandScaleIntensityd,
     ScaleIntensityd,
     EnsureChannelFirstd,
+    RandGaussianSharpend,
+    Lambdad
 )
 from monai.networks.nets import ViT,  UNet, BasicUNet, AttentionUnet, SwinUNETR, UNETR
 from monai.losses import DiceCELoss, DiceLoss
@@ -69,6 +71,12 @@ import nibabel as nib
 from tqdm import tqdm
 import matplotlib.pyplot as plt 
 from augment import *
+import resource
+
+
+rlimit = resource.getrlimit(resource.RLIMIT_NOFILE)
+resource.setrlimit(resource.RLIMIT_NOFILE, (4096, rlimit[1]))
+
 
 rs = np.random.RandomState()
 
@@ -76,7 +84,7 @@ config = {
     "max_iteration": 5000,
     "batch_size": 1,
     "learning_rate": 1e-4,
-    "model": SwinUNETR ,
+    "model": UNETR ,
     "weight_decay": 1e-5, 
 }
 
@@ -126,14 +134,15 @@ def plot_slices_combined(combined, gt, pred, debug=False):
     
     # plot X slices before and after the mid-sagittal slice in a grid
     fig, axs = plt.subplots(4, 6, figsize=(10, 6))
-    fig.suptitle('Original Image --> Ground Truth --> Prediction')
+    fig.suptitle('T2 Image --> Other contrast --> Ground Truth --> Prediction')
     if np.all(combined == 0):
         print("Array contains only zeros")
     for i in range(6):
         axs[0, i].imshow(combined[0,mid_sagittal-3+i,:,:].T, cmap='gray'); axs[0, i].axis('off') 
-        axs[1, i].imshow(gt[mid_sagittal-3+i,:,:].T); axs[1, i].axis('off')
-        axs[2, i].imshow(pred[mid_sagittal-3+i,:,:].T); axs[2, i].axis('off')
-        axs[3, i].imshow(combined[1,mid_sagittal-3+i,:,:].T, cmap='gray'); axs[3, i].axis('off') 
+        axs[1, i].imshow(combined[1,mid_sagittal-3+i,:,:].T, cmap='gray'); axs[1, i].axis('off') 
+        axs[2, i].imshow(gt[mid_sagittal-3+i,:,:].T); axs[2, i].axis('off')
+        axs[3, i].imshow(pred[mid_sagittal-3+i,:,:].T); axs[3, i].axis('off')
+        
     
     plt.tight_layout()
     fig.show()
@@ -175,6 +184,8 @@ def validation(epoch_iterator_val):
         
         mean_dice_val = dice_metric.aggregate().item()
         dice_metric.reset()
+        wandb.log({"val_dice": mean_dice_val, "global_step": global_step}) 
+
     return mean_dice_val
     
 
@@ -202,7 +213,9 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
             "Training (%d / %d Steps) (loss=%2.5f)" % (global_step, max_iterations, loss)
         )
         global_step += 1
-        if global_step%10 == 0 : 
+        wandb.log({"train_loss": loss.item(), "global_step": global_step})  # Log training loss
+       
+        if True or global_step%10 == 0 : 
            
             train_image= x[0].detach().cpu().squeeze()
             train_gt= y[0].detach().cpu().squeeze()
@@ -282,8 +295,11 @@ target_specs = {
     "seg": {"resolution": (3.0, 0.7, 0.7), "shape": (32,512,512)}  # Same as T2
 }
 
-train_transforms = Compose(
-    [
+
+def train_transforms_totalspineseg():
+    
+    transforms_monai = [
+        # pre-processing
         LoadImaged(keys=["image1", "image2", "label"]),
         EnsureChannelFirstd(keys=["image1",'image2', "label"]),
         Orientationd(keys=["image1","image2", "label"], axcodes="RPI"),
@@ -292,59 +308,55 @@ train_transforms = Compose(
             pixdim=target_specs["image"]["resolution"],
             mode=("bilinear", "bilinear", "nearest"),
         ),
-        ScaleIntensityd(
-            keys=["image1","image2"],
-        ),
         ResizeWithPadOrCropd(keys=["image1","image2", "label"], spatial_size=target_specs["image"]["shape"]),
-        RandLambdad(
+         RandLambdad(
             keys=["image1","image2"],
             func=aug_log,
             prob=0.1,
         ),
+        RandLambdad(keys=["image1","image2"],func=aug_sqrt,prob=0.1,),
+        RandLambdad(keys=["image1","image2"],func=aug_sin,prob=0.1,),
+        RandLambdad(keys=["image1","image2"],func=aug_exp,prob=0.1,),
+        RandLambdad(keys=["image1","image2"],func=aug_sig,prob=0.1, ),
+        RandLambdad(keys=["image1","image2"],func=aug_laplace,prob=0.1,),
+        RandLambdad(keys=["image1","image2"],func=aug_inverse,prob=0.1, ),
 
-        RandLambdad(
-            keys=["image1","image2"],
-            func=aug_sqrt,
-            prob=0.1,
-        ),
-
-        RandLambdad(
-            keys=["image1","image2"],
-            func=aug_sin,
-            prob=0.1,
-        ),
-
-        RandLambdad(
-            keys=["image1","image2"],
-            func=aug_exp,
-            prob=0.1,
-        ),
-
-        RandLambdad(
-            keys=["image1","image2"],
-            func=aug_sig,
-            prob=0.1,
-        ),
-
-        RandLambdad(
-            keys=["image1","image2"],
-            func=aug_laplace,
-            prob=0.1,
-        ),
-
-        RandLambdad(
-            keys=["image1","image2"],
-            func=aug_inverse,
-            prob=0.1,
-        ),
         
-    
-
-        ConcatItemsd(keys=["image1","image2"], name="combined"),
-        ToTensord(keys=["combined"])
     ]
-)
+    
+    # artifacts augmentation
+    if rs.rand() < 0.7:
+        transforms_monai.append(rs.choice([
+            tio.RandomMotion(include=["image1",'image2', "label"]), 
+            tio.RandomGhosting(include=["image1",'image2', "label"]),
+            tio.RandomSpike(intensity=(1,2), include=["image1",'image2']),
+            tio.RandomBiasField(include=["image1",'image2']),
+            tio.RandomBlur(include=["image1",'image2']),
+            Lambdad(keys=["image1"],func= lambda x: x ),
+        ], p = [0.1,0.1,0.1,0.1,0.1,0.5]))
+    transforms_monai.append(RandGaussianNoised(keys=["image1",'image2'], mean=0.0, std=0.1, prob=0.1))
+    transforms_monai.append(RandGaussianSharpend(keys=["image1",'image2'], prob=0.1),)
+    # spatial augmentation
+    transforms_monai.append(tio.RandomFlip(axes=('LR'), flip_probability=0.3, include=["image1",'image2', "label"]))
+    if rs.rand() < 0.7:
 
+        transforms_monai.append(rs.choice([
+            tio.RandomAffine(image_interpolation='bspline', label_interpolation='linear', include=["image1",'image2', "label"]),
+            tio.RandomAffine(image_interpolation='linear', label_interpolation='nearest', include=["image1",'image2', "label"]),
+            tio.RandomElasticDeformation(max_displacement=30, include=["image1",'image2', "label"]),
+            Lambdad(keys=["image1"],func= lambda x: x ),
+        ], p=[0.1, 0.1, 0.1, 0.7]))
+
+    # simulate low resolution
+    #if rs.rand() < 0.7:
+    #z    transforms_monai.append(tio.RandomAnisotropy(downsampling=(1.5, 5), include=["image1",'image2', "label"]))
+    transforms_monai.append(tio.RescaleIntensity(out_min_max=(0, 1), percentiles=(0.5, 99.5), include=["image1",'image2']))
+    transforms_monai.append(ConcatItemsd(keys=["image1","image2"], name="combined"))
+    transforms_monai.append(ToTensord(keys=["combined"]))
+    return Compose(transforms_monai)
+
+
+train_transforms = train_transforms_totalspineseg()
 
 val_transforms = Compose(
     [
@@ -408,7 +420,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     dropout_rate=0.1
 ).to(device)"""
 
-"""model = UNETR(
+model = UNETR(
     in_channels=2,
     out_channels=1,
     img_size=target_specs["image"]["shape"],
@@ -420,9 +432,9 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     norm_name="instance",
     res_block=True,
     dropout_rate=0.0,
-).to(device)"""
+).to(device)
 
-model = SwinUNETR(
+"""model = SwinUNETR(
     img_size=target_specs["image"]["shape"],
     in_channels=2,
     out_channels=1,
@@ -431,7 +443,7 @@ model = SwinUNETR(
     attn_drop_rate=0.0,
     dropout_path_rate=0.0,
     use_checkpoint=True,
-).to(device)
+).to(device)"""
 
 loss_function = DiceCELoss(to_onehot_y=True, softmax=True, smooth_dr=1e-4)
 torch.backends.cudnn.benchmark = True

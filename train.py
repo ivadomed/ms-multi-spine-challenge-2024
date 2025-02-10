@@ -18,6 +18,7 @@ import torch.multiprocessing
 from monai.data import (
     DataLoader,
     CacheDataset,
+    Dataset,
     load_decathlon_datalist,
     decollate_batch,
 )
@@ -64,6 +65,12 @@ from monai.inferers import sliding_window_inference
 import nibabel as nib
 from tqdm import tqdm
 import matplotlib.pyplot as plt 
+
+import resource
+
+
+rlimit = resource.getrlimit(resource.RLIMIT_NOFILE)
+resource.setrlimit(resource.RLIMIT_NOFILE, (4096, rlimit[1]))
 
 
 
@@ -334,5 +341,3 @@ model.load_state_dict(torch.load(os.path.join(root_dir, "best_metric_model.pth")
 wandb.finish()  
 
 
-if __name__ == "__main__":
-    main()
