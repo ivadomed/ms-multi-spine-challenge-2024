@@ -55,7 +55,8 @@ from monai.transforms import (
     RandZoomd,
     RandGaussianSmoothd,
     RandScaleIntensityd,
-    ScaleIntensityd
+    ScaleIntensityd,
+    RandGaussianSharpend
 )
 from monai.networks.nets import ViT,  UNet, BasicUNet, AttentionUnet, SwinUNETR, UNETR
 from monai.losses import DiceCELoss, DiceLoss
@@ -65,8 +66,17 @@ from monai.inferers import sliding_window_inference
 import nibabel as nib
 from tqdm import tqdm
 import matplotlib.pyplot as plt 
-
+from augment import *
 import resource
+
+def dice_score(prediction, groundtruth, smooth=1.):
+    numer = (prediction * groundtruth).sum()
+
+    denor = (prediction + groundtruth).sum()
+
+    # loss = (2 * numer + self.smooth) / (denor + self.smooth)
+    dice = (2 * numer + smooth) / (denor + smooth)
+    return dice
 
 
 rlimit = resource.getrlimit(resource.RLIMIT_NOFILE)
@@ -78,7 +88,8 @@ config = {
     "learning_rate": 1e-4,  
     "model": UNETR ,
     "weight_decay": 1e-5, 
-    "feature_size": 16
+    "feature_size": 16,
+    "data_augmentation": "no aug", #"aug_sqrt, aug_sin,aug_exp,aug_sig,aug_laplace,aug_inverse, RandGaussianNoised,RandGaussianSharpend,tio.RescaleIntensity," 
 }
 
 
@@ -106,10 +117,9 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
         )
         global_step += 1
 
-        train_outputs = [post_pred(i) for i in decollate_batch(output)]
-        train_labels = [post_label(i) for i in decollate_batch(y)]
+        
             
-        dice_metric(y_pred=train_outputs, y=train_labels)
+        dice_epoch += dice_score(prediction= output,  groundtruth = y).detach().cpu().item()
         
         if global_step%30 == 0 : 
             train_image= x[0].detach().cpu().squeeze()
@@ -126,10 +136,10 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
             
     
     
-    mean_dice_train = dice_metric.aggregate().item()
-    wandb.log({"train_dice": mean_dice_train, "epoch": global_step//80})
-    print(mean_dice_train)
-    dice_metric.reset()
+    dice_epoch /= step
+    wandb.log({"train_dice": dice_epoch, "epoch": global_step//80})
+    print(dice_epoch)
+    
 
     epoch_iterator_val = tqdm(val_loader, desc="Validate (X / X Steps) (dice=X.X)", dynamic_ncols=True)
     dice_val = validation(epoch_iterator_val)
@@ -167,8 +177,10 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
 def validation(epoch_iterator_val):
     model.eval()
     counter = 0 
+    val_dice_epoch = 0 
+    number = 0 
     with torch.no_grad():
-        for batch in epoch_iterator_val:
+        for step, batch in enumerate(epoch_iterator_val):
             
             val_inputs, val_labels = (batch["image"].cuda(), batch["label"].cuda())
             outputs = sliding_window_inference(val_inputs, target_specs["T2"]["shape"], mode="gaussian",
@@ -177,12 +189,18 @@ def validation(epoch_iterator_val):
             outputs = F.relu(outputs) / F.relu(outputs).max() if bool(F.relu(outputs).max()) else F.relu(outputs)
         
             loss = loss_function(outputs, val_labels)
+      
             val_outputs = [post_pred(i) for i in decollate_batch(outputs)]
             val_labels = [post_label(i) for i in decollate_batch(val_labels)]
-            dice_metric(y_pred=val_outputs, y=val_labels)
+           
+            number += len(val_outputs)
+            dice = dice_score(val_outputs[0], val_labels[0]).detach().cpu().sum().item()
+            
+            val_dice_epoch += dice
+
             epoch_iterator_val.set_description("Validate (%d / %d Steps)" % (global_step, 20.0))  # noqa: B038
 
-            if counter%10 == 0 : 
+            if True or counter%10 == 0 : 
                 val_image= val_inputs[0].detach().cpu().squeeze()
                 val_gt= val_labels[0].detach().cpu().squeeze()
                 val_pred= val_outputs[0].detach().cpu().squeeze()
@@ -197,9 +215,11 @@ def validation(epoch_iterator_val):
             
             counter+=1 
         
-        mean_dice_val = dice_metric.aggregate().item()
-        dice_metric.reset()
-    return mean_dice_val
+        
+        val_dice_epoch /= number
+       
+        
+    return val_dice_epoch
 
 
 def plot_slices(image, gt, pred, debug=False):
@@ -229,18 +249,11 @@ def plot_slices(image, gt, pred, debug=False):
     plt.tight_layout()
     fig.show()
     return fig
-
-
-
-
-
-
      
-
 output_path = os.path.join("output_path", str(datetime.now().date()) +"_" +str(datetime.now().time()))
 os.makedirs(output_path, exist_ok=True)
 
-wandb.init(project=f'monai-ms-lesion-seg-unetr', config=config, save_code=True, dir=output_path)
+wandb.init(project=f'monai-ms-lesion-seg-transformer-approach', config=config, save_code=True, dir=output_path)
 
 
 
@@ -273,7 +286,32 @@ train_transforms = Compose(
         Orientationd(keys=["image", "label"], axcodes="RPI"),
         Spacingd(
             keys=["image", "label"],
-            pixdim=(3.0, 0.7, 0.7),
+            pixdim=target_specs["T2"]["resolution"],
+            mode=("bilinear", "nearest"),
+        ),
+        
+        #RandLambdad(keys=["image"],func=aug_sqrt,prob=0.1,),
+        #RandLambdad(keys=["image"],func=aug_sin,prob=0.1,),
+        #RandLambdad(keys=["image"],func=aug_exp,prob=0.1,),
+        #RandLambdad(keys=["image"],func=aug_sig,prob=0.1, ),
+        #RandLambdad(keys=["image"],func=aug_laplace,prob=0.1,),
+        #RandLambdad(keys=["image"],func=aug_inverse,prob=0.1, ),        
+        #RandGaussianNoised(keys=["image"], mean=0.0, std=0.1, prob=0.1),
+        #RandGaussianSharpend(keys=["image"], prob=0.1),   
+        #tio.RescaleIntensity(out_min_max=(0, 1), percentiles=(0.5, 99.5), include=["image"]),
+
+        ResizeWithPadOrCropd(keys=["image", "label"], spatial_size=target_specs["T2"]["shape"]),
+    ]
+)
+
+val_transforms = Compose(
+    [
+        LoadImaged(keys=["image", "label"]),
+        EnsureChannelFirstd(keys=["image", "label"]),
+        Orientationd(keys=["image", "label"], axcodes="RPI"),
+        Spacingd(
+            keys=["image", "label"],
+            pixdim=target_specs["T2"]["resolution"],
             mode=("bilinear", "nearest"),
         ),
         ScaleIntensityd(
@@ -282,7 +320,6 @@ train_transforms = Compose(
         ResizeWithPadOrCropd(keys=["image", "label"], spatial_size=target_specs["T2"]["shape"]),
     ]
 )
-val_transforms = train_transforms
 
 data_dir = ""
 split_json = "dataset_split.json"
@@ -334,7 +371,7 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=config["learning_rate"], we
 max_iterations = config["max_iteration"]
 post_label = Compose([EnsureType()])
 post_pred = Compose([EnsureType()])
-dice_metric = DiceMetric(include_background=False, reduction="mean", get_not_nans=False)
+#dice_metric = DiceMetric(include_background=False, reduction="mean", get_not_nans=False)
 global_step = 0
 dice_val_best = 0.0
 global_step_best = 0
