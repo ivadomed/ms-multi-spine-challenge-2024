@@ -56,7 +56,8 @@ from monai.transforms import (
     RandGaussianSmoothd,
     RandScaleIntensityd,
     ScaleIntensityd,
-    RandGaussianSharpend
+    RandGaussianSharpend,
+    RandLambda
 )
 from monai.networks.nets import ViT,  UNet, BasicUNet, AttentionUnet, SwinUNETR, UNETR
 from monai.losses import DiceCELoss, DiceLoss
@@ -68,6 +69,8 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt 
 from augment import *
 import resource
+
+rs = np.random.RandomState()
 
 def dice_score(prediction, groundtruth, smooth=1.):
     numer = (prediction * groundtruth).sum()
@@ -83,18 +86,25 @@ rlimit = resource.getrlimit(resource.RLIMIT_NOFILE)
 resource.setrlimit(resource.RLIMIT_NOFILE, (4096, rlimit[1]))
 
 config = {
-    "max_iteration": 5000,
+    "max_iteration": 20000,
     "batch_size": 1,
     "learning_rate": 1e-4,  
     "model": UNETR ,
     "weight_decay": 1e-5, 
     "feature_size": 16,
-    "data_augmentation": "no aug", #"aug_sqrt, aug_sin,aug_exp,aug_sig,aug_laplace,aug_inverse, RandGaussianNoised,RandGaussianSharpend,tio.RescaleIntensity," 
+    "data_augmentation": "aug_sqrt, aug_sin, aug_exp, aug_sig, aug_laplace, aug_inverse, RandBiasFieldd RandAffined, RandGaussianNoised RandGaussianSharpend Rand3DElasticd, RandShiftIntensityd"
 }
+    
+
+
+
 
 
 def train(global_step, train_loader, dice_val_best, global_step_best):
     model.train()
+
+    
+
     epoch_loss = 0
     dice_epoch = 0 
     step = 0
@@ -121,7 +131,7 @@ def train(global_step, train_loader, dice_val_best, global_step_best):
             
         dice_epoch += dice_score(prediction= output,  groundtruth = y).detach().cpu().item()
         
-        if global_step%30 == 0 : 
+        if  global_step%3 == 0 : 
             train_image= x[0].detach().cpu().squeeze()
             train_gt= y[0].detach().cpu().squeeze()
             train_pred= output[0].detach().cpu().squeeze()
@@ -279,8 +289,8 @@ target_specs = {
     "seg": {"resolution": (3.0, 0.7, 0.7), "shape": (16, 512, 528)}  # Same as T2
 }
 
-train_transforms = Compose(
-    [
+def train_transfo():
+    transforms_monai = [ 
         LoadImaged(keys=["image", "label"]),
         EnsureChannelFirstd(keys=["image", "label"]),
         Orientationd(keys=["image", "label"], axcodes="RPI"),
@@ -290,19 +300,27 @@ train_transforms = Compose(
             mode=("bilinear", "nearest"),
         ),
         
-        #RandLambdad(keys=["image"],func=aug_sqrt,prob=0.1,),
-        #RandLambdad(keys=["image"],func=aug_sin,prob=0.1,),
-        #RandLambdad(keys=["image"],func=aug_exp,prob=0.1,),
-        #RandLambdad(keys=["image"],func=aug_sig,prob=0.1, ),
-        #RandLambdad(keys=["image"],func=aug_laplace,prob=0.1,),
-        #RandLambdad(keys=["image"],func=aug_inverse,prob=0.1, ),        
-        #RandGaussianNoised(keys=["image"], mean=0.0, std=0.1, prob=0.1),
-        #RandGaussianSharpend(keys=["image"], prob=0.1),   
-        #tio.RescaleIntensity(out_min_max=(0, 1), percentiles=(0.5, 99.5), include=["image"]),
+        RandLambdad(keys=["image"],func=aug_sqrt,prob=0.1,),
+        RandLambdad(keys=["image"],func=aug_sin,prob=0.1,),
+        RandLambdad(keys=["image"],func=aug_exp,prob=0.1,),
+        RandLambdad(keys=["image"],func=aug_sig,prob=0.1, ),
+        RandLambdad(keys=["image"],func=aug_laplace,prob=0.1,),
+        RandLambdad(keys=["image"],func=aug_inverse,prob=0.1, ),   
+        RandBiasFieldd(keys=["image"],prob=0.1),
+        RandAffined(keys=["image","label"],prob=0.1, padding_mode="zeros", mode=["bilinear", "nearest"]), 
 
-        ResizeWithPadOrCropd(keys=["image", "label"], spatial_size=target_specs["T2"]["shape"]),
-    ]
-)
+        RandGaussianNoised(keys=["image"], mean=0.0, std=0.1, prob=0.1),
+        RandGaussianSharpend(keys=["image"], prob=0.1),   
+
+        Rand3DElasticd(keys=["image","label"],prob=0.1, padding_mode="zeros", mode=["bilinear", "nearest"], sigma_range=(5,7), magnitude_range=(50,150)),
+            
+        RandShiftIntensityd(keys=["image","label"],prob=1,offsets=(10,20)),
+        ResizeWithPadOrCropd(keys=["image", "label"], spatial_size=target_specs["T2"]["shape"])]
+    
+
+    return Compose(transforms_monai) 
+
+train_transforms = train_transfo()
 
 val_transforms = Compose(
     [
