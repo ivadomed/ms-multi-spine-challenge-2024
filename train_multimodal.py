@@ -118,7 +118,7 @@ def plot_slices(image, gt, pred, debug=False):
 
 
 def plot_slices_combined(combined, gt, pred, debug=False):
-    """
+    """z
     Plot the image, ground truth and prediction of the mid-sagittal axial slice
     The orientaion is assumed to RPI
     """
@@ -319,7 +319,8 @@ def train_transforms_totalspineseg():
         RandLambdad(keys=["image1","image2"],func=aug_exp,prob=0.1,),
         RandLambdad(keys=["image1","image2"],func=aug_sig,prob=0.1, ),
         RandLambdad(keys=["image1","image2"],func=aug_laplace,prob=0.1,),
-        RandLambdad(keys=["image1","image2"],func=aug_inverse,prob=0.1, ),        
+        RandLambdad(keys=["image1","image2"],func=aug_inverse,prob=0.1, ),      
+        
     ]
     
     # artifacts augmentation
