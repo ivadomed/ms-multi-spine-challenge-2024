@@ -1,0 +1,2 @@
+# nnunetv2==2.4 # Installation of nnUnet model should be done with pip install -e . in the repo containing the specific trainer
+acvl_utils==0.2
