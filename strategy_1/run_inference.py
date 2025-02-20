@@ -115,7 +115,7 @@ def main():
                 tmpdir = os.path.join(output_path, 'tmp')
                 os.makedirs(tmpdir, exist_ok=True)
                 
-                img_in = Image(str(natural_images[0]))
+                img_in = Image(str(image))
                 orig_orientation = get_orientation(img_in)
                 model_orientation = 'RPI'
                 if orig_orientation != model_orientation:
