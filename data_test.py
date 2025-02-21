@@ -4,7 +4,7 @@ import json
 import nibabel as nib
 import numpy as np
 
-def convert_to_nnUNet_format(root_dir, output_dir, task_name="Dataset030_ms-challenge-multimodal"):
+def convert_to_nnUNet_format(root_dir, output_dir, task_name="Dataset240_ms-challenge-multimodal"):
     nnUNet_base = os.path.join(output_dir, "nnUNet_raw", task_name)
     imagesTr = os.path.join(nnUNet_base, "imagesTr")
     labelsTr = os.path.join(nnUNet_base, "labelsTr")
@@ -27,15 +27,7 @@ def convert_to_nnUNet_format(root_dir, output_dir, task_name="Dataset030_ms-chal
         
         assert os.system(f"sct_image -i {t2w_image} -setorient RPI -o {imagesTr}/{sub}_0000.nii.gz") ==0
 
-        contrast_image = None
-        for contrast in contrast_list:
-            contrast_path = os.path.join(anat_dir, f"{sub}_desc-preprocReg_{contrast}.nii.gz")
-            if os.path.exists(contrast_path):
-                contrast_image = contrast_path
-                break
-
-        assert os.system(f"sct_image -i {contrast_image} -setorient RPI -o {imagesTr}/{sub}_0001.nii.gz") ==0
-        
+       
        
         
         if os.path.exists(label_image):
@@ -51,7 +43,7 @@ def convert_to_nnUNet_format(root_dir, output_dir, task_name="Dataset030_ms-chal
             assert os.system(f"sct_image -i {label_path} -setorient RPI -o {label_path}") ==0
     
     dataset_json = {
-        "channel_names": {"0": "T2", "1": "Contrast"},
+        "channel_names": {"0": "T2"},
         "labels": {"background": 0, "lesion": 1},
         "numTraining": len(subjects),
         "file_ending": ".nii.gz"
