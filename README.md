@@ -17,4 +17,4 @@ export nnUNet_results="nnUNet_results"
 
 nnUNetv2_plan_and_preprocess -d 30 -pl nnUNetPlannerResEncL --verify_dataset_integrity
 
-nnUNetv2_train 30 3d_fullres 0 --npz -p nnUNetResEncUNetLPlans
+CUDA_VISIBLE_DEVICES=1  nnUNetv2_train 40 3d_fullres 0 --npz -p nnUNetResEncUNetLPlans -tr 
