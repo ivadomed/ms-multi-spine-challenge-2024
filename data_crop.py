@@ -7,18 +7,12 @@ def get_nonzero_bbox(image_data):
     nonzero_coords = np.argwhere(image_data > 0)
     min_idx = np.min(nonzero_coords, axis=0)
     max_idx = np.max(nonzero_coords, axis=0) + 1  # Include last index
-    return tuple(slice(min_idx[d], max_idx[d]) for d in range(image_data.ndim)), min_idx
+    print(min_idx,max_idx)
+    return max_idx, min_idx
 
-def crop_and_save_nifti(input_path, output_path, bbox, min_idx):
-    nifti = nib.load(input_path)
-    cropped_data = nifti.get_fdata()[bbox]
-    new_affine = nifti.affine.copy()
-    new_affine[:3, 3] += nifti.affine[:3, :3] @ min_idx  # Update origin
-    cropped_nifti = nib.Nifti1Image(cropped_data, affine=new_affine, header=nifti.header)
-    cropped_nifti.header.set_data_shape(cropped_data.shape)  # Update header with new shape
-    nib.save(cropped_nifti, output_path)
 
-def convert_to_nnUNet_format(root_dir, output_dir, task_old="Dataset030_ms-challenge-multimodal", task_new="Dataset031_ms-challenge-multimodal-cropped"):
+
+def convert_to_nnUNet_format(root_dir, output_dir, task_old="Dataset030_ms-challenge-multimodal", task_new="Dataset035_ms-challenge-multimodal-cropped"):
     nnUNet_base_old = os.path.join(output_dir, "nnUNet_raw", task_old)
     nnUNet_base_new = os.path.join(output_dir, "nnUNet_raw", task_new)
     
@@ -40,12 +34,13 @@ def convert_to_nnUNet_format(root_dir, output_dir, task_old="Dataset030_ms-chall
         label_path_old = os.path.join(labelsTr_old, f"{sub}.nii.gz")
         
         t2w_nifti = nib.load(t2w_path_old)
-        bbox, min_idx = get_nonzero_bbox(t2w_nifti.get_fdata())
+        max_idx, min_idx = get_nonzero_bbox(t2w_nifti.get_fdata())
         
-        crop_and_save_nifti(t2w_path_old, os.path.join(imagesTr_new, f"{sub}_0000.nii.gz"), bbox, min_idx)
-        crop_and_save_nifti(contrast_path_old, os.path.join(imagesTr_new, f"{sub}_0001.nii.gz"), bbox, min_idx)
-        if os.path.exists(label_path_old):
-            crop_and_save_nifti(label_path_old, os.path.join(labelsTr_new, f"{sub}.nii.gz"), bbox, min_idx)
+        os.system(f'sct_crop_image -i {t2w_path_old} -o {os.path.join(imagesTr_new, f"{sub}_0000.nii.gz")} -zmin {min_idx[0]} -xmin {min_idx[1]} -ymin {min_idx[2]} -zmax {max_idx[0]} -xmax {max_idx[1]}  -ymax {max_idx[2]} ')
+        os.system(f'sct_crop_image -i {contrast_path_old} -o {os.path.join(imagesTr_new, f"{sub}_0001.nii.gz")} -zmin {min_idx[0]} -xmin {min_idx[1]} -ymin {min_idx[2]} -zmax {max_idx[0]} -xmax {max_idx[1]}  -ymax {max_idx[2]} ')
+        os.system(f'sct_crop_image -i {label_path_old} -o {os.path.join(labelsTr_new, f"{sub}.nii.gz")} -zmin {min_idx[0]} -xmin {min_idx[1]} -ymin {min_idx[2]} -zmax {max_idx[0]} -xmax {max_idx[1]}  -ymax {max_idx[2]} ')
+       
+        
     
     with open(os.path.join(nnUNet_base_old, "dataset.json"), "r") as f:
         dataset_json = json.load(f)
