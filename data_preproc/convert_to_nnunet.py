@@ -1,3 +1,24 @@
+"""
+This script is used to convert the ms-multi-spine challenge dataset from the BIDS format to the nnUNet format.
+The script will need to create the types of dataset detailed in the PR head: https://github.com/ivadomed/ms-multi-spine-challenge-2024/pull/13.
+It takes as input a predefined data split (detailed in this issue: https://github.com/ivadomed/ms-multi-spine-challenge-2024/issues/12). 
+
+Input: 
+    --data: Path to the root directory of the dataset.
+    --output: Path to the output directory where the nnUNet dataset will be created (nnUnet_raw).
+    --path-data-split: Path to the data split YAML file.
+    --task-name: Name of the task for nnUNet.
+    --task-number: Number of the task for nnUnet (it has to be 3 digits).
+    --dataset-type: Number corresponding to the dataset type we want to create. 
+
+Output:
+    None
+
+Author: Thomas Dagonneau and Pierre-Louis Benveniste
+
+TODO: 
+    - 
+"""
 import os
 import shutil
 import json
@@ -5,6 +26,18 @@ import nibabel as nib
 import numpy as np
 import yaml
 import argparse
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--data", type=str, required=True, help="Path to the root directory of the dataset.")
+    parser.add_argument("--output", type=str, required=True, help="Path to the output directory where the nnUNet dataset will be created (nnUnet_raw).")
+    parser.add_argument("--path-data-split", type=str, required=True, help="Path to the data split YAML file.")
+    parser.add_argument("--task-name", type=str, default="MsMultiSpine", help="Name of the task for nnUNet.")
+    parser.add_argument("--task-number", type=str, required=True, help="Number of the task for nnUnet (it has to be 3 digits).")
+    parser.add_argument("--dataset-type", type=int, required=True, help="Number corresponding to the dataset type we want to create.")
+    args = parser.parse_args()
+    return args
 
 
 def convert_to_nnUNet_format(root_dir, output_dir, path_data_split, task_name, kind, multimodal):
@@ -113,17 +146,8 @@ def convert_to_nnUNet_format(root_dir, output_dir, path_data_split, task_name, k
     print(f"Dataset successfully converted to nnUNet format at {nnUNet_base}")
 
 def main():
-    parser = argparse.ArgumentParser(description="Convert dataset to nnUNet format.")
-    parser.add_argument("--root_dir", type=str, help="Root directory of the dataset.")
-    parser.add_argument("--output_dir", type=str, help="Output directory where nnUNet_raw is.")
-    parser.add_argument("--path_data_split", type=str, help="Path to the data split YAML file.")
-    parser.add_argument("--task_name", type=str, help="Task name for nnUNet.")
-    parser.add_argument("--kind_of_image", type=str, help="Kind of image to choose among base, preproc (desc-preproc) or preproc-reg (desc-preprocReg).")
-    parser.add_argument("--multimodal", type=bool, default=False ,help="Choose if you want to make a multimodal dataset or not.")
-    
-    args = parser.parse_args()
-    print(args)
-    print(args.multimodal)
+    # Parse the arguments
+    args = parse_arguments()
 
     convert_to_nnUNet_format(args.root_dir, args.output_dir, args.path_data_split, args.task_name, args.kind_of_image, args.multimodal)
 
