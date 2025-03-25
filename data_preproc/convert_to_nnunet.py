@@ -53,7 +53,7 @@ def agg_data(data_dir, dataset_type):
     
     elif dataset_type == 2: # Data for dataset type 2 (monomodal_all_raw)
         # List all raw images
-        raw_images = Path(data_dir).rglob("*.nii.gz")
+        raw_images = Path(data_dir).rglob("*STIR.nii.gz")
         # Remove images with SHA256 in the name
         raw_images = [str(p) for p in raw_images if "SHA256" not in str(p)]
         # Remove images with "preproc" in the name
@@ -172,8 +172,8 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
                 train_images.append(file)
                 train_labels.append(label_file)
                 # Build output paths
-                out_image = path_out_imagesTr / f'{subject_name}_0000.nii.gz'
-                out_label = path_out_labelsTr / f'{subject_name}.nii.gz'
+                out_image = path_out_imagesTr / f'{task_name}_{scan_cnt_train:03d}_0000.nii.gz'
+                out_label = path_out_labelsTr / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
                 
             
             # For the testing files
@@ -183,8 +183,8 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
                 test_images.append(file)
                 test_labels.append(label_file)
                 # Build output paths
-                out_image = path_out_imagesTs / f'{subject_name}_0000.nii.gz'
-                out_label = path_out_labelsTs / f'{subject_name}.nii.gz'
+                out_image = path_out_imagesTs / f'{task_name}_{scan_cnt_train:03d}_0000.nii.gz'
+                out_label = path_out_labelsTs / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
             
             # Add to the conversion dict
             conversion_dict[str(file)] = str(out_image)
@@ -205,6 +205,7 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
             other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
             assert os.system(f"rm {other_file_to_remove}") == 0
+            break
     
     # In the multimodal case
     elif dataset_type in [6, 7, 8]:
@@ -226,9 +227,9 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
                 train_images.append(file2)
                 train_labels.append(label_file)
                 # Build output paths
-                out_image1 = path_out_imagesTr / f'{subject_name}_0000.nii.gz'
-                out_image2 = path_out_imagesTr / f'{subject_name}_0001.nii.gz'
-                out_label = path_out_labelsTr / f'{subject_name}.nii.gz'
+                out_image1 = path_out_imagesTr / f'{task_name}_{scan_cnt_train:03d}_0000.nii.gz'
+                out_image2 = path_out_imagesTr / f'{task_name}_{scan_cnt_train:03d}_0001.nii.gz'
+                out_label = path_out_labelsTr / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
             # For the testing files
             elif subject_name in testing_subjects:
                 scan_cnt_test += 1
@@ -237,9 +238,9 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
                 test_images.append(file2)
                 test_labels.append(label_file)
                 # Build output paths
-                out_image1 = path_out_imagesTs / f'{subject_name}_0000.nii.gz'
-                out_image2 = path_out_imagesTs / f'{subject_name}_0001.nii.gz'
-                out_label = path_out_labelsTs / f'{subject_name}.nii.gz'
+                out_image1 = path_out_imagesTs / f'{task_name}_{scan_cnt_train:03d}_0000.nii.gz'
+                out_image2 = path_out_imagesTs / f'{task_name}_{scan_cnt_train:03d}_0001.nii.gz'
+                out_label = path_out_labelsTs / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
 
             # Add to the conversion dict
             # Add to the conversion dict
@@ -311,9 +312,9 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
     json_dict["file_ending"] = ".nii.gz"
 
     if dataset_type in [1, 2, 3, 4, 5]:
-        json_dict['training'] = [{'image': str(train_labels[i]).replace("labelsTr", "imagesTr") , "label": train_labels[i] }
-                                    for i in range(len(train_images))]
-        json_dict['test'] = [{'image': str(test_labels[i]).replace("labelsTs", "imagesTs") , "label": test_labels[i] }
+        json_dict['training'] = [{'image': str(train_images[i]) , "label": train_labels[i] }
+                                    for i in range(len(train_labels))]
+        json_dict['test'] = [{'image': str(test_images[i]) , "label": test_labels[i] }
                                     for i in range(len(test_images))]
     
     elif dataset_type in [6, 7, 8]:
@@ -331,6 +332,39 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
         outfile.write(json_object)
     print(f"Conversion done. The dataset is saved in {path_out}")
 
+    return json_dict
+
+
+def register_label_from_T2w(json_dict, output_dir):
+    """
+    This script is used to register the label to the T2w image.
+    To do so, we need to create the warping field from T2w to the other contrasts and apply it the label.
+    """
+    # We iterate over the training dict
+    for element in json_dict["training"]:
+        print(element)
+        image = element["image"]
+        label = element["label"]
+        # if the image is not a T2w we need to modify the label
+        if "T2w" not in image:
+            # Get corresponding T2w image
+            contrast = image.split('/')[-1].split('_')[-1].split('.')[0]
+            T2w_image = image.replace(contrast, "T2w")
+            # Build temporary folder in output path
+            temp_folder = Path(output_dir) / "tmp"
+            temp_folder.mkdir(parents=True, exist_ok=True)
+            # Build warping field from T2w_image to image
+            assert os.system(f"sct_register_multimodal -i {T2w_image} -d {image} -ofolder {temp_folder} -owarp {temp_folder/'warp_t2_to_stir.nii.gz'}") == 0
+            # Apply the warping field to the label
+            assert os.system(f"sct_apply_transfo -i {label} -d {label} -w {temp_folder/'warp_t2_to_stir.nii.gz'} -o {label} -x nn") == 0
+            # Binarize the label and save it
+            label_data = nib.load(label).get_fdata()
+            label_data[label_data > 0.1] = 1
+            label_nifti = nib.Nifti1Image(label_data, nib.load(label).affine)
+            nib.save(label_nifti, label)
+            # Remove the temporary folder
+            assert os.system(f"rm -r {temp_folder}") == 0
+
 
 def main():
     # Parse the arguments
@@ -340,7 +374,13 @@ def main():
     aggregated_data = agg_data(args.data, args.dataset_type)
 
     # Then we convert it to the nnUnet format
-    convert_to_nnUNet_format(aggregated_data, args.output, args.path_data_split, args.task_name, args.task_number, args.dataset_type)
+    json_dict = convert_to_nnUNet_format(aggregated_data, args.output, args.path_data_split, args.task_name, args.task_number, args.dataset_type)
+
+    # In the case of dataset type 2, we need to register the label to the image.
+    ## This means that we need to create the warping field from T2w to the other contrasts and apply it the label
+    if args.dataset_type == 2:
+        # Register the label to the T2w image
+        register_label_from_T2w(json_dict, args.output)
 
 
 if __name__ == "__main__":
