@@ -20,13 +20,12 @@ TODO:
     - 
 """
 import os
-# import shutil
-# import json
+import json
 import nibabel as nib
-# import numpy as np
 import yaml
 import argparse
 from pathlib import Path
+from collections import OrderedDict
 
 
 def parse_arguments():
@@ -159,70 +158,179 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
         for file in agg_data:
             # Get the subject name
             subject_name = file.split('/')[-1].split('_')[0]
+            # Get corresponding label
+            label_file = file.replace('.nii.gz', '_label-lesion_seg.nii.gz')
+            label_file = label_file.replace('ms-multi-spine-challenge-2024', 'ms-multi-spine-challenge-2024/derivatives/labels')
+            if not os.path.exists(label_file):
+                raise ValueError(f"Derivative file not found: {label_file}")
+           
             # Check if the subject is in the training or testing set
             if subject_name in training_subjects:
-                # Get corresponding label
-                label_file = file.replace('.nii.gz', '_label-lesion_seg.nii.gz')
-                label_file = label_file.replace('ms-multi-spine-challenge-2024', 'ms-multi-spine-challenge-2024/derivatives/labels')
-                if not os.path.exists(label_file):
-                    raise ValueError(f"Derivative file not found: {label_file}")
+                scan_cnt_train += 1
                 # Add to the training list
                 train_images.append(file)
                 train_labels.append(label_file)
                 # Build output paths
                 out_image = path_out_imagesTr / f'{subject_name}_0000.nii.gz'
                 out_label = path_out_labelsTr / f'{subject_name}.nii.gz'
-                # Binarize the label and save it
-                label_data = nib.load(label_file).get_fdata()
-                label_data[label_data > 0] = 1
-                label_file = nib.Nifti1Image(label_data, nib.load(label_file).affine)
-                nib.save(label_file, out_label)
-                # Reorient both image and label to desired orientation and location
-                assert os.system(f"sct_image -i {file} -setorient RPI -o {out_image}") == 0
-                assert os.system(f"sct_image -i {out_label} -setorient RPI -o {out_label}") == 0
+                
+            
+            # For the testing files
             elif subject_name in testing_subjects:
-                # Get corresponding label
-                label_file = file.replace('.nii.gz', '_label-lesion_seg.nii.gz')
-                label_file = label_file.replace('ms-multi-spine-challenge-2024', 'ms-multi-spine-challenge-2024/derivatives/labels')
-                if not os.path.exists(label_file):
-                    raise ValueError(f"Derivative file not found: {label_file}")
-                # Add to the training list
+                scan_cnt_test += 1
+                # Add to the testing list
                 test_images.append(file)
                 test_labels.append(label_file)
                 # Build output paths
                 out_image = path_out_imagesTs / f'{subject_name}_0000.nii.gz'
                 out_label = path_out_labelsTs / f'{subject_name}.nii.gz'
-                # Binarize the label and save it
-                label_data = nib.load(label_file).get_fdata()
-                label_data[label_data > 0] = 1
-                label_file = nib.Nifti1Image(label_data, nib.load(label_file).affine)
-                nib.save(label_file, out_label)
-                # Reorient both image and label to desired orientation and location
-                assert os.system(f"sct_image -i {file} -setorient RPI -o {out_image}") == 0
-                assert os.system(f"sct_image -i {out_label} -setorient RPI -o {out_label}") == 0
+            
+            # Add to the conversion dict
+            conversion_dict[str(file)] = str(out_image)
+            conversion_dict[str(label_file)] = str(out_label)
+        
+            # Binarize the label and save it
+            label_data = nib.load(label_file).get_fdata()
+            label_data[label_data > 0] = 1
+            label_file = nib.Nifti1Image(label_data, nib.load(label_file).affine)
+            nib.save(label_file, out_label)
+            # Reorient both image and label to desired orientation and location
+            assert os.system(f"sct_image -i {file} -setorient RPI -o {out_image}") == 0
+            assert os.system(f"sct_image -i {out_label} -setorient RPI -o {out_label}") == 0
+            
+            # An extra security is to use the sct_register_multimodal to match dimension, resolution and orientation
+            assert os.system(f"sct_register_multimodal -i {str(out_label)} -d {str(out_image)} -identity 1 -o {str(out_label)} -owarp file_to_delete.nii.gz -owarpinv file_to_delete_2.nii.gz ") == 0
+            # Remove the other useless files
+            assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
+            other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
+            assert os.system(f"rm {other_file_to_remove}") == 0
+            break
+    
+    # In the multimodal case
+    elif dataset_type in [6, 7, 8]:
+        for file1, file2 in zip(input1_data, input2_data):
+            # Get the subject name
+            subject_name = file1.split('/')[-1].split('_')[0]
+            # Get corresponding label
+            label_file = file1.replace('.nii.gz', '_label-lesion_seg.nii.gz')
+            label_file = label_file.replace('ms-multi-spine-challenge-2024', 'ms-multi-spine-challenge-2024/derivatives/labels')
+            if not os.path.exists(label_file):
+                raise ValueError(f"Derivative file not found: {label_file}")
+            
+            # Check if the subject is in the training or testing set
+            if subject_name in training_subjects:
+                scan_cnt_train += 1
+                # Add to the training list
+                train_images.append(file1)
+                train_images.append(file2)
+                train_labels.append(label_file)
+                # Build output paths
+                out_image1 = path_out_imagesTr / f'{subject_name}_0000.nii.gz'
+                out_image2 = path_out_imagesTr / f'{subject_name}_0001.nii.gz'
+                out_label = path_out_labelsTr / f'{subject_name}.nii.gz'
+            # For the testing files
+            elif subject_name in testing_subjects:
+                scan_cnt_test += 1
+                # Add to the testing list
+                test_images.append(file1)
+                test_images.append(file2)
+                test_labels.append(label_file)
+                # Build output paths
+                out_image1 = path_out_imagesTs / f'{subject_name}_0000.nii.gz'
+                out_image2 = path_out_imagesTs / f'{subject_name}_0001.nii.gz'
+                out_label = path_out_labelsTs / f'{subject_name}.nii.gz'
+
+            # Add to the conversion dict
+            # Add to the conversion dict
+            conversion_dict[str(file1)] = str(out_image1)
+            conversion_dict[str(file2)] = str(out_image2)
+            conversion_dict[str(label_file)] = str(out_label)
+
+            # Binarize the label and save it
+            label_data = nib.load(label_file).get_fdata()
+            label_data[label_data > 0] = 1
+            label_file = nib.Nifti1Image(label_data, nib.load(label_file).affine)
+            nib.save(label_file, out_label)
+            # Reorient both image and label to desired orientation and location
+            assert os.system(f"sct_image -i {file1} -setorient RPI -o {out_image1}") == 0
+            assert os.system(f"sct_image -i {file2} -setorient RPI -o {out_image2}") == 0
+            assert os.system(f"sct_image -i {out_label} -setorient RPI -o {out_label}") == 0
+            
+            # An extra security is to use the sct_register_multimodal to match dimension, resolution and orientation
+            assert os.system(f"sct_register_multimodal -i {str(out_label)} -d {str(out_image1)} -identity 1 -o {str(out_label)} -owarp file_to_delete.nii.gz -owarpinv file_to_delete_2.nii.gz ") == 0
+            # Remove the other useless files
+            assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
+            other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
+            assert os.system(f"rm {other_file_to_remove}") == 0
+            break
+    
+    print("Number of images for training: " + str(scan_cnt_train))
+    print("Number of images for testing: " + str(scan_cnt_test))
 
 
-    # if multimodal:
+    #----------------- CREATION OF THE DICTIONNARY-----------------------------------
+    # create dataset_description.json
+    json_object = json.dumps(conversion_dict, indent=4)
+    # write to dataset description
+    conversion_dict_name = f"conversion_dict.json"
+    with open(os.path.join(path_out, conversion_dict_name), "w") as outfile:
+        outfile.write(json_object)
 
-    #     dataset_json = {
-    #         "channel_names": {"0": "T2", "1": "Contrast"},
-    #         "labels": {"background": 0, "lesion": 1},
-    #         "numTraining": len(training_subjects),
-    #         "file_ending": ".nii.gz"
-    #     }
+    # c.f. dataset json generation. This contains the metadata for the dataset that nnUNet uses during preprocessing and training
+    # general info : https://github.com/MIC-DKFZ/nnUNet/blob/master/nnunet/dataset_conversion/utils.py
+    # example: https://github.com/MIC-DKFZ/nnUNet/blob/master/nnunet/dataset_conversion/Task055_SegTHOR.py
 
-    # else:   
-    #     dataset_json = {
-    #         "channel_names": {"0": "T2"},
-    #         "labels": {"background": 0, "lesion": 1},
-    #         "numTraining": len(training_subjects),
-    #         "file_ending": ".nii.gz"
-    #     }
+    json_dict = OrderedDict()
+    json_dict['name'] = task_name
+    json_dict['description'] = "MS Multi-Spine Challenge 2024"
+    json_dict['tensorImageSize'] = "3D"
+    json_dict['reference'] = "TBD"
+    json_dict['licence'] = "TBD"
+    json_dict['release'] = "0.0"
+    
+    # Because only using one modality  
+    ## was changed from 'modality' to 'channel_names'
+    json_dict['channel_names'] = {
+        "0": "MRI",
+    }
+    if dataset_type in [6, 7, 8]:
+        json_dict['modality'] = {
+            "0": "MRI",
+            "1": "MRI"
+        }
+    
+    # 0 is always the background. Any class labels should start from 1.
+    json_dict['labels'] = {
+        "background" : 0,
+        "lesion" : 1,
+    }
+   
+    json_dict['numTraining'] = scan_cnt_train
+    json_dict['numTest'] = scan_cnt_test
+    #Newly required field in the json file with v2
+    json_dict["file_ending"] = ".nii.gz"
 
-    # with open(os.path.join(nnUNet_base, "dataset.json"), "w") as f:
-    #     json.dump(dataset_json, f, indent=4)
+    if dataset_type in [1, 2, 3, 4, 5]:
+        json_dict['training'] = [{'image': str(train_labels[i]).replace("labelsTr", "imagesTr") , "label": train_labels[i] }
+                                    for i in range(len(train_images))]
+        json_dict['test'] = [{'image': str(test_labels[i]).replace("labelsTs", "imagesTs") , "label": test_labels[i] }
+                                    for i in range(len(test_images))]
+    
+    elif dataset_type in [6, 7, 8]:
+        json_dict['training'] = [{'image1': str(train_images[2*i]), 'image2': str(train_images[2*i+1]), "label": train_labels[i] }
+                                    for i in range(len(train_labels))]
+        json_dict['test'] = [{'image1': str(test_images[2*i]), 'image2': str(test_images[2*i+1]), "label": test_labels[i] }
+                                    for i in range(len(test_labels))]
 
-    # print(f"Dataset successfully converted to nnUNet format at {nnUNet_base}")
+    # create dataset_description.json
+    json_object = json.dumps(json_dict, indent=4)
+    # write to dataset description
+    # nn-unet requires it to be "dataset.json"
+    dataset_dict_name = f"dataset.json"
+    with open(os.path.join(path_out, dataset_dict_name), "w") as outfile:
+        outfile.write(json_object)
+    print(f"Conversion done. The dataset is saved in {path_out}")
+
 
 def main():
     # Parse the arguments
@@ -233,6 +341,7 @@ def main():
 
     # Then we convert it to the nnUnet format
     convert_to_nnUNet_format(aggregated_data, args.output, args.path_data_split, args.task_name, args.task_number, args.dataset_type)
+
 
 if __name__ == "__main__":
     main()
