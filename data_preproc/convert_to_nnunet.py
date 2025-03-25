@@ -158,8 +158,9 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
         for file in agg_data:
             # Get the subject name
             subject_name = file.split('/')[-1].split('_')[0]
+            contrast = file.split('/')[-1].split('_')[-1].split('.')[0]
             # Get corresponding label
-            label_file = file.replace('.nii.gz', '_label-lesion_seg.nii.gz')
+            label_file = file.replace(f'{contrast}.nii.gz', 'T2w_label-lesion_seg.nii.gz')
             label_file = label_file.replace('ms-multi-spine-challenge-2024', 'ms-multi-spine-challenge-2024/derivatives/labels')
             if not os.path.exists(label_file):
                 raise ValueError(f"Derivative file not found: {label_file}")
@@ -210,8 +211,9 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
         for file1, file2 in zip(input1_data, input2_data):
             # Get the subject name
             subject_name = file1.split('/')[-1].split('_')[0]
+            contrast = file1.split('/')[-1].split('_')[-1].split('.')[0]
             # Get corresponding label
-            label_file = file1.replace('.nii.gz', '_label-lesion_seg.nii.gz')
+            label_file = file1.replace(f'{contrast}.nii.gz', 'T2w_label-lesion_seg.nii.gz')
             label_file = label_file.replace('ms-multi-spine-challenge-2024', 'ms-multi-spine-challenge-2024/derivatives/labels')
             if not os.path.exists(label_file):
                 raise ValueError(f"Derivative file not found: {label_file}")
