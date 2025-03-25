@@ -19,12 +19,12 @@ Author: Thomas Dagonneau and Pierre-Louis Benveniste
 TODO: 
     - 
 """
-# import os
+import os
 # import shutil
 # import json
-# import nibabel as nib
+import nibabel as nib
 # import numpy as np
-# import yaml
+import yaml
 import argparse
 from pathlib import Path
 
@@ -115,110 +115,114 @@ def agg_data(data_dir, dataset_type):
         raise ValueError(f"Dataset type {dataset_type} is not recognized.")
 
 
-# def convert_to_nnUNet_format(root_dir, output_dir, path_data_split, task_name, kind, multimodal):
-#     print(multimodal)
-#     #Create the path to the nnUNet directory to put the dataset 
-#     nnUNet_base = os.path.join(output_dir, "nnUNet_raw", task_name)
-#     imagesTr = os.path.join(nnUNet_base, "imagesTr")
-#     labelsTr = os.path.join(nnUNet_base, "labelsTr")
-#     imagesTs = os.path.join(nnUNet_base, "imagesTs")
-#     #If this is the first time running the script, create the directories
-#     os.makedirs(imagesTr, exist_ok=True)
-#     os.makedirs(labelsTr, exist_ok=True)
-#     os.makedirs(imagesTs, exist_ok=True)
+def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, task_number, dataset_type):
+    """
+    This function converts the aggregated data to the nnUNet format.
+    """
 
+    # Split the aggregated data in case of multimodal
+    if dataset_type in [6, 7, 8]:
+        input1_data, input2_data = agg_data
 
+    # Define the output path
+    path_out = Path(os.path.join(output_dir, f'Dataset{task_number}_{task_name}'))
+    # Define paths for train and test folders 
+    path_out_imagesTr = Path(os.path.join(path_out, 'imagesTr'))
+    path_out_imagesTs = Path(os.path.join(path_out, 'imagesTs'))
+    path_out_labelsTr = Path(os.path.join(path_out, 'labelsTr'))
+    path_out_labelsTs = Path(os.path.join(path_out, 'labelsTs'))
+    # Load both train and validation set into the train images as nnunet uses cross-fold-validation
+    train_images, train_labels = [], []
+    test_images, test_labels = [], []
+    # Make the directories
+    path_out.mkdir(parents=True, exist_ok=True)
+    path_out_imagesTr.mkdir(parents=True, exist_ok=True)
+    path_out_imagesTs.mkdir(parents=True, exist_ok=True)
+    path_out_labelsTr.mkdir(parents=True, exist_ok=True)
+    path_out_labelsTs.mkdir(parents=True, exist_ok=True)
+
+    # Initialise the conversion dict
+    conversion_dict = {}
+
+    # Initialise the number of scans in train and in test folder
+    scan_cnt_train, scan_cnt_test = 0, 0
     
-#     # Load the data split
-#     with open(path_data_split, 'r') as file:
-#         data_split_yml = yaml.load(file, Loader=yaml.FullLoader)
+    # Load the data split
+    with open(path_data_split, 'r') as file:
+        data_split_yml = yaml.load(file, Loader=yaml.FullLoader)
+    # Split into the training and testing
+    training_subjects = data_split_yml['TRAINING']
+    testing_subjects = data_split_yml['TESTING']
 
-#     # Split into the training and testing
-#     training_subjects = data_split_yml['TRAINING']
-#     testing_subjects = data_split_yml['TESTING']
-
-
-
-#     # List of contrasts and particles to generate the files names
-#     contrast_list = ["STIR", "PSIR", "MP2RAGE"]
-#     particle_list = {"base": "", "preproc": "desc-preproc_", "preproc_reg": "desc-preprocReg_"}
-
-#     # Loop over the training subjects to convert the data to nnUNet format
-
-#     for sub in training_subjects:
-#         anat_dir = os.path.join(root_dir, sub, "anat")
-#         label_dir = os.path.join(root_dir, "derivatives", "labels", sub, "anat")
-
-#         t2w_image = os.path.join(anat_dir, f"{sub}_{particle_list[kind]}T2w.nii.gz")
-#         label_image = os.path.join(label_dir, f"{sub}_{particle_list[kind]}T2w_label-lesion_seg.nii.gz")
-
-#         assert os.system(f"sct_image -i {t2w_image} -setorient RPI -o {imagesTr}/{sub}_0000.nii.gz") == 0
-
-#         if multimodal: 
-#             contrast_image = None
-#             for contrast in contrast_list:
-#                 contrast_path = os.path.join(anat_dir, f"{sub}_{particle_list[kind]}{contrast}.nii.gz")
-#                 if os.path.exists(contrast_path):
-#                     contrast_image = contrast_path
-#                     break
-
-#             assert os.system(f"sct_image -i {contrast_image} -setorient RPI -o {imagesTr}/{sub}_0001.nii.gz") == 0
-
-
-#         if os.path.exists(label_image):
-#             label_nifti = nib.load(label_image)
-#             label_data = label_nifti.get_fdata()
-
-#             # Convert labels: set non-zero voxels to 1, keep zeros as 0
-#             binary_label_data = (label_data > 0).astype(np.int8)
-
-#             new_label_nifti = nib.Nifti1Image(binary_label_data, affine=label_nifti.affine, header=label_nifti.header)
-#             label_path = os.path.join(labelsTr, f"{sub}.nii.gz")
-#             nib.save(new_label_nifti, label_path)
-#             assert os.system(f"sct_image -i {label_path} -setorient RPI -o {label_path}") == 0
-
-        
-
-        
-#     for sub in testing_subjects:
-#         anat_dir = os.path.join(root_dir, sub, "anat")
-
-#         t2w_image = os.path.join(anat_dir, f"{sub}_{particle_list[kind]}T2w.nii.gz")
-
-#         assert os.system(f"sct_image -i {t2w_image} -setorient RPI -o {imagesTs}/{sub}_0000.nii.gz") == 0
-
-#         if multimodal: 
-#             contrast_image = None
-#             for contrast in contrast_list:
-#                 contrast_path = os.path.join(anat_dir, f"{sub}_{particle_list[kind]}{contrast}.nii.gz")
-#                 if os.path.exists(contrast_path):
-#                     contrast_image = contrast_path
-#                     break
-
-#             assert os.system(f"sct_image -i {contrast_image} -setorient RPI -o {imagesTs}/{sub}_0001.nii.gz") == 0
+    # Convert the data to nnUNet format of the monomodal datasets
+    if dataset_type in [1, 2, 3, 4, 5]:
+        for file in agg_data:
+            # Get the subject name
+            subject_name = file.split('/')[-1].split('_')[0]
+            # Check if the subject is in the training or testing set
+            if subject_name in training_subjects:
+                # Get corresponding label
+                label_file = file.replace('.nii.gz', '_label-lesion_seg.nii.gz')
+                label_file = label_file.replace('ms-multi-spine-challenge-2024', 'ms-multi-spine-challenge-2024/derivatives/labels')
+                if not os.path.exists(label_file):
+                    raise ValueError(f"Derivative file not found: {label_file}")
+                # Add to the training list
+                train_images.append(file)
+                train_labels.append(label_file)
+                # Build output paths
+                out_image = path_out_imagesTr / f'{subject_name}_0000.nii.gz'
+                out_label = path_out_labelsTr / f'{subject_name}.nii.gz'
+                # Binarize the label and save it
+                label_data = nib.load(label_file).get_fdata()
+                label_data[label_data > 0] = 1
+                label_file = nib.Nifti1Image(label_data, nib.load(label_file).affine)
+                nib.save(label_file, out_label)
+                # Reorient both image and label to desired orientation and location
+                assert os.system(f"sct_image -i {file} -setorient RPI -o {out_image}") == 0
+                assert os.system(f"sct_image -i {out_label} -setorient RPI -o {out_label}") == 0
+            elif subject_name in testing_subjects:
+                # Get corresponding label
+                label_file = file.replace('.nii.gz', '_label-lesion_seg.nii.gz')
+                label_file = label_file.replace('ms-multi-spine-challenge-2024', 'ms-multi-spine-challenge-2024/derivatives/labels')
+                if not os.path.exists(label_file):
+                    raise ValueError(f"Derivative file not found: {label_file}")
+                # Add to the training list
+                test_images.append(file)
+                test_labels.append(label_file)
+                # Build output paths
+                out_image = path_out_imagesTs / f'{subject_name}_0000.nii.gz'
+                out_label = path_out_labelsTs / f'{subject_name}.nii.gz'
+                # Binarize the label and save it
+                label_data = nib.load(label_file).get_fdata()
+                label_data[label_data > 0] = 1
+                label_file = nib.Nifti1Image(label_data, nib.load(label_file).affine)
+                nib.save(label_file, out_label)
+                # Reorient both image and label to desired orientation and location
+                assert os.system(f"sct_image -i {file} -setorient RPI -o {out_image}") == 0
+                assert os.system(f"sct_image -i {out_label} -setorient RPI -o {out_label}") == 0
 
 
-#     if multimodal:
+    # if multimodal:
 
-#         dataset_json = {
-#             "channel_names": {"0": "T2", "1": "Contrast"},
-#             "labels": {"background": 0, "lesion": 1},
-#             "numTraining": len(training_subjects),
-#             "file_ending": ".nii.gz"
-#         }
+    #     dataset_json = {
+    #         "channel_names": {"0": "T2", "1": "Contrast"},
+    #         "labels": {"background": 0, "lesion": 1},
+    #         "numTraining": len(training_subjects),
+    #         "file_ending": ".nii.gz"
+    #     }
 
-#     else:   
-#         dataset_json = {
-#             "channel_names": {"0": "T2"},
-#             "labels": {"background": 0, "lesion": 1},
-#             "numTraining": len(training_subjects),
-#             "file_ending": ".nii.gz"
-#         }
+    # else:   
+    #     dataset_json = {
+    #         "channel_names": {"0": "T2"},
+    #         "labels": {"background": 0, "lesion": 1},
+    #         "numTraining": len(training_subjects),
+    #         "file_ending": ".nii.gz"
+    #     }
 
-#     with open(os.path.join(nnUNet_base, "dataset.json"), "w") as f:
-#         json.dump(dataset_json, f, indent=4)
+    # with open(os.path.join(nnUNet_base, "dataset.json"), "w") as f:
+    #     json.dump(dataset_json, f, indent=4)
 
-#     print(f"Dataset successfully converted to nnUNet format at {nnUNet_base}")
+    # print(f"Dataset successfully converted to nnUNet format at {nnUNet_base}")
 
 def main():
     # Parse the arguments
@@ -226,10 +230,9 @@ def main():
 
     # First we aggregated the data depending on the dataset type
     aggregated_data = agg_data(args.data, args.dataset_type)
-    if args.dataset_type in [6, 7, 8]:
-        input1_data, input2_data = aggregated_data
-    
-    # convert_to_nnUNet_format(args.root_dir, args.output_dir, args.path_data_split, args.task_name, args.kind_of_image, args.multimodal)
+
+    # Then we convert it to the nnUnet format
+    convert_to_nnUNet_format(aggregated_data, args.output, args.path_data_split, args.task_name, args.task_number, args.dataset_type)
 
 if __name__ == "__main__":
     main()
