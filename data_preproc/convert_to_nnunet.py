@@ -269,7 +269,6 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
             other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
             assert os.system(f"rm {other_file_to_remove}") == 0
-            break
     
     print("Number of images for training: " + str(scan_cnt_train))
     print("Number of images for testing: " + str(scan_cnt_test))
