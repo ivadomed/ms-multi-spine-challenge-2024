@@ -53,7 +53,7 @@ def agg_data(data_dir, dataset_type):
     
     elif dataset_type == 2: # Data for dataset type 2 (monomodal_all_raw)
         # List all raw images
-        raw_images = Path(data_dir).rglob("*STIR.nii.gz")
+        raw_images = Path(data_dir).rglob("*.nii.gz")
         # Remove images with SHA256 in the name
         raw_images = [str(p) for p in raw_images if "SHA256" not in str(p)]
         # Remove images with "preproc" in the name
@@ -140,8 +140,9 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
     path_out_labelsTr.mkdir(parents=True, exist_ok=True)
     path_out_labelsTs.mkdir(parents=True, exist_ok=True)
 
-    # Initialise the conversion dict
+    # Initialise the conversion dict and image_label_conversion_dict
     conversion_dict = {}
+    image_label_conversion_dict = {}
 
     # Initialise the number of scans in train and in test folder
     scan_cnt_train, scan_cnt_test = 0, 0
@@ -189,12 +190,15 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             # Add to the conversion dict
             conversion_dict[str(file)] = str(out_image)
             conversion_dict[str(label_file)] = str(out_label)
+            # Add to the image_label_conversion_dict
+            sub_dict = {"image_source": str(file), "label_source": str(label_file), "image_nnunet": str(out_image), "label_nnunet": str(out_label)}
+            image_label_conversion_dict[str(file)] = sub_dict
         
             # Binarize the label and save it
             label_data = nib.load(label_file).get_fdata()
             label_data[label_data > 0] = 1
-            label_file = nib.Nifti1Image(label_data, nib.load(label_file).affine)
-            nib.save(label_file, out_label)
+            label_nifty = nib.Nifti1Image(label_data, nib.load(label_file).affine)
+            nib.save(label_nifty, out_label)
             # Reorient both image and label to desired orientation and location
             assert os.system(f"sct_image -i {file} -setorient RPI -o {out_image}") == 0
             assert os.system(f"sct_image -i {out_label} -setorient RPI -o {out_label}") == 0
@@ -205,7 +209,6 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
             other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
             assert os.system(f"rm {other_file_to_remove}") == 0
-            break
     
     # In the multimodal case
     elif dataset_type in [6, 7, 8]:
@@ -243,16 +246,18 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
                 out_label = path_out_labelsTs / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
 
             # Add to the conversion dict
-            # Add to the conversion dict
             conversion_dict[str(file1)] = str(out_image1)
             conversion_dict[str(file2)] = str(out_image2)
             conversion_dict[str(label_file)] = str(out_label)
+            # Add to the image_label_conversion_dict
+            sub_dict = {"image1_source": str(file1), "image2_source": str(file2), "label_source": str(label_file), "image1_nnunet": str(out_image1), "image2_nnunet": str(out_image2), "label_nnunet": str(out_label)}
+            image_label_conversion_dict[str(file1)] = sub_dict
 
             # Binarize the label and save it
             label_data = nib.load(label_file).get_fdata()
             label_data[label_data > 0] = 1
-            label_file = nib.Nifti1Image(label_data, nib.load(label_file).affine)
-            nib.save(label_file, out_label)
+            label_nifty = nib.Nifti1Image(label_data, nib.load(label_file).affine)
+            nib.save(label_nifty, out_label)
             # Reorient both image and label to desired orientation and location
             assert os.system(f"sct_image -i {file1} -setorient RPI -o {out_image1}") == 0
             assert os.system(f"sct_image -i {file2} -setorient RPI -o {out_image2}") == 0
@@ -264,10 +269,10 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
             other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
             assert os.system(f"rm {other_file_to_remove}") == 0
+            break
     
     print("Number of images for training: " + str(scan_cnt_train))
     print("Number of images for testing: " + str(scan_cnt_test))
-
 
     #----------------- CREATION OF THE DICTIONNARY-----------------------------------
     # create dataset_description.json
@@ -332,38 +337,60 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
         outfile.write(json_object)
     print(f"Conversion done. The dataset is saved in {path_out}")
 
-    return json_dict
+    return image_label_conversion_dict
 
 
-def register_label_from_T2w(json_dict, output_dir):
+def register_label_from_T2w(image_label_dict, output_dir):
     """
     This script is used to register the label to the T2w image.
     To do so, we need to create the warping field from T2w to the other contrasts and apply it the label.
     """
     # We iterate over the training dict
-    for element in json_dict["training"]:
-        print(element)
-        image = element["image"]
-        label = element["label"]
+    for element in image_label_dict:
+        image_source = image_label_dict[element]["image_source"]
+        image_nnunet = image_label_dict[element]["image_nnunet"]
+        label_nnunet = image_label_dict[element]["label_nnunet"]
         # if the image is not a T2w we need to modify the label
-        if "T2w" not in image:
+        if "T2w" not in image_source:
             # Get corresponding T2w image
-            contrast = image.split('/')[-1].split('_')[-1].split('.')[0]
-            T2w_image = image.replace(contrast, "T2w")
+            contrast = image_source.split('/')[-1].split('_')[-1].split('.')[0]
+            T2w_image = image_source.replace(contrast, "T2w")
             # Build temporary folder in output path
             temp_folder = Path(output_dir) / "tmp"
             temp_folder.mkdir(parents=True, exist_ok=True)
             # Build warping field from T2w_image to image
-            assert os.system(f"sct_register_multimodal -i {T2w_image} -d {image} -ofolder {temp_folder} -owarp {temp_folder/'warp_t2_to_stir.nii.gz'}") == 0
+            assert os.system(f"sct_register_multimodal -i {T2w_image} -d {image_source} -ofolder {temp_folder} -owarp {temp_folder/'warp_t2_to_stir.nii.gz'}") == 0
             # Apply the warping field to the label
-            assert os.system(f"sct_apply_transfo -i {label} -d {label} -w {temp_folder/'warp_t2_to_stir.nii.gz'} -o {label} -x nn") == 0
+            assert os.system(f"sct_apply_transfo -i {label_nnunet} -d {image_nnunet} -w {temp_folder/'warp_t2_to_stir.nii.gz'} -o {label_nnunet} -x nn") == 0
             # Binarize the label and save it
-            label_data = nib.load(label).get_fdata()
+            label_data = nib.load(label_nnunet).get_fdata()
             label_data[label_data > 0.1] = 1
-            label_nifti = nib.Nifti1Image(label_data, nib.load(label).affine)
-            nib.save(label_nifti, label)
+            label_nifti = nib.Nifti1Image(label_data, nib.load(label_nnunet).affine)
+            nib.save(label_nifti, label_nnunet)
             # Remove the temporary folder
             assert os.system(f"rm -r {temp_folder}") == 0
+    print("Label registration done.")
+
+
+def register_2ndInput_to_T2wInput(image_label_dict, output_dir):
+    """
+    This function is used in the context of dataset_type 7.
+    It registers the 2nd input (which is either STIR, PSIR or MP2RAGE) to the T2w input.
+    """
+    # We iterate over the images
+    for element in image_label_dict:
+        image1_nnunet = image_label_dict[element]["image1_nnunet"]
+        image2_nnunet = image_label_dict[element]["image2_nnunet"]
+        # Build temporary folder in output path
+        temp_folder = Path(output_dir) / "tmp"
+        temp_folder.mkdir(parents=True, exist_ok=True)
+        # Register the 2nd input to the T2w input
+        assert os.system(f"sct_register_multimodal -i {image2_nnunet} -d {image1_nnunet} -ofolder {temp_folder} -owarp {temp_folder/'warp_stir_to_t2.nii.gz'} -o {temp_folder/'input2_registered_to_input1.nii.gz'}") == 0
+        # Copy the registered file to the nnunet folder
+        assert os.system(f"cp {temp_folder/'input2_registered_to_input1.nii.gz'} {image2_nnunet}") == 0
+        # Remove the temporary folder
+        assert os.system(f"rm -r {temp_folder}") == 0
+    print("2nd input registration done.")
 
 
 def main():
@@ -374,13 +401,20 @@ def main():
     aggregated_data = agg_data(args.data, args.dataset_type)
 
     # Then we convert it to the nnUnet format
-    json_dict = convert_to_nnUNet_format(aggregated_data, args.output, args.path_data_split, args.task_name, args.task_number, args.dataset_type)
+    image_label_dict = convert_to_nnUNet_format(aggregated_data, args.output, args.path_data_split, args.task_name, args.task_number, args.dataset_type)
 
     # In the case of dataset type 2, we need to register the label to the image.
     ## This means that we need to create the warping field from T2w to the other contrasts and apply it the label
     if args.dataset_type == 2:
         # Register the label to the T2w image
-        register_label_from_T2w(json_dict, args.output)
+        register_label_from_T2w(image_label_dict, args.output)
+
+    # In the case of dataset type 7, we need to register the other contrast to the T2w image.
+    if args.dataset_type == 7:
+        # Register the label to the T2w image
+        register_2ndInput_to_T2wInput(image_label_dict, args.output)
+    
+    print("Conversion done.")
 
 
 if __name__ == "__main__":
