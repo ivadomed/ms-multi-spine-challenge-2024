@@ -272,6 +272,8 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             assert os.system(f"rm {other_file_to_remove}") == 0
 
             # If dataset_type is 9, we need to crop the images
+            ## The cropping is zone by finding the empty region on the T2w image
+            ## That cropping is applied to image1, image2 and label
             if dataset_type == 9:
 
                 # Function to extract the coordinates to crop from  
@@ -283,17 +285,14 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
                 
                 # Load the image and get the coordinates
                 image_data = nib.load(out_image1).get_fdata()
-
+                # Get the cropping box coordinates
                 max_idx, min_idx = get_nonzero_bbox(image_data)
-        
+                # Crop the images using SCT
                 assert os.system(f'sct_crop_image -i {out_image1} -o {out_image1} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0
                 assert os.system(f'sct_crop_image -i {out_image2} -o {out_image2} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0 
                 assert os.system(f'sct_crop_image -i {out_label} -o {out_label} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0 
-    
-            
 
-
-    
+    # Print number of images in training and testing
     print("Number of images for training: " + str(scan_cnt_train))
     print("Number of images for testing: " + str(scan_cnt_test))
 
@@ -308,7 +307,6 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
     # c.f. dataset json generation. This contains the metadata for the dataset that nnUNet uses during preprocessing and training
     # general info : https://github.com/MIC-DKFZ/nnUNet/blob/master/nnunet/dataset_conversion/utils.py
     # example: https://github.com/MIC-DKFZ/nnUNet/blob/master/nnunet/dataset_conversion/Task055_SegTHOR.py
-
     json_dict = OrderedDict()
     json_dict['name'] = task_name
     json_dict['description'] = "MS Multi-Spine Challenge 2024"
