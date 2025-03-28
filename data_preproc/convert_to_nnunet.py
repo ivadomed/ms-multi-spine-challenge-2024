@@ -115,6 +115,14 @@ def agg_data(data_dir, dataset_type):
         raise ValueError(f"Dataset type {dataset_type} is not recognized.")
 
 
+# Function to extract the coordinates to crop from  
+def get_nonzero_bbox(image_data):
+    nonzero_coords = np.argwhere(image_data > 0)
+    min_idx = np.min(nonzero_coords, axis=0)
+    max_idx = np.max(nonzero_coords, axis=0) + 1  # Include last index
+    return max_idx, min_idx
+
+
 def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, task_number, dataset_type):
     """
     This function converts the aggregated data to the nnUNet format.
@@ -210,16 +218,9 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
             other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
             assert os.system(f"rm {other_file_to_remove}") == 0
-    
-            if dataset_type == 10:
 
-                # Function to extract the coordinates to crop from  
-                def get_nonzero_bbox(image_data):
-                    nonzero_coords = np.argwhere(image_data > 0)
-                    min_idx = np.min(nonzero_coords, axis=0)
-                    max_idx = np.max(nonzero_coords, axis=0) + 1  # Include last index
-                    return max_idx, min_idx
-                
+            # For the dataset type 10, we crop the image around non-empty areas of the image
+            if dataset_type == 10:
                 # Load the image and get the coordinates
                 image_data = nib.load(out_image).get_fdata()
                 # Get the cropping box coordinates
@@ -227,7 +228,6 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
                 # Crop the images using SCT
                 assert os.system(f'sct_crop_image -i {out_image} -o {out_image} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0
                 assert os.system(f'sct_crop_image -i {out_label} -o {out_label} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0 
-
 
     # In the multimodal case
     elif dataset_type in [6, 7, 8, 9]:
@@ -293,14 +293,6 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             ## The cropping is zone by finding the empty region on the T2w image
             ## That cropping is applied to image1, image2 and label
             if dataset_type == 9:
-
-                # Function to extract the coordinates to crop from  
-                def get_nonzero_bbox(image_data):
-                    nonzero_coords = np.argwhere(image_data > 0)
-                    min_idx = np.min(nonzero_coords, axis=0)
-                    max_idx = np.max(nonzero_coords, axis=0) + 1  # Include last index
-                    return max_idx, min_idx
-                
                 # Load the image and get the coordinates
                 image_data = nib.load(out_image1).get_fdata()
                 # Get the cropping box coordinates
