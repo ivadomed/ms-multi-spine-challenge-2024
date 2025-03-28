@@ -69,7 +69,7 @@ def agg_data(data_dir, dataset_type):
         preprocReg_t2w_images = [str(p) for p in preprocReg_t2w_images]
         return preprocReg_t2w_images
     
-    elif dataset_type == 4: # Data for dataset type 4 (monomodal_all_preprocReg)
+    elif dataset_type == 4 or dataset_type == 10: # Data for dataset type 4 (monomodal_all_preprocReg) and 10 (monomodal_all_preprocReg_croppped)
         # List all preprocReg images
         preprocReg_images = Path(data_dir).rglob("*desc-preprocReg*.nii.gz")
         # Remove derivative files
@@ -156,7 +156,7 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
     testing_subjects = data_split_yml['TESTING']
 
     # Convert the data to nnUNet format of the monomodal datasets
-    if dataset_type in [1, 2, 3, 4, 5]:
+    if dataset_type in [1, 2, 3, 4, 5, 10]:
         for file in agg_data:
             # Get the subject name
             subject_name = file.split('/')[-1].split('_')[0]
@@ -211,6 +211,24 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
             assert os.system(f"rm {other_file_to_remove}") == 0
     
+            if dataset_type == 10:
+
+                # Function to extract the coordinates to crop from  
+                def get_nonzero_bbox(image_data):
+                    nonzero_coords = np.argwhere(image_data > 0)
+                    min_idx = np.min(nonzero_coords, axis=0)
+                    max_idx = np.max(nonzero_coords, axis=0) + 1  # Include last index
+                    return max_idx, min_idx
+                
+                # Load the image and get the coordinates
+                image_data = nib.load(out_image).get_fdata()
+                # Get the cropping box coordinates
+                max_idx, min_idx = get_nonzero_bbox(image_data)
+                # Crop the images using SCT
+                assert os.system(f'sct_crop_image -i {out_image} -o {out_image} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0
+                assert os.system(f'sct_crop_image -i {out_label} -o {out_label} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0 
+
+
     # In the multimodal case
     elif dataset_type in [6, 7, 8, 9]:
         for file1, file2 in zip(input1_data, input2_data):
