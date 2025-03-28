@@ -26,6 +26,7 @@ import yaml
 import argparse
 from pathlib import Path
 from collections import OrderedDict
+import numpy as np 
 
 
 def parse_arguments():
@@ -98,7 +99,7 @@ def agg_data(data_dir, dataset_type):
         input2_raw_contrasts = [str(p) for p in input2_raw_contrasts if "preproc" not in str(p)]
         return input1_raw_T2w, input2_raw_contrasts
     
-    elif dataset_type == 8: # Data for dataset type 8 (multimodal_preprocReg_registered)
+    elif dataset_type == 8 or dataset_type == 9 : # Data for dataset type 8 (multimodal_preprocReg_registered) and 9 (multimodal_preprocReg_registered_cropped)
         # List all preprocReg T2w images for input 1
         input1_preprocReg_T2w = Path(data_dir).rglob("*desc-preprocReg_T2w.nii.gz")
         input1_preprocReg_T2w = [str(p) for p in input1_preprocReg_T2w]
@@ -120,7 +121,7 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
     """
 
     # Split the aggregated data in case of multimodal
-    if dataset_type in [6, 7, 8]:
+    if dataset_type in [6, 7, 8, 9]:
         input1_data, input2_data = agg_data
 
     # Define the output path
@@ -184,8 +185,8 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
                 test_images.append(file)
                 test_labels.append(label_file)
                 # Build output paths
-                out_image = path_out_imagesTs / f'{task_name}_{scan_cnt_train:03d}_0000.nii.gz'
-                out_label = path_out_labelsTs / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
+                out_image = path_out_imagesTs / f'{task_name}_{scan_cnt_test:03d}_0000.nii.gz'
+                out_label = path_out_labelsTs / f'{task_name}_{scan_cnt_test:03d}.nii.gz'
             
             # Add to the conversion dict
             conversion_dict[str(file)] = str(out_image)
@@ -211,7 +212,7 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             assert os.system(f"rm {other_file_to_remove}") == 0
     
     # In the multimodal case
-    elif dataset_type in [6, 7, 8]:
+    elif dataset_type in [6, 7, 8, 9]:
         for file1, file2 in zip(input1_data, input2_data):
             # Get the subject name
             subject_name = file1.split('/')[-1].split('_')[0]
@@ -241,9 +242,9 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
                 test_images.append(file2)
                 test_labels.append(label_file)
                 # Build output paths
-                out_image1 = path_out_imagesTs / f'{task_name}_{scan_cnt_train:03d}_0000.nii.gz'
-                out_image2 = path_out_imagesTs / f'{task_name}_{scan_cnt_train:03d}_0001.nii.gz'
-                out_label = path_out_labelsTs / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
+                out_image1 = path_out_imagesTs / f'{task_name}_{scan_cnt_test:03d}_0000.nii.gz'
+                out_image2 = path_out_imagesTs / f'{task_name}_{scan_cnt_test:03d}_0001.nii.gz'
+                out_label = path_out_labelsTs / f'{task_name}_{scan_cnt_test:03d}.nii.gz'
 
             # Add to the conversion dict
             conversion_dict[str(file1)] = str(out_image1)
@@ -269,6 +270,29 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
             other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
             assert os.system(f"rm {other_file_to_remove}") == 0
+
+            # If dataset_type is 9, we need to crop the images
+            if dataset_type == 9:
+
+                # Function to extract the coordinates to crop from  
+                def get_nonzero_bbox(image_data):
+                    nonzero_coords = np.argwhere(image_data > 0)
+                    min_idx = np.min(nonzero_coords, axis=0)
+                    max_idx = np.max(nonzero_coords, axis=0) + 1  # Include last index
+                    return max_idx, min_idx
+                
+                # Load the image and get the coordinates
+                image_data = nib.load(out_image1).get_fdata()
+
+                max_idx, min_idx = get_nonzero_bbox(image_data)
+        
+                assert os.system(f'sct_crop_image -i {out_image1} -o {out_image1} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0
+                assert os.system(f'sct_crop_image -i {out_image2} -o {out_image2} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0 
+                assert os.system(f'sct_crop_image -i {out_label} -o {out_label} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0 
+    
+            
+
+
     
     print("Number of images for training: " + str(scan_cnt_train))
     print("Number of images for testing: " + str(scan_cnt_test))
