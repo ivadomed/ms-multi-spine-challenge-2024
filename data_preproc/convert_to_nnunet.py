@@ -203,21 +203,29 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             sub_dict = {"image_source": str(file), "label_source": str(label_file), "image_nnunet": str(out_image), "label_nnunet": str(out_label)}
             image_label_conversion_dict[str(file)] = sub_dict
         
-            # Binarize the label and save it
-            label_data = nib.load(label_file).get_fdata()
-            label_data[label_data > 0] = 1
-            label_nifty = nib.Nifti1Image(label_data, nib.load(label_file).affine)
-            nib.save(label_nifty, out_label)
+            
             # Reorient both image and label to desired orientation and location
             assert os.system(f"sct_image -i {file} -setorient RPI -o {out_image}") == 0
-            assert os.system(f"sct_image -i {out_label} -setorient RPI -o {out_label}") == 0
-            
+            assert os.system(f"sct_image -i {label_file} -setorient RPI -o {out_label}") == 0
+
             # An extra security is to use the sct_register_multimodal to match dimension, resolution and orientation
             assert os.system(f"sct_register_multimodal -i {str(out_label)} -d {str(out_image)} -identity 1 -o {str(out_label)} -owarp file_to_delete.nii.gz -owarpinv file_to_delete_2.nii.gz ") == 0
             # Remove the other useless files
             assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
             other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
             assert os.system(f"rm {other_file_to_remove}") == 0
+<<<<<<< HEAD
+=======
+
+
+            # Binarize the label and save it
+            label_data = nib.load(out_label).get_fdata()
+            label_data[label_data > 0] = 1
+            label_nifty = nib.Nifti1Image(label_data, nib.load(out_label).affine)
+            nib.save(label_nifty, out_label)
+    
+            if dataset_type == 10:
+>>>>>>> 4b80f35 (modified the position of the binirization of the label because the sct transforms where modifying the value 1 from int to float and nnUNet couldn t work with that)
 
             # For the dataset type 10, we crop the image around non-empty areas of the image
             if dataset_type == 10:
@@ -272,11 +280,7 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             sub_dict = {"image1_source": str(file1), "image2_source": str(file2), "label_source": str(label_file), "image1_nnunet": str(out_image1), "image2_nnunet": str(out_image2), "label_nnunet": str(out_label)}
             image_label_conversion_dict[str(file1)] = sub_dict
 
-            # Binarize the label and save it
-            label_data = nib.load(label_file).get_fdata()
-            label_data[label_data > 0] = 1
-            label_nifty = nib.Nifti1Image(label_data, nib.load(label_file).affine)
-            nib.save(label_nifty, out_label)
+            
             # Reorient both image and label to desired orientation and location
             assert os.system(f"sct_image -i {file1} -setorient RPI -o {out_image1}") == 0
             assert os.system(f"sct_image -i {file2} -setorient RPI -o {out_image2}") == 0
@@ -288,6 +292,12 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
             other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
             assert os.system(f"rm {other_file_to_remove}") == 0
+
+            # Binarize the label and save it
+            label_data = nib.load(out_label).get_fdata()
+            label_data[label_data > 0] = 1
+            label_nifty = nib.Nifti1Image(label_data, nib.load(out_label).affine)
+            nib.save(label_nifty, out_label)
 
             # If dataset_type is 9, we need to crop the images
             ## The cropping is zone by finding the empty region on the T2w image
