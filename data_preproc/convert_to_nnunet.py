@@ -337,8 +337,8 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
     json_dict['channel_names'] = {
         "0": "MRI",
     }
-    if dataset_type in [6, 7, 8]:
-        json_dict['modality'] = {
+    if dataset_type in [6, 7, 8, 9]:
+        json_dict['channel_names'] = {
             "0": "MRI",
             "1": "MRI"
         }
