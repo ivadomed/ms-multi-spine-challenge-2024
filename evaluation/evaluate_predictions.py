@@ -109,6 +109,13 @@ def main():
         for key, value in sensitivity_scores.items():
             f.write(f"{key}: {value}\n")
 
+    # In a txt file save the average and std of each results
+    with open(os.path.join(output_folder, "scores_summary.txt"), "w") as f:
+        f.write(f"Dice score: {np.mean(list(dice_scores.values()))} ± {np.std(list(dice_scores.values()))}\n")
+        f.write(f"PPV score: {np.mean(list(ppv_scores.values()))} ± {np.std(list(ppv_scores.values()))}\n")
+        f.write(f"F1 score: {np.mean(list(f1_scores.values()))} ± {np.std(list(f1_scores.values()))}\n")
+        f.write(f"Sensitivity score: {np.mean(list(sensitivity_scores.values()))} ± {np.std(list(sensitivity_scores.values()))}\n")
+
     return None
 
 
