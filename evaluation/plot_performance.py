@@ -109,9 +109,9 @@ def main():
     metrics_results = metrics_results.sort_values(by='contrast').reset_index(drop=True)
 
     # plot a violin plot per contrast for dice scores
-    plt.figure(figsize=(20, 10))
+    plt.figure(figsize=(8, 15))
     plt.grid(True)
-    sns.violinplot(x='contrast_count', y='dice_score', data=metrics_results)
+    sns.violinplot(x='contrast_count', y='dice_score', data=metrics_results, bw_method=0.2)
     # y ranges from -0.2 to 1.2
     plt.ylim(-0.2, 1.2)
     plt.title('Dice scores per contrast')
@@ -121,9 +121,9 @@ def main():
     print(f"Saved the dice plot in {path_to_outputs}")
 
     # plot a violin plot per contrast for ppv scores
-    plt.figure(figsize=(20, 10))
+    plt.figure(figsize=(8, 15))
     plt.grid(True)
-    sns.violinplot(x='contrast_count', y='ppv_score', data=metrics_results)
+    sns.violinplot(x='contrast_count', y='ppv_score', data=metrics_results, bw_method=0.2)
     # y ranges from -0.2 to 1.2
     plt.ylim(-0.2, 1.2)
     plt.title('PPV scores per contrast')
@@ -134,9 +134,9 @@ def main():
     print(f"Saved the ppv plot in {path_to_outputs}")
 
     # plot a violin plot per contrast for f1 scores
-    plt.figure(figsize=(20, 10))
+    plt.figure(figsize=(8, 15))
     plt.grid(True)
-    sns.violinplot(x='contrast_count', y='f1_score', data=metrics_results)
+    sns.violinplot(x='contrast_count', y='f1_score', data=metrics_results, bw_method=0.2)
     # y ranges from -0.2 to 1.2
     plt.ylim(-0.2, 1.2)
     plt.title('F1 scores per contrast')
@@ -147,9 +147,9 @@ def main():
     print(f"Saved the F1 plot in {path_to_outputs}")
 
     # plot a violin plot per contrast for f1 scores
-    plt.figure(figsize=(20, 10))
+    plt.figure(figsize=(8, 15))
     plt.grid(True)
-    sns.violinplot(x='contrast_count', y='sensitivity_score', data=metrics_results)
+    sns.violinplot(x='contrast_count', y='sensitivity_score', data=metrics_results, bw_method=0.2)
     # y ranges from -0.2 to 1.2
     plt.ylim(-0.2, 1.2)
     plt.title('Sensitivity scores per contrast')
