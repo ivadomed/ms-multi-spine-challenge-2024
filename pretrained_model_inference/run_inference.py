@@ -134,6 +134,14 @@ def main():
             # Save the output probability
             output_prob_path = os.path.join(output_paths_soft[fold], os.path.basename(image).replace('_0000.nii.gz', '.nii.gz'))
             prob_out.save(output_prob_path)
+            # # Load the output probability
+            # pred_soft = nib.load(output_prob_path).get_fdata()
+            # # We apply thresholding at 0.0001
+            # pred_soft[pred_soft < 0.000001] = 0
+            # # Save the output probability
+            # pred_soft_img = nib.Nifti1Image(pred_soft, nib.load(output_prob_path).affine)
+            # nib.save(pred_soft_img, output_prob_path)
+
 
     print('Inference done!')
 
