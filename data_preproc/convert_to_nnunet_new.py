@@ -85,6 +85,14 @@ def agg_data(data_dir, dataset_type):
     return images
 
 
+# Function to extract the coordinates to crop from  
+def get_nonzero_bbox(image_data):
+    nonzero_coords = np.argwhere(image_data > 0)
+    min_idx = np.min(nonzero_coords, axis=0)
+    max_idx = np.max(nonzero_coords, axis=0) + 1  # Include last index
+    return max_idx, min_idx
+
+
 def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, task_number, dataset_type):
     """
     This function converts the aggregated data to the nnUNet format.
@@ -200,7 +208,14 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
         label_nifty = nib.Nifti1Image(label_data, nib.load(out_label).affine)
         nib.save(label_nifty, out_label)
 
-        break
+        # We end by cropping the zero areas of the images
+        # Load the image and get the coordinates
+        image_data = nib.load(out_image).get_fdata()
+        # Get the cropping box coordinates
+        max_idx, min_idx = get_nonzero_bbox(image_data)
+        # Crop the images using SCT
+        assert os.system(f'sct_crop_image -i {out_image} -o {out_image} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0
+        assert os.system(f'sct_crop_image -i {out_label} -o {out_label} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0 
     
     #----------------- CREATION OF THE CONVERSION DICT-----------------------------------
     # Print number of images in training and testing
