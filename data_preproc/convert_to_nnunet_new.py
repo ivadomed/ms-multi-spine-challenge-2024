@@ -184,7 +184,14 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
         assert os.system(f"sct_deepseg -i {temp_folder/'raw_t2w.nii.gz'} -o {temp_folder/'raw_t2w_sc_seg.nii.gz'} -task seg_sc_contrast_agnostic ") == 0
 
         # We register the image to the corresponding T2w raw space
-        assert os.system(f"sct_register_multimodal -i {file} -d {t2w_raw_image} -identity 1 -ofolder {temp_folder} -owarp {temp_folder/'warp_image_to_t2wraw.nii.gz'} -o {temp_folder/'image_reg_to_t2wraw.nii.gz'} -qc {path_registration_qc} -dseg {temp_folder/'raw_t2w_sc_seg.nii.gz'} -qc-subject {file.split('/')[-1]}") == 0
+        if contrast == 'T2w':
+            # If the image is a T2w image then we juste have to move it back to its original space
+            assert os.system(f"sct_register_multimodal -i {file} -d {t2w_raw_image} -identity 1 -ofolder {temp_folder} -owarp {temp_folder/'warp_image_to_t2wraw.nii.gz'} -o {temp_folder/'image_reg_to_t2wraw.nii.gz'} -qc {path_registration_qc} -dseg {temp_folder/'raw_t2w_sc_seg.nii.gz'} -qc-subject {file.split('/')[-1]}") == 0
+        else:
+            # Else we need to compute more complex registration
+            parameters = 'step=1,type=im,algo=dl'
+            assert os.system(f"sct_register_multimodal -i {file} -d {t2w_raw_image} -param {parameters} -ofolder {temp_folder} -owarp {temp_folder/'warp_image_to_t2wraw.nii.gz'} -o {temp_folder/'image_reg_to_t2wraw.nii.gz'} -qc {path_registration_qc} -dseg {temp_folder/'raw_t2w_sc_seg.nii.gz'} -qc-subject {file.split('/')[-1]}") == 0
+      
         # Copy the registered file to the nnunet folder
         assert os.system(f"cp {temp_folder/'image_reg_to_t2wraw.nii.gz'} {out_image}") == 0
 
