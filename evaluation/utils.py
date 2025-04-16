@@ -166,3 +166,114 @@ def lesion_sensitivity(truth, prediction, overlap_ratio=0.1):
         if(denom != 0):
             sensitivity = tp / denom
         return sensitivity
+
+
+class MorphologyOps(object):
+    """
+    Class that performs the morphological operations needed to get notably
+    connected component. To be used in the evaluation
+    """
+
+    def __init__(self, binary_img, connectivity):
+        self.binary_map = np.asarray(binary_img, dtype=np.int8)
+        self.connectivity = connectivity
+
+    def border_map(self):
+        """
+        Create the border map defined as the difference between the original image 
+        and its eroded version
+
+        :return: border
+        """
+        eroded = ndimage.binary_erosion(self.binary_map)
+        border = self.binary_map - eroded
+        return border
+
+    def border_map2(self):
+        """
+        Creates the border for a 3D image
+        :return:
+        """
+        west = ndimage.shift(self.binary_map, [-1, 0, 0], order=0)
+        east = ndimage.shift(self.binary_map, [1, 0, 0], order=0)
+        north = ndimage.shift(self.binary_map, [0, 1, 0], order=0)
+        south = ndimage.shift(self.binary_map, [0, -1, 0], order=0)
+        top = ndimage.shift(self.binary_map, [0, 0, 1], order=0)
+        bottom = ndimage.shift(self.binary_map, [0, 0, -1], order=0)
+        cumulative = west + east + north + south + top + bottom
+        border = ((cumulative < 6) * self.binary_map) == 1
+        return border
+
+    def foreground_component(self):
+        return ndimage.label(self.binary_map)
+
+    def list_foreground_component(self):
+        labels, _ = self.foreground_component()
+        list_ind_lab = []
+        list_volumes = []
+        list_com = []
+        list_values = np.unique(labels)
+        for f in list_values:
+            if f > 0:
+                tmp_lab = np.where(
+                    labels == f, np.ones_like(labels), np.zeros_like(labels)
+                )
+                list_ind_lab.append(tmp_lab)
+                list_volumes.append(np.sum(tmp_lab))
+                list_com.append(ndimage.center_of_mass(tmp_lab))
+        return list_ind_lab, list_volumes, list_com
+
+
+def border_distance(truth, pred, pixdim, connectivity=1):
+        """
+        This functions determines the map of distance from the borders of the
+        prediction and the reference and the border maps themselves
+
+        :return: distance_border_ref, distance_border_pred, border_ref,
+        border_pred
+        """
+        border_truth = MorphologyOps(truth, connectivity).border_map()
+        border_pred = MorphologyOps(pred, connectivity).border_map()
+        oppose_truth = 1 - truth
+        oppose_pred = 1 - pred
+        distance_truth = ndimage.distance_transform_edt(
+            1 - border_truth, sampling=pixdim
+        )
+        distance_pred = ndimage.distance_transform_edt(
+            1 - border_pred, sampling=pixdim
+        )
+        distance_border_pred = border_truth * distance_pred
+        distance_border_truth = border_pred * distance_truth
+        return distance_border_truth, distance_border_pred, border_truth, border_pred
+
+
+def normalised_surface_distance(truth, prediction, pixdim, overlap_ratio=0.1, tau=1):
+        """
+        Calculates the normalised surface distance (NSD) between prediction and reference
+        using the distance parameter :math:`{\\tau}`
+
+        Stanislav Nikolov, Sam Blackwell, Alexei Zverovitch, Ruheena Mendes, Michelle Livne, Jeffrey De Fauw, Yojan Patel,
+        Clemens Meyer, Harry Askham, Bernadino Romera-Paredes, et al. 2021. Clinically applicable segmentation of head
+        and neck anatomy for radiotherapy: deep learning algorithm development and validation study. Journal of Medical
+        Internet Research 23, 7 (2021), e26151.
+
+        .. math::
+
+            NSD(A,B)^{(\\tau)} = \dfrac{|S_{A} \cap Bord_{B,\\tau}| + |S_{B} \cup Bord_{A,\\tau}|}{|S_{A}| + S_{B}}
+
+        :return: NSD
+        """
+        if not np.any(truth) and not np.any(prediction):
+            # Both reference and prediction are empty --> model learned correctly --> distance is 0
+            return 0.0
+        
+        dist_ref, dist_pred, border_ref, border_pred = border_distance(truth, prediction, pixdim)
+        reg_ref = np.where(
+            dist_ref <= tau, np.ones_like(dist_ref), np.zeros_like(dist_ref)
+        )
+        reg_pred = np.where(
+            dist_pred <= tau, np.ones_like(dist_pred), np.zeros_like(dist_pred)
+        )
+        numerator = np.sum(border_pred * reg_ref) + np.sum(border_ref * reg_pred)
+        denominator = np.sum(border_ref) + np.sum(border_pred)
+        return numerator / denominator

@@ -25,7 +25,7 @@ from pathlib import Path
 import json
 import nibabel as nib
 from tqdm import tqdm
-from utils import dice_score, lesion_ppv, lesion_f1_score, lesion_sensitivity
+from utils import dice_score, lesion_ppv, lesion_f1_score, lesion_sensitivity, normalised_surface_distance
 
 
 def parse_args():
@@ -64,6 +64,7 @@ def main():
     ppv_scores = {}
     f1_scores = {}
     sensitivity_scores = {}
+    nsd_scores = {}
 
     # Iterate over the results
     for pred in tqdm(predictions):
@@ -75,11 +76,15 @@ def main():
         pred_data = nib.load(str(pred)).get_fdata()
         label_data = nib.load(str(label)).get_fdata()
 
+        # Get resolution
+        resolution = nib.load(str(image)).header.get_zooms()
+
         # Compute dice score
         dice = dice_score(pred_data, label_data)
         ppv = lesion_ppv(label_data, pred_data)
         f1 = lesion_f1_score(label_data, pred_data)
         sensitivity = lesion_sensitivity(label_data, pred_data)
+        nsd = normalised_surface_distance(pred_data, label_data, resolution)
 
         # Get initial image name from conversion dict
         image_name = None
@@ -94,6 +99,7 @@ def main():
         ppv_scores[image_name] = ppv
         f1_scores[image_name] = f1
         sensitivity_scores[image_name] = sensitivity
+        nsd_scores[image_name] = nsd
 
     # Save the results
     with open(os.path.join(output_folder, "dice_scores.txt"), "w") as f:
@@ -108,6 +114,9 @@ def main():
     with open(os.path.join(output_folder, "sensitivity_scores.txt"), "w") as f:
         for key, value in sensitivity_scores.items():
             f.write(f"{key}: {value}\n")
+    with open(os.path.join(output_folder, "nsd_scores.txt"), "w") as f:
+        for key, value in nsd_scores.items():
+            f.write(f"{key}: {value}\n")
 
     # In a txt file save the average and std of each results
     with open(os.path.join(output_folder, "scores_summary.txt"), "w") as f:
@@ -115,6 +124,7 @@ def main():
         f.write(f"PPV score: {np.mean(list(ppv_scores.values()))} ± {np.std(list(ppv_scores.values()))}\n")
         f.write(f"F1 score: {np.mean(list(f1_scores.values()))} ± {np.std(list(f1_scores.values()))}\n")
         f.write(f"Sensitivity score: {np.mean(list(sensitivity_scores.values()))} ± {np.std(list(sensitivity_scores.values()))}\n")
+        f.write(f"NSD score: {np.mean(list(nsd_scores.values()))} ± {np.std(list(nsd_scores.values()))}\n")
 
     return None
 
