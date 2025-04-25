@@ -102,6 +102,16 @@ def main():
             sensitivity_scores[key] = float(value)
     test_dice_results['sensitivity_score'] = test_dice_results['name'].apply(lambda x: sensitivity_scores[x])
 
+    ###### NSD SCORES ######
+    # then we add the nsd score to the df
+    nsd_score_file = path_to_outputs + '/nsd_scores.txt'
+    nsd_scores = {}
+    with open(nsd_score_file, 'r') as file:
+        for line in file:
+            key, value = line.strip().split(':')
+            nsd_scores[key] = float(value)
+    test_dice_results['nsd_score'] = test_dice_results['name'].apply(lambda x: nsd_scores[x])
+
     # We rename th df to metrics_results
     metrics_results = test_dice_results
 
@@ -159,6 +169,19 @@ def main():
     plt.savefig(path_to_outputs + '/sensitivity_scores_contrast.png')
     print(f"Saved the sensitivity plot in {path_to_outputs}")
 
+    # plot a violin plot per contrast for nsd scores
+    plt.figure(figsize=(8, 15))
+    plt.grid(True)
+    sns.violinplot(x='contrast_count', y='nsd_score', data=metrics_results, bw_method=0.2)
+    # y ranges from -0.2 to 1.2
+    plt.ylim(-0.2, 1.2)
+    plt.title('NSD scores per contrast')
+    plt.show()
+
+    # # Save the plot
+    plt.savefig(path_to_outputs + '/nsd_scores_contrast.png')
+    print(f"Saved the NSD plot in {path_to_outputs}")
+
     # Print the mean dice score per contrast and std
     print("\nDice score per contrast (mean ± std)")
     dice_stats = metrics_results.groupby('contrast_count')['dice_score'].agg(['mean', 'std'])
@@ -190,6 +213,14 @@ def main():
     print(f"Global sensitivity score: {metrics_results['sensitivity_score'].mean():.4f} ± {metrics_results['sensitivity_score'].std():.4f}")
     for contrast, row in sensitivity_stats.iterrows():
         print(f"{contrast}: {row['mean']:.4f} ± {row['std']:.4f}")
+
+    # Print the mean nsd score per contrast and std
+    print("\nNSD score per contrast (mean ± std)")
+    nsd_stats = metrics_results.groupby('contrast_count')['nsd_score'].agg(['mean', 'std'])
+    # print global nsd score and std
+    print(f"Global nsd score: {metrics_results['nsd_score'].mean():.4f} ± {metrics_results['nsd_score'].std():.4f}")
+    for contrast, row in nsd_stats.iterrows():
+        print(f"{contrast}: {row['mean']:.4f} ± {row['std']:.4f}")
     
     # Save the prints in a txt file
     with open(path_to_outputs + '/metrics_stats.txt', 'w') as f:
@@ -208,6 +239,10 @@ def main():
         f.write("\nSensitivity score per contrast (mean ± std)\n")
         f.write(f"Global sensitivity score: {metrics_results['sensitivity_score'].mean():.4f} ± {metrics_results['sensitivity_score'].std():.4f}\n")
         for contrast, row in sensitivity_stats.iterrows():
+            f.write(f"{contrast}: {row['mean']:.4f} ± {row['std']:.4f}\n")
+        f.write("\nNSD score per contrast (mean ± std)\n")
+        f.write(f"Global nsd score: {metrics_results['nsd_score'].mean():.4f} ± {metrics_results['nsd_score'].std():.4f}\n")
+        for contrast, row in nsd_stats.iterrows():
             f.write(f"{contrast}: {row['mean']:.4f} ± {row['std']:.4f}\n")
     
     return None
