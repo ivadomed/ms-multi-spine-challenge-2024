@@ -38,7 +38,7 @@ def main():
     # Parse arguments
     args = parse_args()
     pred = args.pred
-    label = args.label_folder
+    label = args.label
     output_folder = args.output
     image_name = args.image_name
 
@@ -68,7 +68,7 @@ def main():
         "sensitivity": sensitivity,
         "nsd": nsd
     }
-    json_data = []
+    json_data = {}
     json_data[image_name] = results
 
     print(json_data)
