@@ -71,7 +71,6 @@ def main():
     json_data = {}
     json_data[image_name] = results
 
-    print(json_data)
     # Save the results in a json file
     json_file_path = os.path.join(output_folder,f"{image_name}.json")
     with open(json_file_path, "w") as json_file:
