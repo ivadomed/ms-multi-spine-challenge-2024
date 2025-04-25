@@ -29,8 +29,8 @@ testing_subjects = data_split_yml['TESTING']
 
 # For each image, we build the following dictionnary:
 ## input_image, corresponding T2w_raw image, corresponding T2w raw lesion mask, contrast
-training_dict = []
-test_dict = []
+training_dict = {}
+test_dict = {}
 
 # Iterate over the images
 for file in images:
@@ -48,8 +48,8 @@ for file in images:
     t2w_raw_image = t2w_raw_image.replace('_desc-preproc', '')
     if not os.path.exists(t2w_raw_image):
         raise ValueError(f"Derivative file not found: {t2w_raw_image}")
-    subj_dict = {
-        'imge_name': file.split('/')[-1],
+    subj_dict = { 
+        'image_name': file.split('/')[-1],
         'subject_name': subject_name,
         'input_image': file,
         't2w_raw_label_file': label_file,
@@ -57,9 +57,9 @@ for file in images:
         'contrast': contrast
     }
     if subject_name in training_subjects:
-        training_dict.append(subj_dict)
+        training_dict[file.split('/')[-1].split('.')[0]] = subj_dict
     else:
-        test_dict.append(subj_dict)
+        test_dict[file.split('/')[-1].split('.')[0]] = subj_dict
 
 # Build final dictionnary
 final_dict = {
