@@ -1,960 +1,1280 @@
 {
     "training": [
         {
+            "imge_name": "sub-036_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-036",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-036/anat/sub-036_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-036/anat/sub-036_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-036/anat/sub-036_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-036_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-036",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-036/anat/sub-036_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-036/anat/sub-036_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-036/anat/sub-036_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-079_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-079",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-079/anat/sub-079_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-079/anat/sub-079_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-079/anat/sub-079_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-079_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-079",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-079/anat/sub-079_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-079/anat/sub-079_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-079/anat/sub-079_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-004_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-004",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-004/anat/sub-004_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-004/anat/sub-004_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-004/anat/sub-004_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-004_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-004",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-004/anat/sub-004_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-004/anat/sub-004_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-004/anat/sub-004_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-052_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-052",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-052/anat/sub-052_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-052/anat/sub-052_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-052/anat/sub-052_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-052_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-052",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-052/anat/sub-052_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-052/anat/sub-052_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-052/anat/sub-052_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-025_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-025",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-025/anat/sub-025_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-025/anat/sub-025_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-025/anat/sub-025_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-025_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-025",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-025/anat/sub-025_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-025/anat/sub-025_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-025/anat/sub-025_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-058_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-058",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-058/anat/sub-058_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-058/anat/sub-058_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-058/anat/sub-058_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-058_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-058",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-058/anat/sub-058_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-058/anat/sub-058_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-058/anat/sub-058_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-017_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-017",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-017/anat/sub-017_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-017/anat/sub-017_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-017/anat/sub-017_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-017_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-017",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-017/anat/sub-017_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-017/anat/sub-017_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-017/anat/sub-017_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-060_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-060",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-060/anat/sub-060_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-060/anat/sub-060_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-060/anat/sub-060_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-060_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-060",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-060/anat/sub-060_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-060/anat/sub-060_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-060/anat/sub-060_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-084_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-084",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-084/anat/sub-084_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-084/anat/sub-084_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-084/anat/sub-084_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-084_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-084",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-084/anat/sub-084_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-084/anat/sub-084_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-084/anat/sub-084_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-089_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-089",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-089/anat/sub-089_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-089/anat/sub-089_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-089/anat/sub-089_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-089_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-089",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-089/anat/sub-089_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-089/anat/sub-089_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-089/anat/sub-089_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-067_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-067",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-067/anat/sub-067_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-067/anat/sub-067_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-067/anat/sub-067_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-067_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-067",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-067/anat/sub-067_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-067/anat/sub-067_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-067/anat/sub-067_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-010_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-010",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-010/anat/sub-010_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-010/anat/sub-010_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-010/anat/sub-010_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-010_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-010",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-010/anat/sub-010_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-010/anat/sub-010_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-010/anat/sub-010_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-083_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-083",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-083/anat/sub-083_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-083/anat/sub-083_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-083/anat/sub-083_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-083_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-083",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-083/anat/sub-083_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-083/anat/sub-083_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-083/anat/sub-083_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-022_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-022",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-022/anat/sub-022_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-022/anat/sub-022_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-022/anat/sub-022_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-022_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-022",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-022/anat/sub-022_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-022/anat/sub-022_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-022/anat/sub-022_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-055_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-055",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-055/anat/sub-055_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-055/anat/sub-055_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-055/anat/sub-055_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-055_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-055",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-055/anat/sub-055_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-055/anat/sub-055_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-055/anat/sub-055_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-028_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-028",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-028/anat/sub-028_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-028/anat/sub-028_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-028/anat/sub-028_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-028_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-028",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-028/anat/sub-028_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-028/anat/sub-028_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-028/anat/sub-028_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-009_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-009",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-009/anat/sub-009_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-009/anat/sub-009_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-009/anat/sub-009_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-009_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-009",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-009/anat/sub-009_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-009/anat/sub-009_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-009/anat/sub-009_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-090_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-090",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-090/anat/sub-090_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-090/anat/sub-090_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-090/anat/sub-090_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-090_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-090",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-090/anat/sub-090_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-090/anat/sub-090_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-090/anat/sub-090_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-003_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-003",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-003/anat/sub-003_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-003/anat/sub-003_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-003/anat/sub-003_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-003_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-003",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-003/anat/sub-003_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-003/anat/sub-003_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-003/anat/sub-003_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-031_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-031",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-031/anat/sub-031_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-031/anat/sub-031_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-031/anat/sub-031_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-031_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-031",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-031/anat/sub-031_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-031/anat/sub-031_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-031/anat/sub-031_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-035_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-035",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-035/anat/sub-035_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-035/anat/sub-035_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-035/anat/sub-035_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-035_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-035",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-035/anat/sub-035_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-035/anat/sub-035_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-035/anat/sub-035_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-070_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-070",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-070/anat/sub-070_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-070/anat/sub-070_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-070/anat/sub-070_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-070_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-070",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-070/anat/sub-070_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-070/anat/sub-070_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-070/anat/sub-070_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-007_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-007",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-007/anat/sub-007_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-007/anat/sub-007_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-007/anat/sub-007_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-007_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-007",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-007/anat/sub-007_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-007/anat/sub-007_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-007/anat/sub-007_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-094_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-094",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-094/anat/sub-094_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-094/anat/sub-094_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-094/anat/sub-094_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-094_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-094",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-094/anat/sub-094_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-094/anat/sub-094_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-094/anat/sub-094_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-026_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-026",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-026/anat/sub-026_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-026/anat/sub-026_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-026/anat/sub-026_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-026_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-026",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-026/anat/sub-026_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-026/anat/sub-026_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-026/anat/sub-026_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-051_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-051",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-051/anat/sub-051_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-051/anat/sub-051_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-051/anat/sub-051_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-051_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-051",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-051/anat/sub-051_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-051/anat/sub-051_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-051/anat/sub-051_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-069_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-069",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-069/anat/sub-069_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-069/anat/sub-069_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-069/anat/sub-069_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-069_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-069",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-069/anat/sub-069_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-069/anat/sub-069_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-069/anat/sub-069_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-087_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-087",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-087/anat/sub-087_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-087/anat/sub-087_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-087/anat/sub-087_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-087_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-087",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-087/anat/sub-087_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-087/anat/sub-087_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-087/anat/sub-087_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-063_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-063",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-063/anat/sub-063_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-063/anat/sub-063_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-063/anat/sub-063_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-063_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-063",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-063/anat/sub-063_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-063/anat/sub-063_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-063/anat/sub-063_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-014_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-014",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-014/anat/sub-014_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-014/anat/sub-014_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-014/anat/sub-014_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-014_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-014",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-014/anat/sub-014_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-014/anat/sub-014_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-014/anat/sub-014_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-080_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-080",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-080/anat/sub-080_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-080/anat/sub-080_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-080/anat/sub-080_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-080_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-080",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-080/anat/sub-080_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-080/anat/sub-080_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-080/anat/sub-080_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-019_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-019",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-019/anat/sub-019_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-019/anat/sub-019_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-019/anat/sub-019_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-019_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-019",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-019/anat/sub-019_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-019/anat/sub-019_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-019/anat/sub-019_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-013_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-013",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-013/anat/sub-013_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-013/anat/sub-013_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-013/anat/sub-013_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-013_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-013",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-013/anat/sub-013_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-013/anat/sub-013_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-013/anat/sub-013_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-064_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-064",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-064/anat/sub-064_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-064/anat/sub-064_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-064/anat/sub-064_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-064_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-064",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-064/anat/sub-064_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-064/anat/sub-064_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-064/anat/sub-064_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-056_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-056",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-056/anat/sub-056_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-056/anat/sub-056_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-056/anat/sub-056_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-056_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-056",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-056/anat/sub-056_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-056/anat/sub-056_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-056/anat/sub-056_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-021_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-021",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-021/anat/sub-021_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-021/anat/sub-021_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-021/anat/sub-021_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-021_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-021",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-021/anat/sub-021_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-021/anat/sub-021_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-021/anat/sub-021_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-077_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-077",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-077/anat/sub-077_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-077/anat/sub-077_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-077/anat/sub-077_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-077_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-077",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-077/anat/sub-077_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-077/anat/sub-077_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-077/anat/sub-077_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-093_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-093",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-093/anat/sub-093_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-093/anat/sub-093_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-093/anat/sub-093_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-093_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-093",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-093/anat/sub-093_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-093/anat/sub-093_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-093/anat/sub-093_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-032_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-032",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-032/anat/sub-032_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-032/anat/sub-032_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-032/anat/sub-032_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-032_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-032",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-032/anat/sub-032_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-032/anat/sub-032_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-032/anat/sub-032_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-038_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-038",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-038/anat/sub-038_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-038/anat/sub-038_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-038/anat/sub-038_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-038_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-038",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-038/anat/sub-038_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-038/anat/sub-038_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-038/anat/sub-038_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-002_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-002",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-002/anat/sub-002_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-002/anat/sub-002_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-002/anat/sub-002_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-002_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-002",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-002/anat/sub-002_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-002/anat/sub-002_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-002/anat/sub-002_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-008_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-008",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-008/anat/sub-008_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-008/anat/sub-008_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-008/anat/sub-008_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-008_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-008",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-008/anat/sub-008_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-008/anat/sub-008_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-008/anat/sub-008_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-091_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-091",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-091/anat/sub-091_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-091/anat/sub-091_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-091/anat/sub-091_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-091_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-091",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-091/anat/sub-091_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-091/anat/sub-091_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-091/anat/sub-091_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-030_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-030",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-030/anat/sub-030_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-030/anat/sub-030_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-030/anat/sub-030_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-030_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-030",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-030/anat/sub-030_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-030/anat/sub-030_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-030/anat/sub-030_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-082_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-082",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-082/anat/sub-082_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-082/anat/sub-082_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-082/anat/sub-082_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-082_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-082",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-082/anat/sub-082_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-082/anat/sub-082_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-082/anat/sub-082_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-088_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-088",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-088/anat/sub-088_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-088/anat/sub-088_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-088/anat/sub-088_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-088_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-088",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-088/anat/sub-088_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-088/anat/sub-088_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-088/anat/sub-088_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-011_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-011",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-011/anat/sub-011_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-011/anat/sub-011_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-011/anat/sub-011_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-011_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-011",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-011/anat/sub-011_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-011/anat/sub-011_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-011/anat/sub-011_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-066_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-066",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-066/anat/sub-066_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-066/anat/sub-066_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-066/anat/sub-066_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-066_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-066",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-066/anat/sub-066_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-066/anat/sub-066_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-066/anat/sub-066_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-029_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-029",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-029/anat/sub-029_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-029/anat/sub-029_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-029/anat/sub-029_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-029_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-029",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-029/anat/sub-029_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-029/anat/sub-029_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-029/anat/sub-029_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-054_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-054",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-054/anat/sub-054_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-054/anat/sub-054_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-054/anat/sub-054_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-054_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-054",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-054/anat/sub-054_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-054/anat/sub-054_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-054/anat/sub-054_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-023_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-023",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-023/anat/sub-023_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-023/anat/sub-023_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-023/anat/sub-023_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-023_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-023",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-023/anat/sub-023_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-023/anat/sub-023_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-023/anat/sub-023_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-059_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-059",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-059/anat/sub-059_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-059/anat/sub-059_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-059/anat/sub-059_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-059_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-059",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-059/anat/sub-059_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-059/anat/sub-059_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-059/anat/sub-059_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-024_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-024",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-024/anat/sub-024_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-024/anat/sub-024_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-024/anat/sub-024_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-024_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-024",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-024/anat/sub-024_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-024/anat/sub-024_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-024/anat/sub-024_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-053_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-053",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-053/anat/sub-053_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-053/anat/sub-053_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-053/anat/sub-053_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-053_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-053",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-053/anat/sub-053_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-053/anat/sub-053_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-053/anat/sub-053_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-085_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-085",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-085/anat/sub-085_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-085/anat/sub-085_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-085/anat/sub-085_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-085_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-085",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-085/anat/sub-085_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-085/anat/sub-085_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-085/anat/sub-085_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-061_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-061",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-061/anat/sub-061_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-061/anat/sub-061_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-061/anat/sub-061_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-061_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-061",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-061/anat/sub-061_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-061/anat/sub-061_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-061/anat/sub-061_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-016_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-016",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-016/anat/sub-016_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-016/anat/sub-016_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-016/anat/sub-016_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-016_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-016",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-016/anat/sub-016_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-016/anat/sub-016_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-016/anat/sub-016_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-037_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-037",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-037/anat/sub-037_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-037/anat/sub-037_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-037/anat/sub-037_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-037_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-037",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-037/anat/sub-037_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-037/anat/sub-037_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-037/anat/sub-037_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-040_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-040",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-040/anat/sub-040_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-040/anat/sub-040_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-040/anat/sub-040_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-040_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-040",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-040/anat/sub-040_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-040/anat/sub-040_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-040/anat/sub-040_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-005_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-005",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-005/anat/sub-005_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-005/anat/sub-005_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-005/anat/sub-005_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-005_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-005",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-005/anat/sub-005_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-005/anat/sub-005_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-005/anat/sub-005_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-078_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-078",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-078/anat/sub-078_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-078/anat/sub-078_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-078/anat/sub-078_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-078_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-078",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-078/anat/sub-078_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-078/anat/sub-078_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-078/anat/sub-078_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-092_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-092",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-092/anat/sub-092_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-092/anat/sub-092_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-092/anat/sub-092_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-092_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-092",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-092/anat/sub-092_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-092/anat/sub-092_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-092/anat/sub-092_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-076_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-076",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-076/anat/sub-076_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-076/anat/sub-076_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-076/anat/sub-076_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-076_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-076",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-076/anat/sub-076_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-076/anat/sub-076_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-076/anat/sub-076_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-001_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-001",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-001/anat/sub-001_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-001/anat/sub-001_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-001/anat/sub-001_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-001_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-001",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-001/anat/sub-001_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-001/anat/sub-001_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-001/anat/sub-001_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-039_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-039",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-039/anat/sub-039_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-039/anat/sub-039_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-039/anat/sub-039_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-039_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-039",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-039/anat/sub-039_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-039/anat/sub-039_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-039/anat/sub-039_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-033_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-033",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-033/anat/sub-033_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-033/anat/sub-033_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-033/anat/sub-033_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-033_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-033",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-033/anat/sub-033_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-033/anat/sub-033_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-033/anat/sub-033_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-065_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-065",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-065/anat/sub-065_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-065/anat/sub-065_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-065/anat/sub-065_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-065_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-065",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-065/anat/sub-065_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-065/anat/sub-065_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-065/anat/sub-065_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-012_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-012",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-012/anat/sub-012_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-012/anat/sub-012_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-012/anat/sub-012_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-012_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-012",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-012/anat/sub-012_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-012/anat/sub-012_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-012/anat/sub-012_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-081_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-081",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-081/anat/sub-081_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-081/anat/sub-081_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-081/anat/sub-081_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-081_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-081",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-081/anat/sub-081_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-081/anat/sub-081_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-081/anat/sub-081_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-018_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-018",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-018/anat/sub-018_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-018/anat/sub-018_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-018/anat/sub-018_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-018_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-018",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-018/anat/sub-018_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-018/anat/sub-018_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-018/anat/sub-018_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-020_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-020",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-020/anat/sub-020_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-020/anat/sub-020_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-020/anat/sub-020_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-020_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-020",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-020/anat/sub-020_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-020/anat/sub-020_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-020/anat/sub-020_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-057_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-057",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-057/anat/sub-057_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-057/anat/sub-057_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-057/anat/sub-057_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-057_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-057",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-057/anat/sub-057_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-057/anat/sub-057_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-057/anat/sub-057_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-027_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-027",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-027/anat/sub-027_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-027/anat/sub-027_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-027/anat/sub-027_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-027_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-027",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-027/anat/sub-027_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-027/anat/sub-027_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-027/anat/sub-027_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-015_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-015",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-015/anat/sub-015_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-015/anat/sub-015_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-015/anat/sub-015_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-015_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-015",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-015/anat/sub-015_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-015/anat/sub-015_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-015/anat/sub-015_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-062_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-062",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-062/anat/sub-062_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-062/anat/sub-062_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-062/anat/sub-062_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-062_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-062",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-062/anat/sub-062_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-062/anat/sub-062_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-062/anat/sub-062_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-068_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-068",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-068/anat/sub-068_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-068/anat/sub-068_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-068/anat/sub-068_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-068_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-068",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-068/anat/sub-068_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-068/anat/sub-068_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-068/anat/sub-068_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-086_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-086",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-086/anat/sub-086_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-086/anat/sub-086_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-086/anat/sub-086_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-086_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-086",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-086/anat/sub-086_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-086/anat/sub-086_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-086/anat/sub-086_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-034_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-034",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-034/anat/sub-034_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-034/anat/sub-034_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-034/anat/sub-034_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-034_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-034",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-034/anat/sub-034_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-034/anat/sub-034_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-034/anat/sub-034_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-095_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-095",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-095/anat/sub-095_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-095/anat/sub-095_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-095/anat/sub-095_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-095_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-095",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-095/anat/sub-095_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-095/anat/sub-095_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-095/anat/sub-095_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-006_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-006",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-006/anat/sub-006_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-006/anat/sub-006_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-006/anat/sub-006_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-006_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-006",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-006/anat/sub-006_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-006/anat/sub-006_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-006/anat/sub-006_T2w.nii.gz",
@@ -963,240 +1283,320 @@
     ],
     "testing": [
         {
+            "imge_name": "sub-041_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-041",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-041/anat/sub-041_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-041/anat/sub-041_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-041/anat/sub-041_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-041_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-041",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-041/anat/sub-041_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-041/anat/sub-041_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-041/anat/sub-041_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-097_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-097",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-097/anat/sub-097_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-097/anat/sub-097_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-097/anat/sub-097_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-097_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-097",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-097/anat/sub-097_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-097/anat/sub-097_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-097/anat/sub-097_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-073_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-073",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-073/anat/sub-073_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-073/anat/sub-073_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-073/anat/sub-073_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-073_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-073",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-073/anat/sub-073_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-073/anat/sub-073_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-073/anat/sub-073_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-074_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-074",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-074/anat/sub-074_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-074/anat/sub-074_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-074/anat/sub-074_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-074_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-074",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-074/anat/sub-074_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-074/anat/sub-074_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-074/anat/sub-074_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-046_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-046",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-046/anat/sub-046_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-046/anat/sub-046_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-046/anat/sub-046_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-046_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-046",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-046/anat/sub-046_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-046/anat/sub-046_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-046/anat/sub-046_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-042_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-042",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-042/anat/sub-042_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-042/anat/sub-042_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-042/anat/sub-042_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-042_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-042",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-042/anat/sub-042_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-042/anat/sub-042_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-042/anat/sub-042_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-048_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-048",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-048/anat/sub-048_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-048/anat/sub-048_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-048/anat/sub-048_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-048_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-048",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-048/anat/sub-048_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-048/anat/sub-048_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-048/anat/sub-048_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-100_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-100",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-100/anat/sub-100_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-100/anat/sub-100_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-100/anat/sub-100_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-100_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-100",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-100/anat/sub-100_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-100/anat/sub-100_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-100/anat/sub-100_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-099_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-099",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-099/anat/sub-099_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-099/anat/sub-099_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-099/anat/sub-099_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-099_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-099",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-099/anat/sub-099_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-099/anat/sub-099_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-099/anat/sub-099_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-045_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-045",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-045/anat/sub-045_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-045/anat/sub-045_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-045/anat/sub-045_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-045_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-045",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-045/anat/sub-045_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-045/anat/sub-045_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-045/anat/sub-045_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-075_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-075",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-075/anat/sub-075_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-075/anat/sub-075_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-075/anat/sub-075_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-075_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-075",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-075/anat/sub-075_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-075/anat/sub-075_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-075/anat/sub-075_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-047_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-047",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-047/anat/sub-047_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-047/anat/sub-047_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-047/anat/sub-047_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-047_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-047",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-047/anat/sub-047_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-047/anat/sub-047_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-047/anat/sub-047_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-072_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-072",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-072/anat/sub-072_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-072/anat/sub-072_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-072/anat/sub-072_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-072_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-072",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-072/anat/sub-072_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-072/anat/sub-072_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-072/anat/sub-072_T2w.nii.gz",
             "contrast": "PSIR"
         },
         {
+            "imge_name": "sub-096_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-096",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-096/anat/sub-096_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-096/anat/sub-096_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-096/anat/sub-096_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-096_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-096",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-096/anat/sub-096_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-096/anat/sub-096_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-096/anat/sub-096_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-098_desc-preproc_MP2RAGE.nii.gz",
+            "subject_name": "sub-098",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-098/anat/sub-098_desc-preproc_MP2RAGE.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-098/anat/sub-098_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-098/anat/sub-098_T2w.nii.gz",
             "contrast": "MP2RAGE"
         },
         {
+            "imge_name": "sub-098_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-098",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-098/anat/sub-098_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-098/anat/sub-098_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-098/anat/sub-098_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-044_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-044",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-044/anat/sub-044_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-044/anat/sub-044_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-044/anat/sub-044_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-044_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-044",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-044/anat/sub-044_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-044/anat/sub-044_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-044/anat/sub-044_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-050_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-050",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-050/anat/sub-050_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-050/anat/sub-050_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-050/anat/sub-050_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-050_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-050",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-050/anat/sub-050_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-050/anat/sub-050_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-050/anat/sub-050_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-049_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-049",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-049/anat/sub-049_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-049/anat/sub-049_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-049/anat/sub-049_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-049_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-049",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-049/anat/sub-049_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-049/anat/sub-049_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-049/anat/sub-049_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-043_desc-preproc_STIR.nii.gz",
+            "subject_name": "sub-043",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-043/anat/sub-043_desc-preproc_STIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-043/anat/sub-043_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-043/anat/sub-043_T2w.nii.gz",
             "contrast": "STIR"
         },
         {
+            "imge_name": "sub-043_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-043",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-043/anat/sub-043_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-043/anat/sub-043_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-043/anat/sub-043_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-071_desc-preproc_T2w.nii.gz",
+            "subject_name": "sub-071",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-071/anat/sub-071_desc-preproc_T2w.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-071/anat/sub-071_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-071/anat/sub-071_T2w.nii.gz",
             "contrast": "T2w"
         },
         {
+            "imge_name": "sub-071_desc-preproc_PSIR.nii.gz",
+            "subject_name": "sub-071",
             "input_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-071/anat/sub-071_desc-preproc_PSIR.nii.gz",
             "t2w_raw_label_file": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/derivatives/labels/sub-071/anat/sub-071_T2w_label-lesion_seg.nii.gz",
             "t2w_raw_image": "/home/plbenveniste/net/challenge-multi-spine/data/ms-multi-spine-challenge-2024/sub-071/anat/sub-071_T2w.nii.gz",

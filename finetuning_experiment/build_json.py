@@ -49,6 +49,8 @@ for file in images:
     if not os.path.exists(t2w_raw_image):
         raise ValueError(f"Derivative file not found: {t2w_raw_image}")
     subj_dict = {
+        'imge_name': file.split('/')[-1],
+        'subject_name': subject_name,
         'input_image': file,
         't2w_raw_label_file': label_file,
         't2w_raw_image': t2w_raw_image,
