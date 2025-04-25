@@ -15,6 +15,8 @@ Output:
 Example:
     python run_inference.py --json images_dict.json --model model/patht --output_dir /output_dir/
 
+TODO: this code need to be modified based on the modifications made to the image_dict
+
 Author: Pierre-Louis Benveniste
 """
 
