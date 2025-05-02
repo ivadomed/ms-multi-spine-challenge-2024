@@ -82,6 +82,22 @@ def agg_data(data_dir, dataset_type):
         # Remove all images with derivatives in name
         images = [str(img) for img in images if "derivatives" not in str(img)]
 
+    elif dataset_type == 16: #dataset 16 (multimodal_all_preprocReg_T2wspace)
+        # List all preproc
+        images = Path(data_dir).rglob("*desc-preproc*.nii.gz")
+        # Remove all images with desc-preprocReg in name
+        images = [str(img) for img in images if "desc-preprocReg" not in str(img)]
+        # Remove all images with derivatives in name
+        images = [str(img) for img in images if "derivatives" not in str(img)]
+        #Select the images with T2w in the name
+        images1 = [img for img in images if "T2w" in str(img)]
+        # Select the images with T2w not in the name
+        images2 = [img for img in images if "T2w" not in str(img)]
+        #Sort the images
+        images1.sort()
+        images2.sort()
+        return images1, images2 
+
     return images
 
 
@@ -130,99 +146,197 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
     training_subjects = data_split_yml['TRAINING']
     testing_subjects = data_split_yml['TESTING']
 
-    for file in agg_data:
-        # Get the subject name
-        subject_name = file.split('/')[-1].split('_')[0]
-        contrast = file.split('/')[-1].split('_')[-1].split('.')[0]
-        # Get corresponding label
-        label_file = file.replace(f'{contrast}.nii.gz', 'T2w_label-lesion_seg.nii.gz')
-        label_file = label_file.replace('ms-multi-spine-challenge-2024', 'ms-multi-spine-challenge-2024/derivatives/labels')
-        # Label file in raw T2w space
-        label_file = label_file.replace('_desc-preproc', '')
-        if not os.path.exists(label_file):
-            raise ValueError(f"Derivative file not found: {label_file}")
-        # Then we find the corresponding T2w raw image
-        t2w_raw_image = file.replace(f'{contrast}.nii.gz', 'T2w.nii.gz')
-        t2w_raw_image = t2w_raw_image.replace('_desc-preproc', '')
-        if not os.path.exists(t2w_raw_image):
-            raise ValueError(f"Derivative file not found: {t2w_raw_image}")
-                        
-        # Check if the subject is in the training or testing set
-        if subject_name in training_subjects:
-            scan_cnt_train += 1
-            # Add to the training list
-            train_images.append(file)
-            train_labels.append(label_file)
-            # Build output paths
-            out_image = path_out_imagesTr / f'{task_name}_{scan_cnt_train:03d}_0000.nii.gz'
-            out_label = path_out_labelsTr / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
+    if dataset_type==16:
+        input1_data, input2_data = agg_data
+        for file1, file2 in zip(input1_data, input2_data):
+            # Get the subject name
+            subject_name = file1.split('/')[-1].split('_')[0]
+            contrast = file1.split('/')[-1].split('_')[-1].split('.')[0]
+            # Get corresponding label
+            label_file = file1.replace(f'{contrast}.nii.gz', 'T2w_label-lesion_seg.nii.gz')
+            label_file = label_file.replace('ms-multi-spine-challenge-2024', 'ms-multi-spine-challenge-2024/derivatives/labels')
+            if not os.path.exists(label_file):
+                raise ValueError(f"Derivative file not found: {label_file}")
             
-        # For the testing files
-        elif subject_name in testing_subjects:
-            scan_cnt_test += 1
-            # Add to the testing list
-            test_images.append(file)
-            test_labels.append(label_file)
-            # Build output paths
-            out_image = path_out_imagesTs / f'{task_name}_{scan_cnt_test:03d}_0000.nii.gz'
-            out_label = path_out_labelsTs / f'{task_name}_{scan_cnt_test:03d}.nii.gz'
-        
-        # Add to the conversion dict
-        conversion_dict[str(file)] = str(out_image)
-        conversion_dict[str(label_file)] = str(out_label)
-        # Add to the image_label_conversion_dict
-        sub_dict = {"image_source": str(file), "label_source": str(label_file), "image_nnunet": str(out_image), "label_nnunet": str(out_label)}
-        image_label_conversion_dict[str(file)] = sub_dict
+            # Check if the subject is in the training or testing set
+            if subject_name in training_subjects:
+                scan_cnt_train += 1
+                # Add to the training list
+                train_images.append(file1)
+                train_images.append(file2)
+                train_labels.append(label_file)
+                # Build output paths
+                out_image1 = path_out_imagesTr / f'{task_name}_{scan_cnt_train:03d}_0000.nii.gz'
+                out_image2 = path_out_imagesTr / f'{task_name}_{scan_cnt_train:03d}_0001.nii.gz'
+                out_label = path_out_labelsTr / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
+            # For the testing files
+            elif subject_name in testing_subjects:
+                scan_cnt_test += 1
+                # Add to the testing list
+                test_images.append(file1)
+                test_images.append(file2)
+                test_labels.append(label_file)
+                # Build output paths
+                out_image1 = path_out_imagesTs / f'{task_name}_{scan_cnt_test:03d}_0000.nii.gz'
+                out_image2 = path_out_imagesTs / f'{task_name}_{scan_cnt_test:03d}_0001.nii.gz'
+                out_label = path_out_labelsTs / f'{task_name}_{scan_cnt_test:03d}.nii.gz'
 
-        temp_folder = Path(output_dir) / "tmp"
-        temp_folder.mkdir(parents=True, exist_ok=True)
+            # Add to the conversion dict
+            conversion_dict[str(file1)] = str(out_image1)
+            conversion_dict[str(file2)] = str(out_image2)
+            conversion_dict[str(label_file)] = str(out_label)
+            # Add to the image_label_conversion_dict
+            sub_dict = {"image1_source": str(file1), "image2_source": str(file2), "label_source": str(label_file), "image1_nnunet": str(out_image1), "image2_nnunet": str(out_image2), "label_nnunet": str(out_label)}
+            image_label_conversion_dict[str(file1)] = sub_dict
 
-        # We generate the QC:
-        # Copy the T2w raw image to the temp folder
-        assert os.system(f"cp {t2w_raw_image} {temp_folder/'raw_t2w.nii.gz'}") == 0
-        ## First we need to generate the spinal cord segmentation
-        assert os.system(f"sct_deepseg -i {temp_folder/'raw_t2w.nii.gz'} -o {temp_folder/'raw_t2w_sc_seg.nii.gz'} -task seg_sc_contrast_agnostic ") == 0
+            temp_folder = Path(output_dir) / "tmp"
+            temp_folder.mkdir(parents=True, exist_ok=True)
 
-        # We register the image to the corresponding T2w raw space
-        if contrast == 'T2w':
+            # We generate the QC:
+            # Copy the T2w raw image to the temp folder
+            t2w_raw_image = file1 
+            assert os.system(f"cp {t2w_raw_image} {temp_folder/'raw_t2w.nii.gz'}") == 0
+            ## First we need to generate the spinal cord segmentation
+            assert os.system(f"sct_deepseg -i {temp_folder/'raw_t2w.nii.gz'} -o {temp_folder/'raw_t2w_sc_seg.nii.gz'} -task seg_sc_contrast_agnostic ") == 0
+
+            # We register the image to the corresponding T2w raw space
+            
             # If the image is a T2w image then we juste have to move it back to its original space
-            assert os.system(f"sct_register_multimodal -i {file} -d {t2w_raw_image} -identity 1 -ofolder {temp_folder} -owarp {temp_folder/'warp_image_to_t2wraw.nii.gz'} -o {temp_folder/'image_reg_to_t2wraw.nii.gz'} -qc {path_registration_qc} -dseg {temp_folder/'raw_t2w_sc_seg.nii.gz'} -qc-subject {file.split('/')[-1]}") == 0
-        else:
+            assert os.system(f"sct_register_multimodal -i {file1} -d {t2w_raw_image} -identity 1 -ofolder {temp_folder} -owarp {temp_folder/'warp_image_to_t2wraw1.nii.gz'} -o {temp_folder/'image_reg_to_t2wraw1.nii.gz'} -qc {path_registration_qc} -dseg {temp_folder/'raw_t2w_sc_seg.nii.gz'} -qc-subject {file1.split('/')[-1]}") == 0
+     
             # Else we need to compute more complex registration
             parameters = 'step=1,type=im,algo=dl'
-            assert os.system(f"sct_register_multimodal -i {file} -d {t2w_raw_image} -param {parameters} -ofolder {temp_folder} -owarp {temp_folder/'warp_image_to_t2wraw.nii.gz'} -o {temp_folder/'image_reg_to_t2wraw.nii.gz'} -qc {path_registration_qc} -dseg {temp_folder/'raw_t2w_sc_seg.nii.gz'} -qc-subject {file.split('/')[-1]}") == 0
-      
-        # Copy the registered file to the nnunet folder
-        assert os.system(f"cp {temp_folder/'image_reg_to_t2wraw.nii.gz'} {out_image}") == 0
+            assert os.system(f"sct_register_multimodal -i {file2} -d {t2w_raw_image} -param {parameters} -ofolder {temp_folder} -owarp {temp_folder/'warp_image_to_t2wraw2.nii.gz'} -o {temp_folder/'image_reg_to_t2wraw2.nii.gz'} -qc {path_registration_qc} -dseg {temp_folder/'raw_t2w_sc_seg.nii.gz'} -qc-subject {file2.split('/')[-1]}") == 0
+    
+            # Copy the registered file to the nnunet folder
+            assert os.system(f"cp {temp_folder/'image_reg_to_t2wraw1.nii.gz'} {out_image1}") == 0
+            assert os.system(f"cp {temp_folder/'image_reg_to_t2wraw2.nii.gz'} {out_image2}") == 0
 
-        # Reorient both image and label to desired orientation and location
-        assert os.system(f"sct_image -i {out_image} -setorient RPI -o {out_image}") == 0
-        assert os.system(f"sct_image -i {label_file} -setorient RPI -o {out_label}") == 0
+            
+            # Reorient both image and label to desired orientation and location
+            assert os.system(f"sct_image -i {out_image1} -setorient RPI -o {out_image1}") == 0
+            assert os.system(f"sct_image -i {out_image2} -setorient RPI -o {out_image2}") == 0
+            assert os.system(f"sct_image -i {label_file} -setorient RPI -o {out_label}") == 0
+            
+            # An extra security is to use the sct_register_multimodal to match dimension, resolution and orientation
+            assert os.system(f"sct_register_multimodal -i {str(out_label)} -d {str(out_image1)} -identity 1 -o {str(out_label)} -owarp file_to_delete.nii.gz -owarpinv file_to_delete_2.nii.gz ") == 0
+            # Remove the other useless files
+            assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
+            other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
+            assert os.system(f"rm {other_file_to_remove}") == 0
+
+            # Binarize the label and save it
+            label_data = nib.load(out_label).get_fdata()
+            label_data[label_data > 0] = 1
+            label_nifty = nib.Nifti1Image(label_data, nib.load(out_label).affine)
+            nib.save(label_nifty, out_label)
+
+            
+            # Load the image and get the coordinates
+            image_data = nib.load(out_image1).get_fdata()
+            # Get the cropping box coordinates
+            max_idx, min_idx = get_nonzero_bbox(image_data)
+            # Crop the images using SCT
+            assert os.system(f'sct_crop_image -i {out_image1} -o {out_image1} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0
+            assert os.system(f'sct_crop_image -i {out_image2} -o {out_image2} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0 
+            assert os.system(f'sct_crop_image -i {out_label} -o {out_label} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0 
+
+    
+    else: 
+
+        for file in agg_data:
+            # Get the subject name
+            subject_name = file.split('/')[-1].split('_')[0]
+            contrast = file.split('/')[-1].split('_')[-1].split('.')[0]
+            # Get corresponding label
+            label_file = file.replace(f'{contrast}.nii.gz', 'T2w_label-lesion_seg.nii.gz')
+            label_file = label_file.replace('ms-multi-spine-challenge-2024', 'ms-multi-spine-challenge-2024/derivatives/labels')
+            # Label file in raw T2w space
+            label_file = label_file.replace('_desc-preproc', '')
+            if not os.path.exists(label_file):
+                raise ValueError(f"Derivative file not found: {label_file}")
+            # Then we find the corresponding T2w raw image
+            t2w_raw_image = file.replace(f'{contrast}.nii.gz', 'T2w.nii.gz')
+            t2w_raw_image = t2w_raw_image.replace('_desc-preproc', '')
+            if not os.path.exists(t2w_raw_image):
+                raise ValueError(f"Derivative file not found: {t2w_raw_image}")
+                            
+            # Check if the subject is in the training or testing set
+            if subject_name in training_subjects:
+                scan_cnt_train += 1
+                # Add to the training list
+                train_images.append(file)
+                train_labels.append(label_file)
+                # Build output paths
+                out_image = path_out_imagesTr / f'{task_name}_{scan_cnt_train:03d}_0000.nii.gz'
+                out_label = path_out_labelsTr / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
+                
+            # For the testing files
+            elif subject_name in testing_subjects:
+                scan_cnt_test += 1
+                # Add to the testing list
+                test_images.append(file)
+                test_labels.append(label_file)
+                # Build output paths
+                out_image = path_out_imagesTs / f'{task_name}_{scan_cnt_test:03d}_0000.nii.gz'
+                out_label = path_out_labelsTs / f'{task_name}_{scan_cnt_test:03d}.nii.gz'
+            
+            # Add to the conversion dict
+            conversion_dict[str(file)] = str(out_image)
+            conversion_dict[str(label_file)] = str(out_label)
+            # Add to the image_label_conversion_dict
+            sub_dict = {"image_source": str(file), "label_source": str(label_file), "image_nnunet": str(out_image), "label_nnunet": str(out_label)}
+            image_label_conversion_dict[str(file)] = sub_dict
+
+            temp_folder = Path(output_dir) / "tmp"
+            temp_folder.mkdir(parents=True, exist_ok=True)
+
+            # We generate the QC:
+            # Copy the T2w raw image to the temp folder
+            assert os.system(f"cp {t2w_raw_image} {temp_folder/'raw_t2w.nii.gz'}") == 0
+            ## First we need to generate the spinal cord segmentation
+            assert os.system(f"sct_deepseg -i {temp_folder/'raw_t2w.nii.gz'} -o {temp_folder/'raw_t2w_sc_seg.nii.gz'} -task seg_sc_contrast_agnostic ") == 0
+
+            # We register the image to the corresponding T2w raw space
+            if contrast == 'T2w':
+                # If the image is a T2w image then we juste have to move it back to its original space
+                assert os.system(f"sct_register_multimodal -i {file} -d {t2w_raw_image} -identity 1 -ofolder {temp_folder} -owarp {temp_folder/'warp_image_to_t2wraw.nii.gz'} -o {temp_folder/'image_reg_to_t2wraw.nii.gz'} -qc {path_registration_qc} -dseg {temp_folder/'raw_t2w_sc_seg.nii.gz'} -qc-subject {file.split('/')[-1]}") == 0
+            else:
+                # Else we need to compute more complex registration
+                parameters = 'step=1,type=im,algo=dl'
+                assert os.system(f"sct_register_multimodal -i {file} -d {t2w_raw_image} -param {parameters} -ofolder {temp_folder} -owarp {temp_folder/'warp_image_to_t2wraw.nii.gz'} -o {temp_folder/'image_reg_to_t2wraw.nii.gz'} -qc {path_registration_qc} -dseg {temp_folder/'raw_t2w_sc_seg.nii.gz'} -qc-subject {file.split('/')[-1]}") == 0
         
-        # Remove the temporary folder
-        assert os.system(f"rm -r {temp_folder}") == 0
+            # Copy the registered file to the nnunet folder
+            assert os.system(f"cp {temp_folder/'image_reg_to_t2wraw.nii.gz'} {out_image}") == 0
 
-        # An extra security is to use the sct_register_multimodal to match dimension, resolution and orientation
-        assert os.system(f"sct_register_multimodal -i {str(out_label)} -d {str(out_image)} -identity 1 -o {str(out_label)} -owarp file_to_delete.nii.gz -owarpinv file_to_delete_2.nii.gz ") == 0
-        # Remove the other useless files
-        assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
-        other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
-        assert os.system(f"rm {other_file_to_remove}") == 0
+            # Reorient both image and label to desired orientation and location
+            assert os.system(f"sct_image -i {out_image} -setorient RPI -o {out_image}") == 0
+            assert os.system(f"sct_image -i {label_file} -setorient RPI -o {out_label}") == 0
+            
+            # Remove the temporary folder
+            assert os.system(f"rm -r {temp_folder}") == 0
 
-        # Binarize the label and save it
-        label_data = nib.load(out_label).get_fdata()
-        label_data[label_data > 0] = 1
-        label_nifty = nib.Nifti1Image(label_data, nib.load(out_label).affine)
-        nib.save(label_nifty, out_label)
+            # An extra security is to use the sct_register_multimodal to match dimension, resolution and orientation
+            assert os.system(f"sct_register_multimodal -i {str(out_label)} -d {str(out_image)} -identity 1 -o {str(out_label)} -owarp file_to_delete.nii.gz -owarpinv file_to_delete_2.nii.gz ") == 0
+            # Remove the other useless files
+            assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
+            other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
+            assert os.system(f"rm {other_file_to_remove}") == 0
 
-        # We end by cropping the zero areas of the images
-        # Load the image and get the coordinates
-        image_data = nib.load(out_image).get_fdata()
-        # Get the cropping box coordinates
-        max_idx, min_idx = get_nonzero_bbox(image_data)
-        # Crop the images using SCT
-        assert os.system(f'sct_crop_image -i {out_image} -o {out_image} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0
-        assert os.system(f'sct_crop_image -i {out_label} -o {out_label} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0 
+            # Binarize the label and save it
+            label_data = nib.load(out_label).get_fdata()
+            label_data[label_data > 0] = 1
+            label_nifty = nib.Nifti1Image(label_data, nib.load(out_label).affine)
+            nib.save(label_nifty, out_label)
+
+            # We end by cropping the zero areas of the images
+            # Load the image and get the coordinates
+            image_data = nib.load(out_image).get_fdata()
+            # Get the cropping box coordinates
+            max_idx, min_idx = get_nonzero_bbox(image_data)
+            # Crop the images using SCT
+            assert os.system(f'sct_crop_image -i {out_image} -o {out_image} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0
+            assert os.system(f'sct_crop_image -i {out_label} -o {out_label} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0 
     
     #----------------- CREATION OF THE CONVERSION DICT-----------------------------------
     # Print number of images in training and testing
