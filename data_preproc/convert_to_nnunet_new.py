@@ -82,7 +82,7 @@ def agg_data(data_dir, dataset_type):
         # Remove all images with derivatives in name
         images = [str(img) for img in images if "derivatives" not in str(img)]
 
-    elif dataset_type == 16: #dataset 16 (multimodal_all_preprocReg_T2wspace)
+    elif dataset_type == 16: #dataset 16 (multimodal_all_preprocReg_T2wpreprocspace)
         # List all preproc
         images = Path(data_dir).rglob("*desc-preproc*.nii.gz")
         # Remove all images with desc-preprocReg in name
@@ -97,6 +97,23 @@ def agg_data(data_dir, dataset_type):
         images1.sort()
         images2.sort()
         return images1, images2 
+
+    elif dataset_type == 17: #dataset 16 (multimodal_all_preprocReg_T2wspace)
+        # List all preproc
+        images = Path(data_dir).rglob("*desc-preproc*.nii.gz")
+        # Remove all images with desc-preprocReg in name
+        images = [str(img) for img in images if "desc-preprocReg" not in str(img)]
+        # Remove all images with derivatives in name
+        images = [str(img) for img in images if "derivatives" not in str(img)]
+        #Select the images with T2w in the name
+        images1 = [img for img in images if "T2w" in str(img)]
+        # Select the images with T2w not in the name
+        images2 = [img for img in images if "T2w" not in str(img)]
+        #Sort the images
+        images1.sort()
+        images2.sort()
+        return images1, images2 
+
 
     return images
 
@@ -146,7 +163,7 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
     training_subjects = data_split_yml['TRAINING']
     testing_subjects = data_split_yml['TESTING']
 
-    if dataset_type==16:
+    if dataset_type in [16,17] :
         input1_data, input2_data = agg_data
         for file1, file2 in zip(input1_data, input2_data):
             # Get the subject name
@@ -194,7 +211,18 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
 
             # We generate the QC:
             # Copy the T2w raw image to the temp folder
-            t2w_raw_image = file1 
+            if dataset_type == 16:
+                # We stay in the preprocessreg space 
+                t2w_raw_image = file1 
+            
+            else:
+                # We need to find the T2w raw image
+                t2w_raw_image = file1.replace('_desc-preproc', '')
+                if not os.path.exists(t2w_raw_image):
+                    raise ValueError(f"Derivative file not found: {t2w_raw_image}")
+                
+
+
             assert os.system(f"cp {t2w_raw_image} {temp_folder/'raw_t2w.nii.gz'}") == 0
             ## First we need to generate the spinal cord segmentation
             assert os.system(f"sct_deepseg -i {temp_folder/'raw_t2w.nii.gz'} -o {temp_folder/'raw_t2w_sc_seg.nii.gz'} -task seg_sc_contrast_agnostic ") == 0
