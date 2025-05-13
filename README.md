@@ -6,7 +6,8 @@ More information can be found in the Zenodo record: https://zenodo.org/records/1
 
 # Docker 
 
+To install docker you can use the procedure described [here](https://docs.docker.com/engine/install/ubuntu/)
+
 To build a docker image we first need a docker image to start with. 
 Since nnUNet uses pythorch with `torch==2.5.1` I will use `docker pull pytorch/pytorch:2.7.0-cuda11.8-cudnn9-devel`
 The `devel` stands for developpement and is bigger than the `runtime` but it's more complete and allows to run everything you want in pytorch. 
- 
