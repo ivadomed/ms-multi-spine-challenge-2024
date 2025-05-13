@@ -35,6 +35,7 @@ def parse_args():
     parser.add_argument("-image-folder", required=True, type=str, help="Folder containing the images of the test set")
     parser.add_argument("-conversion-dict", required=True, type=str, help="Dictionary containing the conversion of the predictions to the original labels")
     parser.add_argument("-output-folder", required=True, type=str, help="Folder to save the evaluation results")
+    parser.add_argument("-multimodal", default=False, type=bool, help="Model multimodal or not") 
     return parser.parse_args()
 
 
@@ -47,6 +48,7 @@ def main():
     image_folder = args.image_folder
     conversion_dict = args.conversion_dict
     output_folder = args.output_folder
+    multimodal = args.multimodal
 
     # Create output folder if it does not exist
     if not os.path.exists(output_folder):
@@ -70,7 +72,10 @@ def main():
     for pred in tqdm(predictions):
         # Get the corresponding image
         label = os.path.join(label_folder, pred.name)
-        image = os.path.join(image_folder, pred.name).replace(".nii.gz", "_0000.nii.gz")
+        if multimodal: 
+            image = os.path.join(image_folder, pred.name).replace(".nii.gz", "_0001.nii.gz")
+        else: 
+            image = os.path.join(image_folder, pred.name).replace(".nii.gz", "_0000.nii.gz")
 
         # Load the predictions and the label
         pred_data = nib.load(str(pred)).get_fdata()
