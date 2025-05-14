@@ -1,11 +1,18 @@
-# Base image with PyTorch + CUDA 11.8
 FROM pytorch/pytorch:2.7.0-cuda11.8-cudnn9-devel
 
-# Set working directory
-WORKDIR /app
+# Set work directory
+WORKDIR /workspace
 
-# Copy a simple test script (create this file locally)
-COPY test.py .
+# Install basic utilities and git
+RUN apt-get update && apt-get install -y \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
-# Run the script when the container starts
-CMD ["python", "test.py"]
+# Clone your fork of nnUNet
+RUN git clone https://github.com/plbenveniste/nnUNet.git
+
+# Install nnUNet in editable mode
+RUN pip install -e ./nnUNet
+
+# Set default command to bash (optional: makes it easier to drop in)
+CMD ["/bin/bash"]
