@@ -8,14 +8,13 @@ Input:
     --output-dir: path to the output directory where to save the results
     --training: flag to indicate if inference should be ran on training images as well
     --use-gpu: flag to indicate if inference should be ran on GPU or CPU
+    --use-checkpoint-best: flag to indicate if inference should be done with the "Checkpoint_best.pth" model (by default it uses Checkpoint_final.pth)
 
 Output:
     None
 
 Example:
     python run_inference.py --json images_dict.json --model model/patht --output_dir /output_dir/
-
-TODO: this code need to be modified based on the modifications made to the image_dict
 
 Author: Pierre-Louis Benveniste
 """
@@ -44,6 +43,7 @@ def parse_args():
     parser.add_argument('--output-dir', type=str, required=True, help='Path to the output directory where to save the results.')
     parser.add_argument('--training',  action='store_true', help='Flag to indicate if inference should be ran on training images as well.')
     parser.add_argument('--use-gpu', action='store_true', help='Flag to indicate if inference should be ran on GPU or CPU.')
+    parser.add_argument('--use-checkpoint-best', action='store_true', help='Flag to indicate if inference should be done with the "Checkpoint_best.pth" model (by default it uses Checkpoint_final.pth).')
     return parser.parse_args()
 
 
@@ -68,7 +68,7 @@ def run_inference(image_input, model_path, output_temp_dir, args):
     predictor.initialize_from_trained_model_folder(
         model_path,
         use_folds=[0],
-        checkpoint_name='checkpoint_final.pth',
+        checkpoint_name='checkpoint_best.pth' if args.use_checkpoint_best else 'checkpoint_final.pth',
     )
 
     # NOTE: for individual files, the image should be in a list of lists
@@ -111,9 +111,9 @@ def main():
     # Iterate over the images and run inference
     for image in images:
         # For each image input image, we register it to the T2w image
-        image_input = image["input_image"]
-        t2w_raw_image = image["t2w_raw_image"]
-        contrast = image["contrast"]
+        image_input = images[image]["input_image"]
+        t2w_raw_image = images[image]["t2w_raw_image"]
+        contrast = images[image]["contrast"]
 
         # Create a temporary folder to store the results
         temp_folder = Path(output_dir) /  "temp"
