@@ -130,3 +130,5 @@ CMD nnUNetv2_predict \
     -nps 1
 
 ```
+
+I had to put the npp and nps flags so that nnUNet wouldn't take too much RAM and make the process crash. It is really demanding in CPU mode and it could be an issue for submission. 
