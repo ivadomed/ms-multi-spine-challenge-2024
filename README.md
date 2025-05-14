@@ -68,14 +68,14 @@ If you now go in the submission folder you can see a Dockerfile that we will use
 Let's break it down: 
 
 Init of the Docker with the torch image
-```Docker 
+```Python 
 FROM pytorch/pytorch:2.7.0-cuda11.8-cudnn9-devel`
 
 # Set work directory
 WORKDIR /workspace
 ```
 Install git and clone our version from the nnUNet github
-```Docker
+```Python
 # Install basic utilities and git
 RUN apt-get update && apt-get install -y \
     git \
@@ -86,7 +86,47 @@ RUN git clone https://github.com/plbenveniste/nnUNet.git
 
 # Install nnUNet in editable mode
 RUN pip install -e ./nnUNet
+
+#move to the branch where our trainers are 
+RUN git -C nnUNet checkout plb/my_trainers
 ```
 
 To see if it works you can type: `docker run --rm -it --gpus all torch-nnunet` which should open a docker bash session and type `nnUNetv2_train -h`. 
 
+Then we have to set nnUNet variables: 
+
+```Python
+# Set up the nnUNet variable 
+ENV nnUNet_raw=/workspace/nnUNet_datasets
+ENV nnUNet_preprocessed=/workspace/nnUNet_preprocessed
+ENV nnUNet_results=/workspace/nnUNet_results
+```
+Install the requirements that were not contained in nnUNet.  
+
+
+```Python 
+# Run requirements.txt
+# Copy requirements.txt into the image
+COPY requirements.txt /workspace/requirements.txt
+
+# Install it 
+RUN pip install -r /workspace/requirements.txt
+```
+
+Make the nnUNet inference: 
+
+```Python 
+# Set up the inference command as entrypoint
+CMD nnUNetv2_predict \
+    -d Dataset170_MsMultiSpine \
+    -i /workspace/nnUNet_datasets/Dataset170_MsMultiSpine/imagesTs \
+    -o /workspace/result \
+    -f 0 \
+    -tr nnUNetTrainerDiceCELoss_noSmooth_300epochs \
+    -c 2d \
+    -p nnUNetResEncUNetLPlans \
+    -device cpu\
+    -npp 1 \
+    -nps 1
+
+```
