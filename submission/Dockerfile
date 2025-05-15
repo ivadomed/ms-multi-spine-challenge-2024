@@ -10,23 +10,14 @@ RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 RUN git clone https://github.com/plbenveniste/nnUNet.git
 
 # Install it in editable mode
-RUN pip install -e ./nnUNet
-
 RUN git -C nnUNet checkout plb/my_trainers
+
+RUN pip install -e ./nnUNet
 
 # Set up the nnUNet variable 
 ENV nnUNet_raw=/workspace
 ENV nnUNet_preprocessed=/workspace/nnUNet_preprocessed
 ENV nnUNet_results=/workspace/nnUNet_results
-
-
-# Run requirements.txt
-# Copy requirements.txt into the image
-COPY requirements.txt /workspace/requirements.txt
-
-# Install it 
-RUN pip install -r /workspace/requirements.txt
-
 
 # Set up the inference command as entrypoint
 CMD bash -c "\
