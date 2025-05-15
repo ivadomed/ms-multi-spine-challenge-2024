@@ -15,9 +15,10 @@ RUN pip install -e ./nnUNet
 RUN git -C nnUNet checkout plb/my_trainers
 
 # Set up the nnUNet variable 
-ENV nnUNet_raw=/workspace/nnUNet_datasets
+ENV nnUNet_raw=/workspace
 ENV nnUNet_preprocessed=/workspace/nnUNet_preprocessed
 ENV nnUNet_results=/workspace/nnUNet_results
+
 
 # Run requirements.txt
 # Copy requirements.txt into the image
@@ -28,14 +29,17 @@ RUN pip install -r /workspace/requirements.txt
 
 
 # Set up the inference command as entrypoint
-CMD nnUNetv2_predict \
-    -d Dataset170_MsMultiSpine \
-    -i /workspace/nnUNet_datasets/Dataset170_MsMultiSpine/imagesTs \
-    -o /workspace/result \
-    -f 0 \
-    -tr nnUNetTrainerDiceCELoss_noSmooth_300epochs \
-    -c 2d \
-    -p nnUNetResEncUNetLPlans \
-    -device cpu\
-    -npp 1 \
-    -nps 1
+CMD bash -c "\
+    for case in \$(ls /workspace/Dataset170_MsMultiSpine/imagesTs/); do \
+        case_id=\$(basename \$case); \
+        echo Predicting \$case_id && \
+        nnUNetv2_predict \
+            -i /workspace/Dataset170_MsMultiSpine/imagesTs/\$case_id \
+            -o /workspace/result \
+            -d Dataset170_MsMultiSpine \
+            -tr nnUNetTrainerDiceCELoss_noSmooth_300epochs \
+            -c 2d \
+            -p nnUNetResEncUNetLPlans \
+            -device cpu \
+            -f 0; \
+    done"
