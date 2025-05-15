@@ -132,3 +132,7 @@ CMD nnUNetv2_predict \
 ```
 
 I had to put the npp and nps flags so that nnUNet wouldn't take too much RAM and make the process crash. It is really demanding in CPU mode and it could be an issue for submission. 
+
+docker build -t nnunet-infer .
+
+docker run --rm --gpus all   -v ../../nnUNet_datasets:/workspace/nnUNet_datasets   -v ../../nnUNet_results:/workspace/nnUNet_results -v ../../nnUNet_preprocessed:/workspace/nnUNet_preprocessed   -v $(pwd)/result:/workspace/result  nnunet-infer
