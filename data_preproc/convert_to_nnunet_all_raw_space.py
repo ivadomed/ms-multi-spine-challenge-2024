@@ -152,7 +152,7 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
         if not os.path.exists(t2w_raw_image):
             raise ValueError(f"T2w raw file not found: {t2w_raw_image}")
         # We find the file in raw space
-        file_raw_image = file_raw_image.replace('_desc-preproc', '')
+        file_raw_image = file.replace('_desc-preproc', '')
         if not os.path.exists(file_raw_image):
             raise ValueError(f"File raw image not found: {file_raw_image}")
 
@@ -183,7 +183,7 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
         sub_dict = {"image_source": str(file), "label_source": str(label_file), "image_nnunet": str(out_image), "label_nnunet": str(out_label)}
         image_label_conversion_dict[str(file)] = sub_dict
 
-        temp_folder = Path(output_dir) / "tmp"
+        temp_folder = Path(path_out) / "tmp"
         temp_folder.mkdir(parents=True, exist_ok=True)
 
         # We generate the QC:
@@ -230,6 +230,7 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
         # Binarize the label and save it
         label_data = nib.load(out_label).get_fdata()
         label_data[label_data >= 0.5] = 1
+        label_data[label_data < 0.6] = 0
         label_nifty = nib.Nifti1Image(label_data, nib.load(out_label).affine)
         nib.save(label_nifty, out_label)
 
