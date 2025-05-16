@@ -217,13 +217,13 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
         assert os.system(f"sct_image -i {out_image} -setorient RPI -o {out_image}") == 0
         assert os.system(f"sct_image -i {out_label} -setorient RPI -o {out_label}") == 0
         
+        # An extra security is to use the sct_register_multimodal to match dimension, resolution and orientation
+        assert os.system(f"sct_register_multimodal -i {str(out_label)} -d {str(out_image)} -identity 1 -o {str(out_label)} -owarp {temp_folder/'file_to_delete.nii.gz'} -owarpinv {temp_folder/'file_to_delete_2.nii.gz'} ") == 0
+        
         # Remove the temporary folder
         assert os.system(f"rm -r {temp_folder}") == 0
-
-        # An extra security is to use the sct_register_multimodal to match dimension, resolution and orientation
-        assert os.system(f"sct_register_multimodal -i {str(out_label)} -d {str(out_image)} -identity 1 -o {str(out_label)} -owarp file_to_delete.nii.gz -owarpinv file_to_delete_2.nii.gz ") == 0
+        
         # Remove the other useless files
-        assert os.system("rm file_to_delete.nii.gz file_to_delete_2.nii.gz") == 0
         other_file_to_remove = str(out_label).replace('.nii.gz', '_inv.nii.gz')
         assert os.system(f"rm {other_file_to_remove}") == 0
 
