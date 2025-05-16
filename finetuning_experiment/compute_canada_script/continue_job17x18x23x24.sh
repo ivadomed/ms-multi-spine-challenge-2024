@@ -14,6 +14,6 @@
 # Launch jobs
 parallel --verbose --jobs 4 ::: \
   "(ts=\$(date '+%Y-%m-%d-%H-%M-%S'); bash /home/p/plb/links/projects/aip-jcohen/plb/challenge/ms-multi-spine-challenge-2024/finetuning_experiment/compute_canada_script/continue_job17.sh 2>&1 | tee /home/p/plb/links/scratch/challenge/logfile_job17_\$ts.txt)" \
-  "(ts=\$(date '+%Y-%m-%d-%H-%M-%S'); bash /home/p/plb/links/projects/aip-jcohen/plb/challenge/ms-multi-spine-challenge-2024/finetuning_experiment/compute_canada_script/continue_job18.sh 2>&1 | tee /home/p/plb/links/scratch/challenge/logfile_job28_\$ts.txt)" \
+  "(ts=\$(date '+%Y-%m-%d-%H-%M-%S'); bash /home/p/plb/links/projects/aip-jcohen/plb/challenge/ms-multi-spine-challenge-2024/finetuning_experiment/compute_canada_script/continue_job18.sh 2>&1 | tee /home/p/plb/links/scratch/challenge/logfile_job18_\$ts.txt)" \
   "(ts=\$(date '+%Y-%m-%d-%H-%M-%S'); bash /home/p/plb/links/projects/aip-jcohen/plb/challenge/ms-multi-spine-challenge-2024/finetuning_experiment/compute_canada_script/continue_job23.sh 2>&1 | tee /home/p/plb/links/scratch/challenge/logfile_job23_\$ts.txt)" \
   "(ts=\$(date '+%Y-%m-%d-%H-%M-%S'); bash /home/p/plb/links/projects/aip-jcohen/plb/challenge/ms-multi-spine-challenge-2024/finetuning_experiment/compute_canada_script/continue_job24.sh 2>&1 | tee /home/p/plb/links/scratch/challenge/logfile_job24_\$ts.txt)" \
