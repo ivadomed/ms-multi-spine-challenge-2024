@@ -13,7 +13,7 @@
 
 # Launch jobs
 parallel --verbose --jobs 4 ::: \
-  "(ts=\$(date '+%Y-%m-%d-%H-%M-%S'); bash /home/p/plb/links/projects/aip-jcohen/plb/challenge/ms-multi-spine-challenge-2024/finetuning_experiment/compute_canada_script/continue_job7.sh 2>&1 | tee /home/p/plb/links/scratch/challenge/logfile_job1_\$ts.txt)" \
-  "(ts=\$(date '+%Y-%m-%d-%H-%M-%S'); bash /home/p/plb/links/projects/aip-jcohen/plb/challenge/ms-multi-spine-challenge-2024/finetuning_experiment/compute_canada_script/continue_job8.sh 2>&1 | tee /home/p/plb/links/scratch/challenge/logfile_job2_\$ts.txt)" \
-  "(ts=\$(date '+%Y-%m-%d-%H-%M-%S'); bash /home/p/plb/links/projects/aip-jcohen/plb/challenge/ms-multi-spine-challenge-2024/finetuning_experiment/compute_canada_script/continue_job9.sh 2>&1 | tee /home/p/plb/links/scratch/challenge/logfile_job3_\$ts.txt)" \
-  "(ts=\$(date '+%Y-%m-%d-%H-%M-%S'); bash /home/p/plb/links/projects/aip-jcohen/plb/challenge/ms-multi-spine-challenge-2024/finetuning_experiment/compute_canada_script/continue_job10.sh 2>&1 | tee /home/p/plb/links/scratch/challenge/logfile_job4_\$ts.txt)"
+  "(ts=\$(date '+%Y-%m-%d-%H-%M-%S'); bash /home/p/plb/links/projects/aip-jcohen/plb/challenge/ms-multi-spine-challenge-2024/finetuning_experiment/compute_canada_script/continue_job7.sh 2>&1 | tee /home/p/plb/links/scratch/challenge/logfile_job7_\$ts.txt)" \
+  "(ts=\$(date '+%Y-%m-%d-%H-%M-%S'); bash /home/p/plb/links/projects/aip-jcohen/plb/challenge/ms-multi-spine-challenge-2024/finetuning_experiment/compute_canada_script/continue_job8.sh 2>&1 | tee /home/p/plb/links/scratch/challenge/logfile_job8_\$ts.txt)" \
+  "(ts=\$(date '+%Y-%m-%d-%H-%M-%S'); bash /home/p/plb/links/projects/aip-jcohen/plb/challenge/ms-multi-spine-challenge-2024/finetuning_experiment/compute_canada_script/continue_job9.sh 2>&1 | tee /home/p/plb/links/scratch/challenge/logfile_job9_\$ts.txt)" \
+  "(ts=\$(date '+%Y-%m-%d-%H-%M-%S'); bash /home/p/plb/links/projects/aip-jcohen/plb/challenge/ms-multi-spine-challenge-2024/finetuning_experiment/compute_canada_script/continue_job10.sh 2>&1 | tee /home/p/plb/links/scratch/challenge/logfile_job10_\$ts.txt)"
