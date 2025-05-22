@@ -191,6 +191,8 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
         assert os.system(f"cp {file_raw_image} {temp_folder/'file_raw_image.nii.gz'}") == 0
         ## First we need to generate the spinal cord segmentation
         assert os.system(f"sct_deepseg -i {temp_folder/'file_raw_image.nii.gz'} -o {temp_folder/'file_raw_image_sc_seg.nii.gz'} -task seg_sc_contrast_agnostic ") == 0
+        ## Then we need to generate the spinal cord segmentation of the T2w raw image
+        assert os.system(f"sct_deepseg -i {t2w_raw_image} -o {temp_folder/'t2_raw_image_sc_seg.nii.gz'} -task seg_sc_contrast_agnostic ") == 0
 
         # If T2w image then: we register the image to the corresponding T2w raw space
         if contrast == 'T2w':
@@ -204,10 +206,12 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
         # If other contrast: we register the T2w raw image to the corresponding file then apply the warping field to the T2w raw segmentation
         else:
             # 1. We register the T2w raw image to the contrast raw image to build a warping field
-            parameters = 'step=1,type=im,algo=dl'
-            assert os.system(f"sct_register_multimodal -i {t2w_raw_image} -d {file_raw_image} -param {parameters} -ofolder {temp_folder} -owarp {temp_folder/'warp_t2raw_to_image_raw.nii.gz'} -o {temp_folder/'t2raw_reg_to_image_raw.nii.gz'} -qc {path_registration_qc} -dseg {temp_folder/'file_raw_image_sc_seg.nii.gz'} -qc-subject {file.split('/')[-1]}") == 0
-            # 2. We apply the warping field to the T2w raw segmentation
-            assert os.system(f"sct_apply_transfo -i {label_file} -d {file_raw_image} -w {temp_folder/'warp_t2raw_to_image_raw.nii.gz'} -o {out_label} -x linear") == 0
+            parameters = 'step=1,type=im,algo=dl,metric=MI:step=2,type=seg,algo=syn,metric=MeanSquares:step=3,type=im,algo=syn,metric=MI,iter=5,shrink=2'
+            assert os.system(f"sct_register_multimodal -i {t2w_raw_image} -d {file_raw_image} -param {parameters} -ofolder {temp_folder} -owarp {temp_folder/'warp_t2raw_to_image_raw.nii.gz'} -o {temp_folder/'t2raw_reg_to_image_raw.nii.gz'} -qc {path_registration_qc} -iseg {temp_folder/'t2_raw_image_sc_seg.nii.gz'} -dseg {temp_folder/'file_raw_image_sc_seg.nii.gz'} -qc-subject {file.split('/')[-1]}") == 0
+            # 2. We binarize the T2w raw segmentation
+            assert os.system(f"sct_maths -i {label_file} -o {temp_folder/'file_raw_image_sc_seg_bin.nii.gz'} -bin 0.5 ") == 0
+            # 2. We apply the warping field to the binarized T2w raw segmentation
+            assert os.system(f"sct_apply_transfo -i {temp_folder/'file_raw_image_sc_seg_bin.nii.gz'} -d {file_raw_image} -w {temp_folder/'warp_t2raw_to_image_raw.nii.gz'} -o {out_label} -x linear") == 0
             # 3. We register the file to the file raw image
             assert os.system(f"sct_register_multimodal -i {file} -d {file_raw_image} -identity 1 -ofolder {temp_folder} -owarp {temp_folder/'warp_image_to_image_raw.nii.gz'} -o {temp_folder/'image_reg_to_image_raw.nii.gz'} -qc {path_registration_qc} -dseg {temp_folder/'file_raw_image_sc_seg.nii.gz'} -qc-subject {file.split('/')[-1]}") == 0
             # 4. We copy the registered file to the nnunet folder
