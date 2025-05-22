@@ -55,7 +55,7 @@ def run_inference(input, output, dataset_id, plans, trainer, configuration, chec
     os.makedirs(dataset_output, exist_ok=True)
 
     #Create the output directory specific to the model 
-    dataset_output = os.path.join(dataset_output, f'{trainer}__{plans}__{configuration}')
+    dataset_output = os.path.join(dataset_output, f'{trainer}__{plans}__{configuration}_{fold}')
     os.makedirs(dataset_output, exist_ok=True)
     
 
@@ -67,6 +67,8 @@ def run_inference(input, output, dataset_id, plans, trainer, configuration, chec
     label_dir = os.path.join(input, f'Dataset{dataset_id}_MsMultiSpine','labelsTs')
 
     # Run inference 
+
+    #assert os.system(f"nnUNetv2_predict -i {input_dir} -o {dataset_output}/prediction -d {dataset_id} -p {plans} -tr {trainer} -c {configuration} -f {fold} -chk {checkpoint} ") == 0
 
     assert os.system(f"nnUNetv2_predict -i {input_dir} -o {dataset_output}/prediction -d {dataset_id} -p {plans} -tr {trainer} -c {configuration} -f {fold} -chk {checkpoint} ") == 0
  
