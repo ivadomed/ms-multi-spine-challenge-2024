@@ -40,10 +40,11 @@ def parse_arguments():
     parser.add_argument("--configuration", type=str, required=True, help="Configuration for nnUNet.")
     parser.add_argument("--checkpoint", type=str, default="checkpoint_best.pth", help="Checkpoint name for nnUNet.")
     parser.add_argument("--fold", type=str, default=all, help="Fold for nnUNet (default=all).")
+    parser.add_argument("--train", type=bool, default=False, help="Specify if you want to make inference on train or test.")
     args = parser.parse_args()
     return args
 
-def run_inference(input, output, dataset_id, plans, trainer, configuration, checkpoint, fold):
+def run_inference(input, output, dataset_id, plans, trainer, configuration, checkpoint, fold, train):
     """
     Run the nnUNet inference on the dataset.
     """
@@ -59,12 +60,21 @@ def run_inference(input, output, dataset_id, plans, trainer, configuration, chec
     os.makedirs(dataset_output, exist_ok=True)
     
 
+    if train: 
 
-    #Path to the input
-    input_dir = os.path.join(input, f'Dataset{dataset_id}_MsMultiSpine/imagesTs')
-    
-    #Path to the labels 
-    label_dir = os.path.join(input, f'Dataset{dataset_id}_MsMultiSpine','labelsTs')
+        #Path to the input
+        input_dir = os.path.join(input, f'Dataset{dataset_id}_MsMultiSpine/imagesTr')
+        
+        #Path to the labels 
+        label_dir = os.path.join(input, f'Dataset{dataset_id}_MsMultiSpine','labelsTr')
+
+    else: 
+
+        #Path to the input
+        input_dir = os.path.join(input, f'Dataset{dataset_id}_MsMultiSpine/imagesTs')
+        
+        #Path to the labels 
+        label_dir = os.path.join(input, f'Dataset{dataset_id}_MsMultiSpine','labelsTs')
 
     # Run inference 
 
@@ -83,7 +93,7 @@ def main():
     args = parse_arguments()
 
     # Run inference
-    run_inference(args.input, args.output, args.dataset_id, args.plans, args.trainer, args.configuration, args.checkpoint, args.fold)
+    run_inference(args.input, args.output, args.dataset_id, args.plans, args.trainer, args.configuration, args.checkpoint, args.fold, args.train)
 
     print(f"Inference completed. Results saved in {args.output}")
 
