@@ -3,7 +3,7 @@
 #SBATCH --job-name=challjob12Folds     # set a more descriptive job-name 
 #SBATCH --nodes=1
 #SBATCH --gpus-per-node=h100:4
-#SBATCH --cpus-per-task=100
+#SBATCH --cpus-per-task=48
 #SBATCH --mem=350G
 #SBATCH --time=1-00:00:00   # DD-HH:MM:SS
 #SBATCH --output=/home/p/plb/links/scratch/challenge/%x_%A_v2.out
