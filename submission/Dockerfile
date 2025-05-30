@@ -27,6 +27,8 @@ ENV nnUNet_raw=/workspace
 ENV nnUNet_preprocessed=/workspace/nnUNet_preprocessed
 ENV nnUNet_results=/workspace/nnUNet_results
 
+
+
 # Set up the inference command as entrypoint
 CMD bash -c "\
     for case in \$(ls /workspace/Dataset170_MsMultiSpine/imagesTs/); do \
