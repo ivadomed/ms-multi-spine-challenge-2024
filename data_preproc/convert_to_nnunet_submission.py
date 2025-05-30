@@ -125,7 +125,7 @@ def get_nonzero_bbox(image_data):
     return max_idx, min_idx
 
 
-def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, task_number, dataset_type):
+def convert_to_nnUNet_format(agg_data, output_dir, task_name, task_number, dataset_type):
     """
     This function converts the aggregated data to the nnUNet format.
     """
@@ -155,12 +155,7 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
     # Initialise the number of scans in train and in test folder
     scan_cnt_train, scan_cnt_test = 0, 0
     
-    # Load the data split
-    with open(path_data_split, 'r') as file:
-        data_split_yml = yaml.load(file, Loader=yaml.FullLoader)
-    # Split into the training and testing
-    training_subjects = data_split_yml['TRAINING']
-    testing_subjects = data_split_yml['TESTING']
+    
 
     if dataset_type in [16,17] :
         input1_data, input2_data = agg_data
@@ -174,28 +169,17 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
             if not os.path.exists(label_file):
                 raise ValueError(f"Derivative file not found: {label_file}")
             
-            # Check if the subject is in the training or testing set
-            if subject_name in training_subjects:
-                scan_cnt_train += 1
-                # Add to the training list
-                train_images.append(file1)
-                train_images.append(file2)
-                train_labels.append(label_file)
-                # Build output paths
-                out_image1 = path_out_imagesTr / f'{task_name}_{scan_cnt_train:03d}_0000.nii.gz'
-                out_image2 = path_out_imagesTr / f'{task_name}_{scan_cnt_train:03d}_0001.nii.gz'
-                out_label = path_out_labelsTr / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
-            # For the testing files
-            elif subject_name in testing_subjects:
-                scan_cnt_test += 1
-                # Add to the testing list
-                test_images.append(file1)
-                test_images.append(file2)
-                test_labels.append(label_file)
-                # Build output paths
-                out_image1 = path_out_imagesTs / f'{task_name}_{scan_cnt_test:03d}_0000.nii.gz'
-                out_image2 = path_out_imagesTs / f'{task_name}_{scan_cnt_test:03d}_0001.nii.gz'
-                out_label = path_out_labelsTs / f'{task_name}_{scan_cnt_test:03d}.nii.gz'
+            
+            scan_cnt_train += 1
+            # Add to the training list
+            train_images.append(file1)
+            train_images.append(file2)
+            train_labels.append(label_file)
+            # Build output paths
+            out_image1 = path_out_imagesTr / f'{task_name}_{scan_cnt_train:03d}_0000.nii.gz'
+            out_image2 = path_out_imagesTr / f'{task_name}_{scan_cnt_train:03d}_0001.nii.gz'
+            out_label = path_out_labelsTr / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
+            
 
             # Add to the conversion dict
             conversion_dict[str(file1)] = str(out_image1)
@@ -289,24 +273,16 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
                 raise ValueError(f"Derivative file not found: {t2w_raw_image}")
                             
             # Check if the subject is in the training or testing set
-            if subject_name in training_subjects:
-                scan_cnt_train += 1
-                # Add to the training list
-                train_images.append(file)
-                train_labels.append(label_file)
-                # Build output paths
-                out_image = path_out_imagesTr / f'{task_name}_{scan_cnt_train:03d}_0000.nii.gz'
-                out_label = path_out_labelsTr / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
+            
+            scan_cnt_train += 1
+            # Add to the training list
+            train_images.append(file)
+            train_labels.append(label_file)
+            # Build output paths
+            out_image = path_out_imagesTr / f'{task_name}_{scan_cnt_train:03d}_0000.nii.gz'
+            out_label = path_out_labelsTr / f'{task_name}_{scan_cnt_train:03d}.nii.gz'
                 
-            # For the testing files
-            elif subject_name in testing_subjects:
-                scan_cnt_test += 1
-                # Add to the testing list
-                test_images.append(file)
-                test_labels.append(label_file)
-                # Build output paths
-                out_image = path_out_imagesTs / f'{task_name}_{scan_cnt_test:03d}_0000.nii.gz'
-                out_label = path_out_labelsTs / f'{task_name}_{scan_cnt_test:03d}.nii.gz'
+            
             
             # Add to the conversion dict
             conversion_dict[str(file)] = str(out_image)
@@ -368,7 +344,7 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
     #----------------- CREATION OF THE CONVERSION DICT-----------------------------------
     # Print number of images in training and testing
     print("Number of images for training: " + str(scan_cnt_train))
-    print("Number of images for testing: " + str(scan_cnt_test))
+    
 
     #----------------- CREATION OF THE DICTIONNARY-----------------------------------
     # create dataset_description.json
@@ -442,7 +418,7 @@ def main():
     aggregated_data = agg_data(args.data, args.dataset_type)
 
     # Then we convert it to the nnUnet format
-    image_label_dict = convert_to_nnUNet_format(aggregated_data, args.output, args.path_data_split, args.task_name, args.task_number, args.dataset_type)
+    image_label_dict = convert_to_nnUNet_format(aggregated_data, args.output, args.task_name, args.task_number, args.dataset_type)
     
     print("Conversion done.")
 

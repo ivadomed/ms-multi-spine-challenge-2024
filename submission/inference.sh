@@ -11,8 +11,8 @@ set -e
 DATASET_NAME="MsMultiSpine"
 DATASET_NUMBER="15"
 DATASET_ID="150"
-RAW_DATA="/path/to/nnUNet_datasets/${DATASET_NAME}"
-NNUNET_DATASET="/path/to/nnUNet_preprocessed"
+RAW_DATA="ms-multi-spine-challenge-2024"
+NNUNET_DATASET="nnunet_datasets"
 RESULTS="/path/to/output_results"
 
 # nnU-Net trainer/plan
@@ -30,10 +30,10 @@ GITHUB="ms-multi-spine-challenge-2024-github"
 
 echo "Step 1: Preprocessing"
 
-python $GITHUB/data_preproc/conver_to_nnunet_new_no_test.py \
+python $GITHUB/data_preproc/convert_to_nnunet_submission.py \
     --data $RAW_DATA \
     --output $NNUNET_DATASET \
-    --task_name $DATASET_NAME \
+    --task-name $DATASET_NAME \
     --task-number $DATASET_ID \
     --dataset-type $DATASET_NUMBER
 
