@@ -14,6 +14,14 @@ RUN git -C nnUNet checkout plb/my_trainers
 
 RUN pip install -e ./nnUNet
 
+# Clone the ms-multi-spine-challenge-2024 repository
+
+RUN git clone https://github.com/ivadomed/ms-multi-spine-challenge-2024.git
+
+# Install the requirements for our pipeline
+
+RUN pip install -r ms-multi-spine-challenge-2024/requirements.txt
+
 # Set up the nnUNet variable 
 ENV nnUNet_raw=/workspace
 ENV nnUNet_preprocessed=/workspace/nnUNet_preprocessed
