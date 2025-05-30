@@ -1,6 +1,17 @@
 #!/bin/bash
 set -e  
 
+# ======================
+# SCT installation
+# ======================
+
+#pip install wget 
+
+#git clone https://github.com/spinalcordtoolbox/spinalcordtoolbox
+
+#yes | ./spinalcordtoolbox/install_sct
+
+
 
 # =====================
 # CONFIGURATION BLOCK
