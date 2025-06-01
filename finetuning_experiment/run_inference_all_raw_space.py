@@ -9,6 +9,7 @@ Input:
     --training: flag to indicate if inference should be ran on training images as well
     --use-gpu: flag to indicate if inference should be ran on GPU or CPU
     --use-checkpoint-best: flag to indicate if inference should be done with the "Checkpoint_best.pth" model (by default it uses Checkpoint_final.pth)
+    --fold-all: flag to indicate if inference should be done on all folds (by default it uses fold 0)
 
 Output:
     None
@@ -47,6 +48,7 @@ def parse_args():
     parser.add_argument('--training',  action='store_true', help='Flag to indicate if inference should be ran on training images as well.')
     parser.add_argument('--use-gpu', action='store_true', help='Flag to indicate if inference should be ran on GPU or CPU.')
     parser.add_argument('--use-checkpoint-best', action='store_true', help='Flag to indicate if inference should be done with the "Checkpoint_best.pth" model (by default it uses Checkpoint_final.pth).')
+    parser.add_argument('--fold-all', action='store_true', help='Flag to indicate if inference should be done on all folds (by default it uses fold 0).')
     return parser.parse_args()
 
 
@@ -117,7 +119,7 @@ def main():
     # initializes the network architecture, loads the checkpoint
     predictor.initialize_from_trained_model_folder(
         model_path,
-        use_folds=[0],
+        use_folds=['all'] if args.fold_all else [0],  # if fold_all is set, we use all folds, else we use fold 0
         checkpoint_name='checkpoint_best.pth' if args.use_checkpoint_best else 'checkpoint_final.pth',
     )
 
