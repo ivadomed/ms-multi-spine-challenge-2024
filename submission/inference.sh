@@ -51,16 +51,11 @@ python $GITHUB/data_preproc/convert_to_nnunet_submission.py \
 
 echo "Step 2: Inference"
 
-nnUNetv2_predict \
-  -i $NNUNET_DATASET/Dataset$DATASET_ID_$DATASET_NAME/imagesTr \
-  -o result \
-  -d Dataset$DATASET_ID_$DATASET_NAME \
-  -tr nnUNetTrainerDiceCELoss_noSmooth_150epochs \
-  -c 2d \
-  -p nnUNetResEncUNetLPlans \
-  -f 0 \
-  -device cpu \
-  -npp 1 \
-  -nps 1
-
-
+python $GITHUB/inference/predict.py \
+  --input $NNUNET_DATASET/Dataset$DATASET_ID_$DATASET_NAME/imagesTr \
+  --output $RESULTS \
+  --dataset-id $DATASET_ID \
+  --plans $PLAN \
+  --trainer $TRAINER \
+  --configuration $CONFIG \
+  --device $DEVICE \
