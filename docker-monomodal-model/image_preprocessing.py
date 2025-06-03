@@ -43,6 +43,10 @@ def preprocess_images(input_images, output_folder):
     # Build the output folder if it does not exist
     os.makedirs(output_folder, exist_ok=True)
 
+    # Build a temp folder in the output folder
+    temp_folder = os.path.join(output_folder, "temp_preprocessing")
+    os.makedirs(temp_folder, exist_ok=True)
+
     # We build the subject dictionary
     for image_path in input_images:
         if image_path == None:
@@ -50,10 +54,6 @@ def preprocess_images(input_images, output_folder):
         type = image_path.split('/')[-3]
         contrast = image_path.split('_')[-1].split('.')[0]
         subj_dict[f"{type}_{contrast}"] = image_path
-
-    # We copy both image to a the a temp folder in the output folder
-    temp_folder = os.path.join(output_folder, "temp")
-    os.makedirs(temp_folder, exist_ok=True)
 
     # Copy the raw images to the temp folder: we will perform inference on these images
     destination_t2 = os.path.join(temp_folder, "T2.nii.gz")

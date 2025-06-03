@@ -22,6 +22,8 @@ import argparse
 import os
 from listing_inputs import listing_input_files
 from image_preprocessing import preprocess_images
+from run_inference import run_inference
+from pred_postprocessing import postprocess_segmentation
 
 
 def parse_args():
@@ -41,17 +43,32 @@ def main():
     # Build the output folder if it does not exist
     os.makedirs(output_folder, exist_ok=True)
 
+    # Create a temporary folder in the output folder
+    temp_folder = os.path.join(output_folder, "temp")
+    os.makedirs(temp_folder, exist_ok=True)
+
     # List all the files in the input folder 
     list_files = listing_input_files(input_folder)
 
     # Now we perform image preprocessing
-    subj_dict, preprocessed_images = preprocess_images(list_files, output_folder)
+    subj_dict, preprocessed_images = preprocess_images(list_files, temp_folder)
     
     # Now we perform inference on the preprocessed images
+    predicted_segmentations = []
+    for images in preprocessed_images.values():
+        if images is not None:
+            # Here you would call the inference function
+            # For example: run_inference(images, temp_folder)
+            print(f"Running inference on {images}...")
+            predicted_segmentations.append(run_inference(images, temp_folder))
+
+    # Now we perform postprocessing of each predicted segmentation
+    postprocessed_segmentations = []
+    for predicted_seg in predicted_segmentations:
+            # Here you would call the postprocessing function
+            postprocessed_segmentations.append(postprocess_segmentation(predicted_seg, subj_dict))
+
     
-
-
-
 
 
     return None
