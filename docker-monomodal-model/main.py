@@ -3,11 +3,11 @@ This is the main script to run inference in the docker.
 The steps are the following: 
 1. Listing the files
 2. Image preprocessing
-2. Inference on images
-3. Fusion of information
-4. Calibration
-5. Instance segmentation
-6. Post-processing for output
+3. Inference on images
+4. Postprocessing of the predicted segmentations
+6. Fusion of information
+7. Instance segmentation
+8. Saving of instance segmentation and csv file with instance probabilities
 
 Args:
     --input_folder: path to the input folder containing the images of only one subject
@@ -47,13 +47,13 @@ def main():
     temp_folder = os.path.join(output_folder, "temp")
     os.makedirs(temp_folder, exist_ok=True)
 
-    # List all the files in the input folder 
+    # 1. List all the files in the input folder 
     list_files = listing_input_files(input_folder)
 
-    # Now we perform image preprocessing
+    # 2. Now we perform image preprocessing
     subj_dict, preprocessed_images = preprocess_images(list_files, temp_folder)
     
-    # Now we perform inference on the preprocessed images
+    # 3. Now we perform inference on the preprocessed images
     predicted_segmentations = []
     for images in preprocessed_images.values():
         if images is not None:
@@ -62,13 +62,14 @@ def main():
             print(f"Running inference on {images}...")
             predicted_segmentations.append(run_inference(images, temp_folder))
 
-    # Now we perform postprocessing of each predicted segmentation
+    # 4. Now we perform postprocessing of each predicted segmentation
     postprocessed_segmentations = []
     for predicted_seg in predicted_segmentations:
             # Here you would call the postprocessing function
             postprocessed_segmentations.append(postprocess_segmentation(predicted_seg, subj_dict))
 
-    
+    # 5. Fusion of information
+     
 
 
     return None
