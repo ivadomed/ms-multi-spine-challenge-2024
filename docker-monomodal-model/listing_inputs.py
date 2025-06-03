@@ -1,3 +1,7 @@
+"""
+This code comes from the challenge repo: https://gitlab.inria.fr/msmultispinechallenge/msmultispinespecification
+"""
+
 import os
 import re
 import argparse
