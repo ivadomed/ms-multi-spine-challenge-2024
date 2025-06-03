@@ -19,7 +19,6 @@ Author: Thomas Dagonneau and Pierre-Louis Benveniste
 
 TODO: 
     - Mofidy the part above TODO. 
-    - Add the compute_metrics function to compute the metrics for the nnUNet dataset.
 """
 import os
 import json

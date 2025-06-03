@@ -20,11 +20,11 @@ set -e
 
 # Dataset directories
 DATASET_NAME="MsMultiSpine"
-DATASET_NUMBER="15"
-DATASET_ID="150"
+DATASET_NUMBER="17"
+DATASET_ID="170"
 RAW_DATA="ms-multi-spine-challenge-2024"
 NNUNET_DATASET="nnunet_datasets"
-RESULTS="/path/to/output_results"
+RESULTS="results"
 
 # nnU-Net trainer/plan
 CONFIG="2d"
