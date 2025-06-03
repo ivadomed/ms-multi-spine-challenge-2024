@@ -1,7 +1,8 @@
 """
 This is the main script to run inference in the docker.
 The steps are the following: 
-1. Data preprocessing
+1. Listing the files
+2. Image preprocessing
 2. Inference on images
 3. Fusion of information
 4. Calibration
@@ -20,6 +21,7 @@ Author: Pierre-Louis Benveniste
 import argparse
 import os
 from listing_inputs import listing_input_files
+from image_preprocessing import preprocess_images
 
 
 def parse_args():
@@ -41,6 +43,16 @@ def main():
 
     # List all the files in the input folder 
     list_files = listing_input_files(input_folder)
+
+    # Now we perform image preprocessing
+    subj_dict, preprocessed_images = preprocess_images(list_files, output_folder)
+    
+    # Now we perform inference on the preprocessed images
+    
+
+
+
+
 
     return None
 
