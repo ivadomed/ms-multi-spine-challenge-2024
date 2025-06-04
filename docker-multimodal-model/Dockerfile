@@ -1,46 +1,49 @@
-FROM pytorch/pytorch:2.7.0-cuda11.8-cudnn9-devel
+# Use a lightweight Python image
+FROM python:3.10-slim
 
-# Set working directory
-WORKDIR /workspace
+# Creates a directory for the application
+WORKDIR /app_challenge
 
-# Install dependencies
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+# Copy the script files into the container (they are not anymore in a scripts folder)
+COPY scripts/ scripts/
 
-# Clone nnUNet
+# Install Python dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git \
+    wget \
+    unzip \
+    bash \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install SCT
+RUN git clone https://github.com/spinalcordtoolbox/spinalcordtoolbox.git
+RUN spinalcordtoolbox/install_sct -y
+
+# Install Python packages from requirements.txt
+RUN pip install -r scripts/requirements.txt
+
+# Clone the nnUNet repository and install the dependencies
 RUN git clone https://github.com/plbenveniste/nnUNet.git
-
-# Install it in editable mode
 RUN git -C nnUNet checkout plb/my_trainers
+RUN pip install -e nnUNet/.
 
-RUN pip install -e ./nnUNet
+# Download the 5 folds of the model
+## Create a directory for the trained model
+RUN mkdir -p trained-model
+## Downloading the model
+RUN wget https://github.com/plbenveniste/model_repository/releases/download/R1/model_fold0.zip
+# RUN wget https://github.com/plbenveniste/model_repository/releases/download/R1/model_fold1.zip
+# RUN wget https://github.com/plbenveniste/model_repository/releases/download/R1/model_fold2.zip
+# RUN wget https://github.com/plbenveniste/model_repository/releases/download/R1/model_fold3.zip
+# RUN wget https://github.com/plbenveniste/model_repository/releases/download/R1/model_fold4.zip
+## Unzip the model files into the trained-model directory
+RUN unzip model_fold0.zip -d trained-model/
+# RUN unzip model_fold1.zip -d trained-model/
+# RUN unzip model_fold2.zip -d trained-model/
+# RUN unzip model_fold3.zip -d trained-model/
+# RUN unzip model_fold4.zip -d trained-model/
 
-# Clone the ms-multi-spine-challenge-2024 repository
-
-RUN git clone https://github.com/ivadomed/ms-multi-spine-challenge-2024.git
-
-# Install the requirements for our pipeline
-
-RUN pip install -r ms-multi-spine-challenge-2024/requirements.txt
-
-# Set up the nnUNet variable 
-ENV nnUNet_raw=/workspace
-ENV nnUNet_preprocessed=/workspace/nnUNet_preprocessed
-ENV nnUNet_results=/workspace/nnUNet_results
-
-
-
-# Set up the inference command as entrypoint
-CMD bash -c "\
-    for case in \$(ls /workspace/Dataset170_MsMultiSpine/imagesTs/); do \
-        case_id=\$(basename \$case); \
-        echo Predicting \$case_id && \
-        nnUNetv2_predict \
-            -i /workspace/Dataset170_MsMultiSpine/imagesTs/\$case_id \
-            -o /workspace/result \
-            -d Dataset170_MsMultiSpine \
-            -tr nnUNetTrainerDiceCELoss_noSmooth_300epochs \
-            -c 2d \
-            -p nnUNetResEncUNetLPlans \
-            -device cpu \
-            -f 0; \
-    done"
+# Point d’entrée par défaut (peut être redéfini au runtime)
+ENTRYPOINT ["python", "scripts/main.py"]
