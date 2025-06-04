@@ -53,9 +53,9 @@ def main():
     # 2. Now we perform image preprocessing
     subj_dict, preprocessed_images = preprocess_images(list_files, temp_folder)
 
+    # Build the path to the model: it is stored in the repo in a folder called "trained-model"
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
-    # Chemin vers le modèle
     model_path = os.path.join(parent_dir, "trained-model")
     print(f"Model path: {model_path}")
 
