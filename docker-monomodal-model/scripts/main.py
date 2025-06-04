@@ -52,7 +52,13 @@ def main():
 
     # 2. Now we perform image preprocessing
     subj_dict, preprocessed_images = preprocess_images(list_files, temp_folder)
-    
+
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    # Chemin vers le modèle
+    model_path = os.path.join(parent_dir, "trained-model")
+    print(f"Model path: {model_path}")
+
     # 3. Now we perform inference on the preprocessed images
     predicted_segmentations = []
     for images in preprocessed_images.values():
@@ -60,7 +66,7 @@ def main():
             # Here you would call the inference function
             # For example: run_inference(images, temp_folder)
             print(f"Running inference on {images}...")
-            predicted_segmentations.append(run_inference(images, temp_folder))
+            predicted_segmentations.append(run_inference(images, model_path, temp_folder))
 
     # 4. Now we perform postprocessing of each predicted segmentation
     postprocessed_segmentations = []

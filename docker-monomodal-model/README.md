@@ -36,7 +36,7 @@ docker run --rm -v ~/Documents/ms-challenge-2025/sub-001:/input -v ~/Documents/m
 ```
 
 > [!NOTE]  
-> the `--rm` flag makes sure that the docker is closed at the end
+> the `--rm` flag makes sure that the docker is closed at the end  
 > the `-v` flag mounts the volume, so that they are visible to the docker
 
 

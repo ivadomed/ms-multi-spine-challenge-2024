@@ -1,21 +1,27 @@
-# Utilise une image officielle légère avec Python préinstallé
+# Use a lightweight Python image
 FROM python:3.10-slim
 
-# Empêche les prompts interactifs durant les builds
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Crée un dossier de travail
+# Creates a directory for the application
 WORKDIR /app_challenge
 
-# Copie le fichier d'inférence et les fichiers modules nécessaires dans le conteneur
-COPY scripts/ .
+# Copy the script files into the container (they are not anymore in a scripts folder)
+COPY scripts/ scripts/
+COPY trained-model/ trained-model/
 
-# Installation des dépendances système minimales
+# Install Python dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
+    git \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Python packages from requirements.txt
+RUN pip install -r scripts/requirements.txt
+
+# Clone the nnUNet repository and install the dependencies
+RUN git clone https://github.com/plbenveniste/nnUNet.git
+RUN git -C nnUNet checkout plb/my_trainers
+RUN pip install -e nnUNet/.
 
 # Point d’entrée par défaut (peut être redéfini au runtime)
-CMD ["python", "main.py"]
+ENTRYPOINT ["python", "scripts/main.py"]
