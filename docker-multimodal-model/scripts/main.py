@@ -49,11 +49,12 @@ def main():
 
     # 1. List all the files in the input folder 
     list_files = listing_input_files(input_folder)
+    print(list_files)
 
     # 2. Now we perform image preprocessing
     subj_dict, preprocessed_images = preprocess_images(list_files, temp_folder)
 
-    # Build the path to the model: it is stored in the repo in a folder called "trained-model"
+    """# Build the path to the model: it is stored in the repo in a folder called "trained-model"
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
     model_path = os.path.join(parent_dir, "trained-model", "model_fold0")
@@ -75,7 +76,7 @@ def main():
             postprocessed_segmentations.append(postprocess_segmentation(predicted_seg, subj_dict))
 
     # 5. Fusion of information
-     
+     """
 
 
     return None

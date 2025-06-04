@@ -40,6 +40,9 @@ subj_dict = {
 
 def preprocess_images(input_images, output_folder):
 
+    print(input_images)
+    print(output_folder)
+
     # Build the output folder if it does not exist
     os.makedirs(output_folder, exist_ok=True)
 
@@ -62,7 +65,8 @@ def preprocess_images(input_images, output_folder):
     destination_mp2rage = os.path.join(temp_folder, "MP2RAGE.nii.gz")
     preprocessed_images = {}
     if subj_dict["rawdata_T2"] is not None:
-        os.system(f"cp {subj_dict['rawdata_T2']} {destination_t2}")
+        assert os.system(f"sct_image -i {subj_dict['rawdata_T2']} -setorient RPI -o {destination_t2}") == 0
+        #os.system(f"cp {subj_dict['rawdata_T2']} {destination_t2}")
         preprocessed_images["T2"] = destination_t2
     if subj_dict["rawdata_STIR"] is not None:
         os.system(f"cp {subj_dict['rawdata_STIR']} {destination_stir}")
