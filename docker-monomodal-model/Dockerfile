@@ -13,8 +13,13 @@ RUN apt-get update && apt-get install -y \
     git \
     wget \
     unzip \
+    bash \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# Install SCT
+RUN git clone https://github.com/spinalcordtoolbox/spinalcordtoolbox.git
+RUN spinalcordtoolbox/install_sct -y
 
 # Install Python packages from requirements.txt
 RUN pip install -r scripts/requirements.txt
