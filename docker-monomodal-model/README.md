@@ -25,5 +25,18 @@ The instructions were the following: _your method that can be run with two argum
 
 ## Building docker image
 
+To build the docker: 
+```console
+docker build -t ms-inference-cpu ms-multi-spine-challenge-2024/docker-monomodal-model/.
+```
+
+To run the docker:
+```console
+docker run --rm -v ~/Documents/ms-challenge-2025/sub-001:/input -v ~/Documents/ms-challenge-2025/output_sub001:/output  ms-inference-cpu -i /input -o /output
+```
+
+> [!NOTE]  
+> the `--rm` flag makes sure that the docker is closed at the end
+> the `-v` flag mounts the volume, so that they are visible to the docker
 
 
