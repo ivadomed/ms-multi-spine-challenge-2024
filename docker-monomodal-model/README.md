@@ -1,5 +1,7 @@
 # Docker for monomodal model for MS lesion segmentation
 
+Information on how this was supposed to be built can be found here: https://gitlab.inria.fr/msmultispinechallenge/msmultispinespecification
+
 ## Docker installation
 
 Docker is already installed on romane. Installation instructions can be found here: https://docs.docker.com/engine/install/ubuntu/
