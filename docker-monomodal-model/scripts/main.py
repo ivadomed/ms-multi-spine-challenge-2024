@@ -47,6 +47,11 @@ def main():
     temp_folder = os.path.join(output_folder, "temp")
     os.makedirs(temp_folder, exist_ok=True)
 
+    # Check if SCT works
+    print("Checking if SCT is installed and working properly...")
+    print("SCT version:")
+    assert os.system("sct_version") == 0, "SCT is not installed or not working properly."
+
     # 1. List all the files in the input folder 
     list_files = listing_input_files(input_folder)
 

@@ -27,8 +27,11 @@ The instructions were the following: _your method that can be run with two argum
 
 To build the docker: 
 ```console
-docker build -t ms-inference-cpu ms-multi-spine-challenge-2024/docker-monomodal-model/.
+docker build --platform linux/amd64 -t ms-inference-cpu ms-multi-spine-challenge-2024/docker-monomodal-model/.
 ```
+
+> [!NOTE]  
+> The `--platform linux/amd64` was added to avoid this [issue](https://github.com/spinalcordtoolbox/spinalcordtoolbox/issues/4918#issue-3118276041)
 
 To run the docker:
 ```console
