@@ -53,7 +53,7 @@ def run_inference(input_image, model_path, output_folder):
     # initializes the network architecture, loads the checkpoint
     predictor.initialize_from_trained_model_folder(
         model_path,
-        use_folds=[0],  # if fold_all is set, we use all folds, else we use fold 0
+        use_folds=[0],
         checkpoint_name='checkpoint_best.pth',
     )
 
