@@ -17,9 +17,9 @@ from pathlib import Path
 import torch
 
 # We define the environment variables here to avoid a warning from nnunetv2
-os.environ['nnUNet_raw'] = "./nnUNet_raw"
-os.environ['nnUNet_preprocessed'] = "./nnUNet_preprocessed"
-os.environ['nnUNet_results']="./nnUNet_results"
+os.environ['nnUNet_raw'] = "../nnUNet_dataset"
+os.environ['nnUNet_preprocessed'] = "../nnUNet_preprocessed"
+os.environ['nnUNet_results']="../nnUNet_results"
 
 # Import for nnunetv2
 from nnunetv2.inference.predict_from_raw_data import nnUNetPredictor
@@ -27,7 +27,7 @@ from batchgenerators.utilities.file_and_folder_operations import join
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Inference script")
-    parser.add_argument("-i", "--input_image", type=str, required=True, help="Path to the input image")
+    parser.add_argument("-i", "--input_image", type=str, required=True, help="Path to the input folder")
     parser.add_argument("-m", "--model_path", type=str, required=True, help="Path to the model folder")
     parser.add_argument("-o", "--output_folder", type=str, required=True, help="Path to the output folder")
     return parser.parse_args()
@@ -78,4 +78,4 @@ def run_inference(input_image, model_path, output_folder):
 
 if __name__ == "__main__":
     args = parse_args()
-    output_image = run_inference(args.input_image, args.output_folder)
+    output_image = run_inference(args.input_image, args.model_path, args.output_folder)

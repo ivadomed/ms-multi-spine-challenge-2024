@@ -48,7 +48,7 @@ def preprocess_images(input_images, output_folder):
 
     # Build a temp folder in the output folder
     temp_folder = Path(os.path.join(output_folder, "temp_preprocessing"))
-    path_registration_qc = Path(os.path.join(output_folder, 'registration_qc'))
+    
 
     os.makedirs(temp_folder, exist_ok=True)
 
@@ -67,7 +67,7 @@ def preprocess_images(input_images, output_folder):
     destination_stir = os.path.join(temp_folder, "MsMultiSpine_001_0001.nii.gz")
     destination_psir = os.path.join(temp_folder, "MsMultiSpine_001_0001.nii.gz")
     destination_mp2rage = os.path.join(temp_folder, "MsMultiSpine_001_0001.nii.gz")
-    preprocessed_images = {}
+    
     if subj_dict["rawdata_T2"] is not None: 
         t2w_raw_image = Path(subj_dict["rawdata_T2"])
     if subj_dict["preprocessed_T2"] is not None:
@@ -93,7 +93,7 @@ def preprocess_images(input_images, output_folder):
     # We register the image to the corresponding T2w raw space
     
     # If the image is a T2w image then we juste have to move it back to its original space
-    assert os.system(f"sct_register_multimodal -i {file1} -d {t2w_raw_image} -identity 1 -ofolder {temp_folder} -owarp {temp_folder/'warp_image_to_t2wraw1.nii.gz'} -o {temp_folder/'image_reg_to_t2wraw1.nii.gz'} -qc {path_registration_qc} -dseg {temp_folder/'raw_t2w_sc_seg.nii.gz'} -qc-subject {file1.split('/')[-1]}") == 0
+    assert os.system(f"sct_register_multimodal -i {file1} -d {t2w_raw_image} -identity 1 -ofolder {temp_folder} -owarp {temp_folder/'warp_image_to_t2wraw1.nii.gz'} -o {temp_folder/'image_reg_to_t2wraw1.nii.gz'}  -dseg {temp_folder/'raw_t2w_sc_seg.nii.gz'} ") == 0
 
     # Else we need to compute more complex registration
     parameters = 'step=1,type=im,algo=dl'
@@ -119,8 +119,15 @@ def preprocess_images(input_images, output_folder):
     assert os.system(f'sct_crop_image -i {out_image1} -o {out_image1} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0
     assert os.system(f'sct_crop_image -i {out_image2} -o {out_image2} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0 
     
+    # We remove the files in the temp folder that are not out_image 
+
+    for file in os.listdir(temp_folder):
+        file_path = os.path.join(temp_folder, file)
+        if 'MsMultiSpine' not in file_path :
+            os.remove(file_path)
+
     # We return a dictionnary with the paths of the preprocessed images
-    return subj_dict, preprocessed_images
+    return subj_dict, temp_folder
 
 
 # Function to extract the coordinates to crop from  
