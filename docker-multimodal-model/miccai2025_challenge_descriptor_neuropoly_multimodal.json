@@ -1,0 +1,28 @@
+{
+  "name": "ChallengeToolName",
+  "tool-version": "0.1",
+  "author": "Your(Institute)Name",
+  "description": "Description of the tool<br />",
+  "command-line": "unzip [INPUT_ARCHIVE] -d input; mkdir OUTDIR; python3 /app_challenge/process.py -i input -o OUTDIR && tar -cvzf [OUTPUT_FILE] OUTDIR",
+  "schema-version": "0.5",
+   "container-image":{
+	  "type": "docker",
+	  "image": "myapp:0.1"
+  },
+  "inputs": [{
+      "id": "input_archive",
+      "name": "Input archive",
+      "type": "File",
+      "description": "Input archive containing all files available for one patient",
+      "value-key": "[INPUT_ARCHIVE]"
+    }
+  ],
+  "output-files": [{
+      "description" : "Tarball containing results. Results are expected under the form of a .nii and a .csv file, both written in the OUTDIR",
+      "id" : "outarchive",
+      "name" : "Output archive",
+      "path-template": "[INPUT_ARCHIVE]_output.tgz",
+	  "path-template-stripped-extensions": [".zip"],
+      "value-key": "[OUTPUT_FILE]"
+    }]
+}
