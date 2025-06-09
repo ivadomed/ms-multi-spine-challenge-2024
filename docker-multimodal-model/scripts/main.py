@@ -52,23 +52,20 @@ def main():
     print(list_files)
 
     # 2. Now we perform image preprocessing
-    subj_dict, preprocessed_images, t2w_raw_image = preprocess_images(list_files, temp_folder)
+    subj_dict, preprocessed_images, t2w_raw_image, t = preprocess_images(list_files, temp_folder)
 
     # Build the path to the model: it is stored in the repo in a folder called "trained-model"
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
 
     # 3. Now we perform inference on the preprocessed images
-    predicted_segmentations = []
     
     print(f"Running inference...")
-    predicted_segmentations.append(run_inference(preprocessed_images, temp_folder))
+    predicted_segmentations = run_inference(preprocessed_images, temp_folder, t)
 
     # 4. Now we perform postprocessing of each predicted segmentation
-    postprocessed_segmentations = []
-    for predicted_seg in predicted_segmentations:
-            # Here you would call the postprocessing function
-            postprocessed_segmentations.append(postprocess_segmentation(predicted_seg, subj_dict, t2w_raw_image))
+    
+    postprocessed_segmentations = (postprocess_segmentation(predicted_segmentations, subj_dict, t2w_raw_image))
 
     # 5. Fusion of information
      

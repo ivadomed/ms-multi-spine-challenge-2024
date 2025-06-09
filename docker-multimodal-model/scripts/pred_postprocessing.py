@@ -22,7 +22,7 @@ def parse_args():
 
 def postprocess_segmentation(predicted_segmentation, subj_dict, t2w_raw_image):
     # Build a temp folder in the output folder
-    temp_folder = os.path.join(os.path.dirname(predicted_segmentation), "temp_postprocessing")
+    temp_folder = 'temp_postprocessing'
     os.makedirs(temp_folder, exist_ok=True)
 
     # Postprocessing running here

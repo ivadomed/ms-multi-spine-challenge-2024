@@ -68,6 +68,8 @@ def preprocess_images(input_images, output_folder):
     destination_psir = os.path.join(output_folder, "MsMultiSpine_001_0001.nii.gz")
     destination_mp2rage = os.path.join(output_folder, "MsMultiSpine_001_0001.nii.gz")
     
+    t = None 
+
     if subj_dict["rawdata_T2"] is not None: 
         t2w_raw_image = Path(subj_dict["rawdata_T2"])
     if subj_dict["preprocessed_T2"] is not None:
@@ -75,12 +77,15 @@ def preprocess_images(input_images, output_folder):
         out_image1 = Path(destination_t2)
     if subj_dict["preprocessed_STIR"] is not None:
         file2 = subj_dict["preprocessed_STIR"]
+        t = "STIR"
         out_image2 = Path(destination_stir)
     if subj_dict["preprocessed_PSIR"] is not None:
         file2 = subj_dict["preprocessed_PSIR"]
+        t = "PSIR"
         out_image2 = Path(destination_psir)
     if subj_dict["preprocessed_MP2RAGE"] is not None:
         file2 = subj_dict["preprocessed_MP2RAGE"]
+        t = "MP2RAGE"
         out_image2 = Path(destination_mp2rage)
 
     print("Input images:", t2w_raw_image)
@@ -122,7 +127,7 @@ def preprocess_images(input_images, output_folder):
     
 
     # We return a dictionnary with the paths of the preprocessed images
-    return subj_dict, temp_folder, t2w_raw_image
+    return subj_dict, output_folder, t2w_raw_image, t 
 
 
 # Function to extract the coordinates to crop from  
