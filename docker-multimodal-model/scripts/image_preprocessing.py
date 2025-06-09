@@ -63,10 +63,10 @@ def preprocess_images(input_images, output_folder):
     print("Subject dictionary:", subj_dict)
 
     # Copy the raw images to the temp folder: we will perform inference on these images
-    destination_t2 = os.path.join(temp_folder, "MsMultiSpine_001_0000.nii.gz")
-    destination_stir = os.path.join(temp_folder, "MsMultiSpine_001_0001.nii.gz")
-    destination_psir = os.path.join(temp_folder, "MsMultiSpine_001_0001.nii.gz")
-    destination_mp2rage = os.path.join(temp_folder, "MsMultiSpine_001_0001.nii.gz")
+    destination_t2 = os.path.join(output_folder, "MsMultiSpine_001_0000.nii.gz")
+    destination_stir = os.path.join(output_folder, "MsMultiSpine_001_0001.nii.gz")
+    destination_psir = os.path.join(output_folder, "MsMultiSpine_001_0001.nii.gz")
+    destination_mp2rage = os.path.join(output_folder, "MsMultiSpine_001_0001.nii.gz")
     
     if subj_dict["rawdata_T2"] is not None: 
         t2w_raw_image = Path(subj_dict["rawdata_T2"])
@@ -88,7 +88,7 @@ def preprocess_images(input_images, output_folder):
 
     assert os.system(f"cp {t2w_raw_image} {temp_folder/'raw_t2w.nii.gz'}") == 0
     ## First we need to generate the spinal cord segmentation
-    assert os.system(f"sct_deepseg -i {temp_folder/'raw_t2w.nii.gz'} -o {temp_folder/'raw_t2w_sc_seg.nii.gz'} -task seg_sc_contrast_agnostic ") == 0
+    assert os.system(f"sct_deepseg spinalcord -i {temp_folder/'raw_t2w.nii.gz'} -o {temp_folder/'raw_t2w_sc_seg.nii.gz'} ") == 0
 
     # We register the image to the corresponding T2w raw space
     
@@ -119,15 +119,10 @@ def preprocess_images(input_images, output_folder):
     assert os.system(f'sct_crop_image -i {out_image1} -o {out_image1} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0
     assert os.system(f'sct_crop_image -i {out_image2} -o {out_image2} -xmin {min_idx[0]} -ymin {min_idx[1]} -zmin {min_idx[2]} -xmax {max_idx[0]} -ymax {max_idx[1]} -zmax {max_idx[2]}') == 0 
     
-    # We remove the files in the temp folder that are not out_image 
-
-    for file in os.listdir(temp_folder):
-        file_path = os.path.join(temp_folder, file)
-        if 'MsMultiSpine' not in file_path :
-            os.remove(file_path)
+    
 
     # We return a dictionnary with the paths of the preprocessed images
-    return subj_dict, temp_folder
+    return subj_dict, temp_folder, t2w_raw_image
 
 
 # Function to extract the coordinates to crop from  

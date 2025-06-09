@@ -20,13 +20,17 @@ def parse_args():
     return parser.parse_args()
 
 
-def postprocess_segmentation(predicted_segmentation, subj_dict):
+def postprocess_segmentation(predicted_segmentation, subj_dict, t2w_raw_image):
     # Build a temp folder in the output folder
     temp_folder = os.path.join(os.path.dirname(predicted_segmentation), "temp_postprocessing")
     os.makedirs(temp_folder, exist_ok=True)
 
     # Postprocessing running here
-    #TODO
+    
+    # We send the predicted segmentation to the T2w raw image space
+    assert os.system(f"sct_register_multimodal -i {predicted_segmentation} -d {t2w_raw_image} -identity 1 -ofolder {temp_folder} -owarp {temp_folder/'warp_image_to_t2wraw1.nii.gz'} -o {temp_folder/'image_reg_to_t2wraw1.nii.gz'}  -dseg {temp_folder/'raw_t2w_sc_seg.nii.gz'} ") == 0
+
+
 
     # Build the postprocessed segmentation path (output folder and image name)
     postprocessed_segmentation = os.path.join(temp_folder, Path(predicted_segmentation).name)
