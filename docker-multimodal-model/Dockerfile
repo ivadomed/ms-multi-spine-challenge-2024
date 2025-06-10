@@ -7,6 +7,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Creates a directory for the application
 WORKDIR /app_challenge
 
+RUN echo "Installing dependencies..."
+
 # Install system dependencies needed for SCT and PyQt5
 RUN apt-get update && apt-get install -y \
     build-essential \

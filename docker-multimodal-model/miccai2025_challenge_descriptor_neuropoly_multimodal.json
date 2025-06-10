@@ -1,13 +1,13 @@
 {
-  "name": "ChallengeToolName",
+  "name": "Neuropoly Multimodal Model for MS Multi-Spine Challenge 2024",
   "tool-version": "0.1",
-  "author": "Your(Institute)Name",
+  "author": "Neuropoly",
   "description": "Description of the tool<br />",
-  "command-line": "unzip [INPUT_ARCHIVE] -d input; mkdir OUTDIR; python3 /app_challenge/process.py -i input -o OUTDIR && tar -cvzf [OUTPUT_FILE] OUTDIR",
+  "command-line": "unzip [INPUT_ARCHIVE] -d input; mkdir OUTDIR; python3 scripts/main.py -i input -o OUTDIR && tar -cvzf [OUTPUT_FILE] OUTDIR",
   "schema-version": "0.5",
    "container-image":{
 	  "type": "docker",
-	  "image": "myapp:0.1"
+	  "image": "tomdag25/ms-inference-cpu:1.3"
   },
   "inputs": [{
       "id": "input_archive",

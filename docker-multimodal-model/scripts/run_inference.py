@@ -47,11 +47,15 @@ def run_inference(input_image, output_folder, t):
     temp_folder = os.path.join(output_folder, "temp_inference")
     os.makedirs(temp_folder, exist_ok=True)
     
+    for root, _, files in os.walk("."):
+        for file in files:
+            print(os.path.join(root, file))
+
     # Step 1: Run inference for each fold
 
     for fold in range(5):
         # Run inference for the fold
-
+        print(f"nnUNetv2_predict -i {input_image} -o {output_folder}/fold_{fold}/prediction -d 200 -p nnUNetResEncUNetLPlans -tr nnUNetTrainerDA5_150epochs -c 2d -f {fold} -chk checkpoint_best_{fold}.pth -device cpu")
         assert os.system(f"nnUNetv2_predict -i {input_image} -o {output_folder}/fold_{fold}/prediction -d 200 -p nnUNetResEncUNetLPlans -tr nnUNetTrainerDA5_150epochs -c 2d -f {fold} -chk checkpoint_best_{fold}.pth -device cpu") == 0
     
 
