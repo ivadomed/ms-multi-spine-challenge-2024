@@ -3,13 +3,15 @@ This script merges both prediction by doing a simple average of both predictions
 """
 import json
 import os
+from image import Image, get_dimension
+import nibabel as nib
 
 
 def main():
 
     image_dict = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/images_dict.json"
 
-    output_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_251_prep"
+    output_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep"
 
     # load the json file
     with open(image_dict, "r") as f:
@@ -32,13 +34,79 @@ def main():
         lesion_mask_t2 = os.path.join(sub_folder,"predictions", "t2w_segmentation_masked.nii.gz")
         lesion_mask_psir = os.path.join(sub_folder,"predictions", "psir_segmentation_masked.nii.gz")
 
-        ## THE FOLLOWING NEEDS TO BE UPDATED (BECAUSE OF PROBLEM OF MASK FOV)
+        # Create a temp folder
+        temp_folder = os.path.join(sub_folder, "temp_merge")
+        os.makedirs(temp_folder, exist_ok=True)
 
-        # # Add both segmentation masks
-        # assert os.system(f"sct_maths -i {lesion_mask_t2} -add {lesion_mask_psir} -o {os.path.join(sub_folder,'predictions', 'merged_segmentation_masked.nii.gz')}") == 0
-        # ## Divide by 2 to average the predictions
-        # assert os.system(f"sct_maths -i {os.path.join(sub_folder,'predictions', 'merged_segmentation_masked.nii.gz')} -div 2 -o {os.path.join(sub_folder,'predictions', 'merged_segmentation_masked.nii.gz')}") == 0
-        # break
+        # We need to segment the spinal cord of the psir inference image
+        psir_inference_file = os.path.join(sub_folder, "cropped_reg_psir_preproc_to_t2_raw.nii.gz")
+        assert os.system(f"sct_deepseg spinalcord -i {psir_inference_file} -o {os.path.join(temp_folder, 'sc_seg_psir_inference_file.nii.gz')}") == 0
+        # We register it to the t2w raw file
+        sc_seg_psir_inference_file_reg_to_t2w_raw = os.path.join(temp_folder, 'sc_seg_psir_inference_file_reg_to_t2w_raw.nii.gz')
+        assert os.system(f"sct_register_multimodal -i {os.path.join(temp_folder, 'sc_seg_psir_inference_file.nii.gz')} -d {images[image]['t2w_raw_image']} -identity 1 -o {sc_seg_psir_inference_file_reg_to_t2w_raw}") == 0
+        # We need to perform the same dilation as the sc seg of the t2 raw file
+        ## We get the orientation of the image
+        sc_seg_psir_inference_file_reg_to_t2w_raw_orientation = Image(sc_seg_psir_inference_file_reg_to_t2w_raw).orientation
+        print("T2w raw image orientation:", sc_seg_psir_inference_file_reg_to_t2w_raw_orientation)
+        ## We check which is the S-I direction
+        s_i_direction = None
+        if 'S' in sc_seg_psir_inference_file_reg_to_t2w_raw_orientation:
+            s_i_direction = sc_seg_psir_inference_file_reg_to_t2w_raw_orientation.index('S')
+        if 'I' in sc_seg_psir_inference_file_reg_to_t2w_raw_orientation:
+            s_i_direction = sc_seg_psir_inference_file_reg_to_t2w_raw_orientation.index('I')
+
+        # We also want the R-L direction
+        r_l_direction = None
+        if 'R' in sc_seg_psir_inference_file_reg_to_t2w_raw_orientation:
+            r_l_direction = sc_seg_psir_inference_file_reg_to_t2w_raw_orientation.index('R')
+        if 'L' in sc_seg_psir_inference_file_reg_to_t2w_raw_orientation:
+            r_l_direction = sc_seg_psir_inference_file_reg_to_t2w_raw_orientation.index('L')
+        print("S-I direction:", s_i_direction)
+        print("R-L direction:", r_l_direction)
+
+        # Finally we also want the A-P direction
+        a_p_direction = None
+        if 'A' in sc_seg_psir_inference_file_reg_to_t2w_raw_orientation:
+            a_p_direction = sc_seg_psir_inference_file_reg_to_t2w_raw_orientation.index('A')
+        if 'P' in sc_seg_psir_inference_file_reg_to_t2w_raw_orientation:
+            a_p_direction = sc_seg_psir_inference_file_reg_to_t2w_raw_orientation.index('P')
+        print("A-P direction:", a_p_direction)
+
+        # Now we want to identify the number of voxels to dilate in the R-L axis (it should be close to 2mm)
+        resolution_r_l = get_dimension(Image(sc_seg_psir_inference_file_reg_to_t2w_raw))[4+ r_l_direction]
+        print("Resolution R-L:", resolution_r_l)
+        vox_dilate_r_l = max(1,int(2 / resolution_r_l))  # 2mm dilation in the R-L axis
+        print("Voxels to dilate in R-L axis:", vox_dilate_r_l)
+
+        # same for the A-P axis
+        resolution_a_p = get_dimension(Image(sc_seg_psir_inference_file_reg_to_t2w_raw))[4+ a_p_direction]
+        print("Resolution A-P:", resolution_a_p)
+        vox_dilate_a_p = max(1,int(2 / resolution_a_p)) # 2mm dilation in the A-P axis
+        print("Voxels to dilate in A-P axis:", vox_dilate_a_p)
+
+        # We dilate the SC mask around the axial plane (S-I direction) with a radius of 2 mm computed on the R-L axis
+        assert os.system(f"sct_maths -i {sc_seg_psir_inference_file_reg_to_t2w_raw} -dilate {vox_dilate_r_l} -shape disk -dim {s_i_direction} -o {sub_folder}/sc_seg_psir_reg_to_t2_raw_dilated_axial.nii.gz")==0
+        # We dilate the SC mask around the sagittal plane (R-L direction) with a radius of 2 mm computed on the A-P axis
+        assert os.system(f"sct_maths -i {sub_folder}/sc_seg_psir_reg_to_t2_raw_dilated_axial.nii.gz -dilate {vox_dilate_a_p} -shape disk -dim {r_l_direction} -o {sub_folder}/sc_seg_psir_reg_to_t2_raw_dilated_axial_sagittal.nii.gz")==0
+
+        # Now we add both spinal cord segmentations together
+        psir_sc_seg_dilated = os.path.join(sub_folder, "sc_seg_psir_reg_to_t2_raw_dilated_axial_sagittal.nii.gz")
+        t2_sc_seg_dilated = os.path.join(sub_folder, "sc_seg_t2_raw_dilated_axial_sagittal.nii.gz")
+        assert os.system(f"sct_maths -i {psir_sc_seg_dilated} -add {t2_sc_seg_dilated} -o {sub_folder}/sc_coverage.nii.gz ") == 0
+
+        # We replace all zero values by 1 in sc_coverage file
+        sc_coverage = nib.load(os.path.join(sub_folder, "sc_coverage.nii.gz"))
+        sc_coverage_data = sc_coverage.get_fdata()
+        sc_coverage_data[sc_coverage_data == 0] = 1
+        sc_coverage = nib.Nifti1Image(sc_coverage_data, sc_coverage.affine, sc_coverage.header)
+        nib.save(sc_coverage, os.path.join(sub_folder, "sc_coverage.nii.gz"))
+
+        # Now we add both lesion masks together
+        assert os.system(f"sct_maths -i {lesion_mask_t2} -add {lesion_mask_psir} -o {os.path.join(temp_folder, 'lesion_mask_added.nii.gz')}") == 0
+        # We divide the lesion mask by the spinal cord coverage
+        assert os.system(f"sct_maths -i {os.path.join(temp_folder, 'lesion_mask_added.nii.gz')} -div {os.path.join(sub_folder, 'sc_coverage.nii.gz')} -o {sub_folder}/lesion_mask_merged.nii.gz") == 0
+
+        break
 
 
 if __name__ == "__main__":
