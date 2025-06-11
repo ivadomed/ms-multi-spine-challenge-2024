@@ -88,7 +88,6 @@ def main():
         assert os.system(f"sct_maths -i {lesion_mask_t2} -mul {sub_folder}/sc_seg_t2_raw_dilated_axial_sagittal.nii.gz -o {lesion_mask_t2.replace('.nii.gz', '_masked.nii.gz')}")==0
         assert os.system(f"sct_maths -i {lesion_mask_psir} -mul {sub_folder}/sc_seg_t2_raw_dilated_axial_sagittal.nii.gz -o {lesion_mask_psir.replace('.nii.gz', '_masked.nii.gz')}")==0
 
-        break
 
 if __name__ == "__main__":
     main()
