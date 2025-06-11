@@ -23,7 +23,6 @@ import os
 from listing_inputs import listing_input_files
 from image_preprocessing import preprocess_images
 from run_inference import run_inference
-from pred_postprocessing import postprocess_segmentation
 
 
 def parse_args():
@@ -51,13 +50,19 @@ def main():
     print("Checking if SCT is installed and working properly...")
     print("SCT version:")
     assert os.system("sct_version") == 0, "SCT is not installed or not working properly."
-
+    
+    #######################
+    #### PREPROCESSING ####
+    #######################
     # 1. List all the files in the input folder 
     list_files = listing_input_files(input_folder)
 
     # 2. Now we perform image preprocessing
     subj_dict = preprocess_images(list_files, temp_folder)
-
+    
+    ###################
+    #### INFERENCE ####
+    ###################
     # Build the path to the model: it is stored in the repo in a folder called "trained-model"
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
@@ -67,13 +72,12 @@ def main():
     # 3. Now we perform inference on the preprocessed images
     subj_dict = run_inference(subj_dict, model_path, temp_folder)
 
-    # # 4. Now we perform postprocessing of each predicted segmentation
-    # postprocessed_segmentations = []
-    # for predicted_seg in predicted_segmentations:
-    #         # Here you would call the postprocessing function
-    #         postprocessed_segmentations.append(postprocess_segmentation(predicted_seg, subj_dict))
+    #########################
+    #### POST-PROCESSING ####
+    #########################
+    # 4. Now we remove lesions outside of the spinal cord
 
-    # 5. Fusion of information
+    
      
 
 
