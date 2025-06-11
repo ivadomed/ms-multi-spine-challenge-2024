@@ -7,6 +7,8 @@ import nibabel as nib
 import numpy as np
 from scipy import ndimage
 from utils import dice_score, lesion_ppv, lesion_f1_score, lesion_sensitivity, normalised_surface_distance
+from tqdm import tqdm
+
 
 def main():
 
@@ -34,15 +36,17 @@ def main():
         f1_scores = {}
         sensitivity_scores = {}
         nsd_scores = {}
+        # Print status
+        print (f"Processing threshold: {thresh}")
 
         # iterate over the images
-        for image in images:
+        for image in tqdm(images):
             # If contrast is T2, we skip
             if images[image]["contrast"] == "T2w":
                 continue
             # Build a folder for each subject
             sub_folder = os.path.join(input_folder, images[image]["subject_name"])
-            print("Subject name", images[image]["subject_name"])
+            # print("Subject name", images[image]["subject_name"])
 
             # Build the path to the lesion mask
             lesion_mask = os.path.join(sub_folder, "calibration", f"merged_segmentation_masked_thresh_{thresh}.nii.gz")
@@ -72,8 +76,6 @@ def main():
             f1_scores[image_name] = f1
             sensitivity_scores[image_name] = sensitivity
             nsd_scores[image_name] = nsd
-
-            break
 
         # Save the results
         os.makedirs(os.path.join(output_folder, f"calib_{thresh}"), exist_ok=True)

@@ -18,7 +18,7 @@ def main():
 
     image_dict = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/images_dict.json"
 
-    output_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_251_prep"
+    pred_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep"
 
     args = parse_args()
     thresh = args.thresh
@@ -37,7 +37,7 @@ def main():
         if images[image]["contrast"] == "T2w":
             continue
         # Build a folder for each subject
-        sub_folder = os.path.join(output_folder, images[image]["subject_name"])
+        sub_folder = os.path.join(pred_folder, images[image]["subject_name"])
         print("Subject name", images[image]["subject_name"])
 
         # Build path to the lesion masks
@@ -94,8 +94,6 @@ def main():
         ### Save the modified PSIR lesion mask
         modified_psir_mask_path = os.path.join(output_folder, f"psir_segmentation_masked_rmvLesion{thresh}.nii.gz")
         nib.save(nib.Nifti1Image(psir_mask_data, nib.load(lesion_mask_psir).affine), modified_psir_mask_path)
-
-        break
 
 
 if __name__ == "__main__":

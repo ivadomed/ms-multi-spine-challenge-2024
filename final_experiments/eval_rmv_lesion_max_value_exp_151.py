@@ -7,6 +7,7 @@ import nibabel as nib
 import numpy as np
 from scipy import ndimage
 from utils import dice_score, lesion_ppv, lesion_f1_score, lesion_sensitivity, normalised_surface_distance
+from tqdm import tqdm
 
 def main():
 
@@ -28,6 +29,7 @@ def main():
     images = {**training_images, **testing_images}
 
     for thresh in [0.5, 0.55, 0.6, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95]:
+        print(f"Evaluating threshold {thresh}")
         # Dict of dice score
         dice_scores = {}
         ppv_scores = {}
@@ -36,13 +38,13 @@ def main():
         nsd_scores = {}
 
         # iterate over the images
-        for image in images:
+        for image in tqdm(images):
             # If contrast is T2, we skip
             if images[image]["contrast"] == "T2w":
                 continue
             # Build a folder for each subject
             sub_folder = os.path.join(input_folder, images[image]["subject_name"])
-            print("Subject name", images[image]["subject_name"])
+            # print("Subject name", images[image]["subject_name"])
 
             # Build path to the lesion masks
             lesion_mask_t2 = os.path.join(sub_folder,f"output_rmv_lesion_{thresh}", f"t2w_segmentation_masked_rmvLesion{thresh}.nii.gz")
@@ -85,8 +87,6 @@ def main():
             f1_scores[image_name_psir] = f1_psir
             sensitivity_scores[image_name_psir] = sensitivity_psir
             nsd_scores[image_name_psir] = nsd_psir
-
-            break
 
         # Save the results
         os.makedirs(os.path.join(output_folder, f"rmv_{thresh}"), exist_ok=True)

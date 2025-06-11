@@ -7,6 +7,7 @@ import nibabel as nib
 import numpy as np
 from scipy import ndimage
 from utils import dice_score, lesion_ppv, lesion_f1_score, lesion_sensitivity, normalised_surface_distance
+from tqdm import tqdm
 
 def main():
 
@@ -43,13 +44,13 @@ def main():
     nsd_scores_postproc = {}
 
     # iterate over the images
-    for image in images:
+    for image in tqdm(images):
         # If contrast is T2, we skip
         if images[image]["contrast"] == "T2w":
             continue
         # Build a folder for each subject
         sub_folder = os.path.join(input_folder, images[image]["subject_name"])
-        print("Subject name", images[image]["subject_name"])
+        # print("Subject name", images[image]["subject_name"])
 
         # Build the path to the lesion mask
         lesion_mask_t2w = os.path.join(sub_folder, "predictions", "t2w_segmentation.nii.gz")
@@ -66,6 +67,12 @@ def main():
         label_data = nib.load(ground_truth).get_fdata()
         pred_data_t2w_postproc = nib.load(lesion_mask_t2w_postproc).get_fdata()
         pred_data_psir_postproc = nib.load(lesion_mask_psir_postproc).get_fdata()
+
+        # We should first binarize the masks
+        pred_data_t2w = (pred_data_t2w > 0).astype(np.float32)
+        pred_data_psir = (pred_data_psir > 0).astype(np.float32)
+        pred_data_t2w_postproc = (pred_data_t2w_postproc > 0).astype(np.float32)
+        pred_data_psir_postproc = (pred_data_psir_postproc > 0).astype(np.float32)
 
         # Get resolution
         resolution = nib.load(str(images[image]["t2w_raw_image"])).header.get_zooms()
@@ -94,11 +101,11 @@ def main():
         # Get image name
         image_name = image
         # Save the dice score
-        dice_scores_postproc[image_name] = dice
-        ppv_scores_postproc[image_name] = ppv
-        f1_scores_postproc[image_name] = f1
-        sensitivity_scores_postproc[image_name] = sensitivity
-        nsd_scores_postproc[image_name] = nsd
+        dice_scores[image_name] = dice
+        ppv_scores[image_name] = ppv
+        f1_scores[image_name] = f1
+        sensitivity_scores[image_name] = sensitivity
+        nsd_scores[image_name] = nsd
 
         # Now compute the post-processed scores
         # Compute dice score t2w post-processed

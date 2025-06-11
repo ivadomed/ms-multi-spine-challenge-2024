@@ -5,6 +5,7 @@ import json
 import os
 from image import Image, get_dimension
 import nibabel as nib
+from tqdm import tqdm
 
 
 def main():
@@ -22,7 +23,7 @@ def main():
     images = {**training_images, **testing_images}
 
     # iterate over the images
-    for image in images:
+    for image in tqdm(images):
         # If contrast is T2, we skip
         if images[image]["contrast"] == "T2w":
             continue
@@ -31,8 +32,8 @@ def main():
         print("Subject name", images[image]["subject_name"])
 
         # Build path to the lesion masks
-        lesion_mask_t2 = os.path.join(sub_folder,"predictions", "t2w_segmentation_masked.nii.gz")
-        lesion_mask_psir = os.path.join(sub_folder,"predictions", "psir_segmentation_masked.nii.gz")
+        lesion_mask_t2 = os.path.join(sub_folder,"output_rmv_lesion_0.8", "t2w_segmentation_masked_rmvLesion0.8.nii.gz")
+        lesion_mask_psir = os.path.join(sub_folder,"output_rmv_lesion_0.8", "psir_segmentation_masked_rmvLesion0.8.nii.gz")
 
         # Create a temp folder
         temp_folder = os.path.join(sub_folder, "temp_merge")
@@ -104,9 +105,10 @@ def main():
         # Now we add both lesion masks together
         assert os.system(f"sct_maths -i {lesion_mask_t2} -add {lesion_mask_psir} -o {os.path.join(temp_folder, 'lesion_mask_added.nii.gz')}") == 0
         # We divide the lesion mask by the spinal cord coverage
-        assert os.system(f"sct_maths -i {os.path.join(temp_folder, 'lesion_mask_added.nii.gz')} -div {os.path.join(sub_folder, 'sc_coverage.nii.gz')} -o {sub_folder}/lesion_mask_merged.nii.gz") == 0
+        assert os.system(f"sct_maths -i {os.path.join(temp_folder, 'lesion_mask_added.nii.gz')} -div {os.path.join(sub_folder, 'sc_coverage.nii.gz')} -o {sub_folder}/lesion_mask_rmv_lesion0p8_merged.nii.gz") == 0
 
-        break
+        # Remove the temp folder
+        os.system(f"rm -rf {temp_folder}")
 
 
 if __name__ == "__main__":
