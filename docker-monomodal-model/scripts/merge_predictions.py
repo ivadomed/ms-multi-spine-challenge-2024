@@ -78,6 +78,10 @@ def merge_predictions(subj_dict, output_folder):
     # Now we add all SC segs together
     sc_seg_file_0 = os.path.join(temp_folder, "sc_seg_0_dilated_axial_sagittal.nii.gz")
     sc_seg_file_others = [os.path.join(temp_folder, f"sc_seg_{i}_dilated_axial_sagittal.nii.gz") for i in range(1, len(inference_files))]
+    ## We first register the sc segmentation files to the T2w raw file
+    assert os.system(f"sct_register_multimodal -i {sc_seg_file_0} -d {subj_dict['t2_raw']} -o {sc_seg_file_0} -identity 1") == 0
+    for i, sc_seg_file in enumerate(sc_seg_file_others):
+        assert os.system(f"sct_register_multimodal -i {sc_seg_file} -d {subj_dict['t2_raw']} -o {sc_seg_file} -identity 1") == 0
     ## Convert sc_seg_file_others to a string with spaces
     sc_seg_file_others_str = ' '.join(sc_seg_file_others)
     assert os.system(f"sct_maths -i {sc_seg_file_0} -add {sc_seg_file_others_str} -o {temp_folder}/sc_seg_coverage.nii.gz") == 0

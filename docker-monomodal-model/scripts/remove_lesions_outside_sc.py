@@ -43,12 +43,12 @@ def remove_lesions_outside_sc(subj_dict, output_folder):
         pred_segmentations.append(other_image['segmentation_file'])
     
     # Segment the spinal cord of the T2w raw image
-    assert os.system(f"sct_deepseg spinalcord -i {subj_dict['t2w_raw_image']} -o {temp_folder}/sc_seg_t2_raw.nii.gz ") == 0
+    assert os.system(f"sct_deepseg spinalcord -i {subj_dict['t2_raw']} -o {temp_folder}/sc_seg_t2_raw.nii.gz ") == 0
     # Build the path to the spinal cord segmentation
     sc_seg_t2_raw = os.path.join(temp_folder, "sc_seg_t2_raw.nii.gz")
 
     # We get the orientation of the image
-    t2w_raw_image_orientation = Image(subj_dict['t2w_raw_image']).orientation
+    t2w_raw_image_orientation = Image(subj_dict['t2_raw']).orientation
     print("T2w raw image orientation:", t2w_raw_image_orientation)
 
     # We find which is the S-I direction
@@ -74,11 +74,11 @@ def remove_lesions_outside_sc(subj_dict, output_folder):
     
 
     # Now we want to identify the number of voxels to dilate in the R-L axis (it should be close to 2mm)
-    resolution_r_l = get_dimension(Image(subj_dict['t2w_raw_image']))[4+ r_l_direction]
+    resolution_r_l = get_dimension(Image(subj_dict['t2_raw']))[4+ r_l_direction]
     vox_dilate_r_l = max(1,int(2 / resolution_r_l))  # 2mm dilation in the R-L axis
 
     # same for the A-P axis
-    resolution_a_p = get_dimension(Image(subj_dict['t2w_raw_image']))[4+ a_p_direction]
+    resolution_a_p = get_dimension(Image(subj_dict['t2_raw']))[4+ a_p_direction]
     vox_dilate_a_p = max(1,int(2 / resolution_a_p)) # 2mm dilation in the A-P axis
 
     # We dilate the SC mask around the axial plane (S-I direction) with a radius of 2 mm computed on the R-L axis

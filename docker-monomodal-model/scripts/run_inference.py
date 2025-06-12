@@ -43,7 +43,7 @@ def run_inference(input_image, model_path, fold_number, temp_folder):
         tile_step_size=0.5,     # changing it from 0.5 to 0.9 makes inference faster
         use_gaussian=True,                      # applies gaussian noise and gaussian blur
         use_mirroring=True,                    # test time augmentation by mirroring on all axes
-        device=torch.device('cpu'),
+        device=torch.device('cuda'),
         verbose=False,
         verbose_preprocessing=False,
         allow_tqdm=True
@@ -70,7 +70,7 @@ def run_inference(input_image, model_path, fold_number, temp_folder):
     )
     
     # Build output image path (output folder and image name)
-    output_image = os.path.join(temp_folder, Path(input_image).name.replace('_inference', ''))
+    output_image = os.path.join(temp_folder, Path(input_image).name.replace('_file', ''))
 
     # Rename the output image to include the fold number
     output_image_new = output_image.replace('.nii.gz', f'_fold{fold_number}.nii.gz')

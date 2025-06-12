@@ -24,10 +24,10 @@ def parse_args():
     return parser.parse_args()
 
 
-min_volume = 12  # Threshold in voxel unit to remove small lesions
+min_volume = 18  # Threshold in voxel unit to remove small lesions
 
 
-def binarize_prediction(subj_dict, output_folder):
+def remove_small_lesions(subj_dict, output_folder):
     """
     This is the main function of the script
     """

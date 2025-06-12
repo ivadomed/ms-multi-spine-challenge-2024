@@ -50,14 +50,14 @@ def remove_lesions_max_value(subj_dict, output_folder):
         instances, nb_labels = ndimage.label(lesion_mask_data)
         ### Now we want to split instances into individual masks for each lesion
         individual_instances = np.zeros((nb_labels, *lesion_mask_data.shape), dtype=np.float32)
-        for i in range(1, nb_labels+1):
+        for j in range(1, nb_labels+1):
             instance_i = np.zeros_like(lesion_mask_data)
-            instance_i[instances == i] = 1
-            individual_instances[i-1] = instance_i
+            instance_i[instances == j] = 1
+            individual_instances[j-1] = instance_i
         ### For each individual instance, we check the max value
-        for i in range(1, nb_labels+1):
+        for k in range(1, nb_labels+1):
             # We select the soft seg of the current lesion
-            soft_seg_current_lesion = lesion_mask_data * individual_instances[i-1]
+            soft_seg_current_lesion = lesion_mask_data * individual_instances[k-1]
             # binarize the soft seg of the current lesion
             soft_seg_current_lesion_bin = (soft_seg_current_lesion > 0).astype(np.float32)
             # if the max value of the soft seg is below the threshold, we remove the lesion from the mask
