@@ -27,6 +27,7 @@ from remove_lesions_outside_sc import remove_lesions_outside_sc
 from remove_lesions_max_value import remove_lesions_max_value
 from merge_predictions import merge_predictions
 from binarize_prediction import binarize_prediction
+from remove_small_lesions import remove_small_lesions
 
 
 def parse_args():
@@ -88,9 +89,11 @@ def main():
     # 6. Merge predictions across contrasts
     subj_dict = merge_predictions(subj_dict, temp_folder)
 
-    # 7. Binarization of the merged predictions
+    # 7. Binarization of the merged predictions (threshold = 0.8)
     subj_dict = binarize_prediction(subj_dict, temp_folder)
 
+    # 8. Remove small lesions  (less than XX voxels)
+    subj_dict = remove_small_lesions(subj_dict, temp_folder)
 
     return None
 
