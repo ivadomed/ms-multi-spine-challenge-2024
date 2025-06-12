@@ -35,7 +35,7 @@ def main():
         output_folder_calibration = os.path.join(sub_folder, "calibration_after_rmv_lesion0p8")
         os.makedirs(output_folder_calibration, exist_ok=True)
 
-        for thresh in [0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95]:
+        for thresh in [0.001, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95]:
             # We build the output path
             output_path = os.path.join(output_folder_calibration, f"merged_segmentation_masked_thresh_{thresh}.nii.gz")
             # We perform the binarization

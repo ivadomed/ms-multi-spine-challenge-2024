@@ -89,6 +89,20 @@ def main():
         assert os.system(f"sct_maths -i {sc_seg_psir_inference_file_reg_to_t2w_raw} -dilate {vox_dilate_r_l} -shape disk -dim {s_i_direction} -o {sub_folder}/sc_seg_psir_reg_to_t2_raw_dilated_axial.nii.gz")==0
         # We dilate the SC mask around the sagittal plane (R-L direction) with a radius of 2 mm computed on the A-P axis
         assert os.system(f"sct_maths -i {sub_folder}/sc_seg_psir_reg_to_t2_raw_dilated_axial.nii.gz -dilate {vox_dilate_a_p} -shape disk -dim {r_l_direction} -o {sub_folder}/sc_seg_psir_reg_to_t2_raw_dilated_axial_sagittal.nii.gz")==0
+        # Add the lesion mask to the sc dilated masc
+        ## binarize the lesion mask
+        assert os.system(f"sct_maths -i {lesion_mask_psir} -bin 0.1 -o {temp_folder}/lesion_mask_psir_bin.nii.gz") == 0
+        # We add the lesion mask to the sc segmentation
+        assert os.system(f"sct_maths -i {sub_folder}/sc_seg_psir_reg_to_t2_raw_dilated_axial_sagittal.nii.gz -add {temp_folder}/lesion_mask_psir_bin.nii.gz -o {sub_folder}/sc_seg_psir_reg_to_t2_raw_dilated_axial_sagittal.nii.gz") == 0
+        # Binarize the sc segmentation
+        assert os.system(f"sct_maths -i {sub_folder}/sc_seg_psir_reg_to_t2_raw_dilated_axial_sagittal.nii.gz -bin 0.1 -o {sub_folder}/sc_seg_psir_reg_to_t2_raw_dilated_axial_sagittal_bin.nii.gz") == 0
+
+        # same for the T2w lesion mask
+        assert os.system(f"sct_maths -i {lesion_mask_t2} -bin 0.1 -o {temp_folder}/lesion_mask_t2_bin.nii.gz") == 0
+        ## add the lesion mask to the sc segmentation
+        assert os.system(f"sct_maths -i {sub_folder}/sc_seg_t2_raw_dilated_axial_sagittal.nii.gz -add {temp_folder}/lesion_mask_t2_bin.nii.gz -o {sub_folder}/sc_seg_t2_raw_dilated_axial_sagittal.nii.gz") == 0
+        # Binarize the sc segmentation
+        assert os.system(f"sct_maths -i {sub_folder}/sc_seg_t2_raw_dilated_axial_sagittal.nii.gz -bin 0.1 -o {sub_folder}/sc_seg_t2_raw_dilated_axial_sagittal_bin.nii.gz") == 0
 
         # Now we add both spinal cord segmentations together
         psir_sc_seg_dilated = os.path.join(sub_folder, "sc_seg_psir_reg_to_t2_raw_dilated_axial_sagittal.nii.gz")
