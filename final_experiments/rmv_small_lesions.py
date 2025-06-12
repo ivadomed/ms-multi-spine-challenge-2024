@@ -24,7 +24,7 @@ def main():
     testing_images = images_dict["testing"]
     images = {**training_images, **testing_images}
 
-    for min_volume in [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 25, 27, 30]:
+    for min_volume in [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 25, 27, 30]:
         print(f"Processing minimum volume: {min_volume} voxels")
 
         # iterate over the images
@@ -37,7 +37,7 @@ def main():
             # print("Subject name", images[image]["subject_name"])
 
             # Build path to the merged lesion mask
-            lesion_mask = os.path.join(sub_folder,"calibration", "merged_segmentation_masked_thresh_0.8.nii.gz")
+            lesion_mask = os.path.join(sub_folder,"calibration", "merged_segmentation_masked_thresh_0.5.nii.gz")
 
             # Build an output folder
             output_folder = os.path.join(sub_folder, f"output_rmv_small_lesion")

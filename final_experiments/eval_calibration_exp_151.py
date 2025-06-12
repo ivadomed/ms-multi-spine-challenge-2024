@@ -29,7 +29,7 @@ def main():
     testing_images = images_dict["testing"]
     images = {**training_images, **testing_images}
 
-    for thresh in [0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95]:
+    for thresh in [0.001, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95]:
         # Dict of dice score
         dice_scores = {}
         ppv_scores = {}
@@ -49,7 +49,7 @@ def main():
             # print("Subject name", images[image]["subject_name"])
 
             # Build the path to the lesion mask
-            lesion_mask = os.path.join(sub_folder, "calibration", f"merged_segmentation_masked_thresh_{thresh}.nii.gz")
+            lesion_mask = os.path.join(sub_folder, "calibration_after_rmv_lesion0p8", f"merged_segmentation_masked_thresh_{thresh}.nii.gz")
 
             # Build path to the ground truth
             ground_truth = images[image]["t2w_raw_label_file"]

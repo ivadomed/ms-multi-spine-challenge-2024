@@ -29,7 +29,7 @@ def main():
     testing_images = images_dict["testing"]
     images = {**training_images, **testing_images}
 
-    for min_volume in [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 25, 27, 30]:
+    for min_volume in [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 25, 27, 30]:
         print(f"Processing minimum volume: {min_volume} voxels")
 
         # Dict of dice score
