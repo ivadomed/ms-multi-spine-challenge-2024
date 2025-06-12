@@ -42,8 +42,6 @@ def remove_lesions_outside_sc(subj_dict, output_folder):
     for other_image in subj_dict['other_images']:
         pred_segmentations.append(other_image['segmentation_file'])
     
-    # We segment the spinal cord in the T2w raw image
-    print("Segmenting the spinal cord in the T2w raw image...")
     # Segment the spinal cord of the T2w raw image
     assert os.system(f"sct_deepseg spinalcord -i {subj_dict['t2w_raw_image']} -o {temp_folder}/sc_seg_t2_raw.nii.gz ") == 0
     # Build the path to the spinal cord segmentation

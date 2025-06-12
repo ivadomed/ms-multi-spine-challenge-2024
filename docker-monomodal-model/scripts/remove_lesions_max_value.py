@@ -27,7 +27,7 @@ def parse_args():
 threshold = 0.8  # Threshold for lesion max voxel value
 
 
-def remove_lesions_outside_sc(subj_dict, output_folder):
+def remove_lesions_max_value(subj_dict, output_folder):
     """
     This is the main function of the script
     """
@@ -72,9 +72,12 @@ def remove_lesions_outside_sc(subj_dict, output_folder):
         else:
             subj_dict['other_images'][i-1]['segmentation_file_rmv_lesions_max_value'] = modified_lesion_mask_path
 
+    # Remove the temp folder
+    assert os.system(f"rm -rf {temp_folder}") == 0
+
     return subj_dict
 
 
 if __name__ == "__main__":
     args = parse_args()
-    updated_subj_dict = remove_lesions_outside_sc(args.subj_dict, args.output_folder)
+    updated_subj_dict = remove_lesions_max_value(args.subj_dict, args.output_folder)

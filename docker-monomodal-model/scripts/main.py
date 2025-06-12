@@ -25,6 +25,8 @@ from image_preprocessing import preprocess_images
 from run_inference import run_inference
 from remove_lesions_outside_sc import remove_lesions_outside_sc
 from remove_lesions_max_value import remove_lesions_max_value
+from merge_predictions import merge_predictions
+from binarize_predictions import binarize_predictions
 
 
 def parse_args():
@@ -83,8 +85,11 @@ def main():
     # 5. Now we remove lesions where max voxel value is below 0.8
     subj_dict = remove_lesions_max_value(subj_dict, temp_folder)
 
-    
+    # 6. Merge predictions across contrasts
+    subj_dict = merge_predictions(subj_dict, temp_folder)
 
+    # 7. Binarization of the merged predictions
+    subj_dict = binarize_predictions(subj_dict, temp_folder)
 
 
     return None
