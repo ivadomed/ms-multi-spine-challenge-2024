@@ -64,6 +64,7 @@ def main():
 
     # 2. Now we perform image preprocessing
     subj_dict = preprocess_images(list_files, temp_folder)
+    print(subj_dict)
     
     ###################
     #### INFERENCE ####
@@ -76,24 +77,36 @@ def main():
 
     # 3. Now we perform inference on the preprocessed images
     subj_dict = run_inference(subj_dict, model_path, temp_folder)
+    print(subj_dict)
 
     #########################
     #### POST-PROCESSING ####
     #########################
     # 4. Now we remove lesions outside of the spinal cord
     subj_dict = remove_lesions_outside_sc(subj_dict, temp_folder)
+    print(subj_dict)
 
     # 5. Now we remove lesions where max voxel value is below 0.8
     subj_dict = remove_lesions_max_value(subj_dict, temp_folder)
+    print(subj_dict)
 
     # 6. Merge predictions across contrasts
     subj_dict = merge_predictions(subj_dict, temp_folder)
+    print(subj_dict)
 
     # 7. Binarization of the merged predictions (threshold = 0.8)
     subj_dict = binarize_prediction(subj_dict, temp_folder)
+    print(subj_dict)
 
     # 8. Remove small lesions  (less than XX voxels)
     subj_dict = remove_small_lesions(subj_dict, temp_folder)
+    print(subj_dict)
+
+    ############################
+    #### FORMAT PREDICTIONS ####
+    ############################
+    # 9. Format the prediction
+    # subj_dict = format_predictions(subj_dict, output_folder)
 
     return None
 
