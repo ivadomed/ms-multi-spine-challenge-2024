@@ -34,10 +34,10 @@ def main():
                 continue
             # Build a folder for each subject
             sub_folder = os.path.join(pred_folder, images[image]["subject_name"])
-            print("Subject name", images[image]["subject_name"])
+            # print("Subject name", images[image]["subject_name"])
 
             # Build path to the merged lesion mask
-            lesion_mask = os.path.join(sub_folder,"calibration", "merged_segmentation_masked_thresh_XX.nii.gz")
+            lesion_mask = os.path.join(sub_folder,"calibration", "merged_segmentation_masked_thresh_0.8.nii.gz")
 
             # Build an output folder
             output_folder = os.path.join(sub_folder, f"output_rmv_small_lesion")
