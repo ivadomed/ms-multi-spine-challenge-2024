@@ -24,6 +24,7 @@ from listing_inputs import listing_input_files
 from image_preprocessing import preprocess_images
 from run_inference import run_inference
 from remove_lesions_outside_sc import remove_lesions_outside_sc
+from remove_lesions_max_value import remove_lesions_max_value
 
 
 def parse_args():
@@ -80,6 +81,8 @@ def main():
     subj_dict = remove_lesions_outside_sc(subj_dict, temp_folder)
 
     # 5. Now we remove lesions where max voxel value is below 0.8
+    subj_dict = remove_lesions_max_value(subj_dict, temp_folder)
+
     
 
 
