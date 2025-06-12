@@ -82,6 +82,13 @@ def merge_predictions(subj_dict, output_folder):
     assert os.system(f"sct_register_multimodal -i {sc_seg_file_0} -d {subj_dict['t2_raw']} -o {sc_seg_file_0} -identity 1") == 0
     for i, sc_seg_file in enumerate(sc_seg_file_others):
         assert os.system(f"sct_register_multimodal -i {sc_seg_file} -d {subj_dict['t2_raw']} -o {sc_seg_file} -identity 1") == 0
+        ## We also add the binary lesion segmentation file to the sc segmentation file
+        ### binarize the lesion segmentation file
+        assert os.system(f"sct_maths -i {subj_dict['other_images'][i]['segmentation_file_rmv_lesions_max_value']} -bin 0.1 -o {temp_folder}/temp_bin_lesion_file.nii.gz") == 0
+        ### add the binary lesion segmentation file to the sc segmentation file
+        assert os.system(f"sct_maths -i {sc_seg_file} -add {temp_folder}/temp_bin_lesion_file.nii.gz -o {sc_seg_file}") == 0
+        ### Binarize the sc segmentation file
+        assert os.system(f"sct_maths -i {sc_seg_file} -bin 0.1 -o {sc_seg_file}") == 0
     ## Convert sc_seg_file_others to a string with spaces
     sc_seg_file_others_str = ' '.join(sc_seg_file_others)
     assert os.system(f"sct_maths -i {sc_seg_file_0} -add {sc_seg_file_others_str} -o {temp_folder}/sc_seg_coverage.nii.gz") == 0
