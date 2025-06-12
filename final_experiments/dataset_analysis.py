@@ -107,6 +107,102 @@ table_resolution.add_row(['Std', round(images_df['R-L_resolution'].std(), 2),
                             round(images_df['I-S_resolution'].std(), 2)])
 print(table_resolution)
 
+# Filter only T2w images
+t2w_images_df = images_df[images_df['contrast'] == 'T2w']
+# Build a table showing the distribution of resolution
+table_resolution_t2 = PrettyTable()
+table_resolution_t2.field_names = ['', 'R-L Resolution', 'A-P Resolution', 'I-S Resolution']
+## In this case we want max, mean, median, min and std of the resolution
+table_resolution_t2.add_row(['Mean', round(t2w_images_df['R-L_resolution'].mean(), 2),
+                            round(t2w_images_df['A-P_resolution'].mean(), 2),
+                            round(t2w_images_df['I-S_resolution'].mean(), 2)])
+table_resolution_t2.add_row(['Max', t2w_images_df['R-L_resolution'].max(),
+                            t2w_images_df['A-P_resolution'].max(),
+                            t2w_images_df['I-S_resolution'].max()])
+table_resolution_t2.add_row(['Min', t2w_images_df['R-L_resolution'].min(),
+                            t2w_images_df['A-P_resolution'].min(),
+                            t2w_images_df['I-S_resolution'].min()])
+table_resolution_t2.add_row(['Median', t2w_images_df['R-L_resolution'].median(),
+                            t2w_images_df['A-P_resolution'].median(),
+                            t2w_images_df['I-S_resolution'].median()])
+table_resolution_t2.add_row(['Std', round(t2w_images_df['R-L_resolution'].std(), 2),
+                            round(t2w_images_df['A-P_resolution'].std(), 2),
+                            round(t2w_images_df['I-S_resolution'].std(), 2)])
+print("T2w Resolution Statistics:")
+print(table_resolution_t2)
+
+# Filter only PSIR images
+psir_images_df = images_df[images_df['contrast'] == 'PSIR']
+# Build a table showing the distribution of resolution
+table_resolution_psir = PrettyTable()
+table_resolution_psir.field_names = ['', 'R-L Resolution', 'A-P Resolution', 'I-S Resolution']
+## In this case we want max, mean, median, min and std of the resolution
+table_resolution_psir.add_row(['Mean', round(psir_images_df['R-L_resolution'].mean(), 2),
+                            round(psir_images_df['A-P_resolution'].mean(), 2),
+                            round(psir_images_df['I-S_resolution'].mean(), 2)])
+table_resolution_psir.add_row(['Max', psir_images_df['R-L_resolution'].max(),
+                            psir_images_df['A-P_resolution'].max(),
+                            psir_images_df['I-S_resolution'].max()])
+table_resolution_psir.add_row(['Min', psir_images_df['R-L_resolution'].min(),
+                            psir_images_df['A-P_resolution'].min(),
+                            psir_images_df['I-S_resolution'].min()])
+table_resolution_psir.add_row(['Median', psir_images_df['R-L_resolution'].median(),
+                            psir_images_df['A-P_resolution'].median(),
+                            psir_images_df['I-S_resolution'].median()])
+table_resolution_psir.add_row(['Std', round(psir_images_df['R-L_resolution'].std(), 2),
+                            round(psir_images_df['A-P_resolution'].std(), 2),
+                            round(psir_images_df['I-S_resolution'].std(), 2)])
+print("PSIR Resolution Statistics:")
+print(table_resolution_psir)
+
+# Filter only STIR images
+stir_images_df = images_df[images_df['contrast'] == 'STIR']
+# Build a table showing the distribution of resolution
+table_resolution_stir = PrettyTable()
+table_resolution_stir.field_names = ['', 'R-L Resolution', 'A-P Resolution', 'I-S Resolution']
+## In this case we want max, mean, median, min and std of the resolution
+table_resolution_stir.add_row(['Mean', round(stir_images_df['R-L_resolution'].mean(), 2),
+                            round(stir_images_df['A-P_resolution'].mean(), 2),
+                            round(stir_images_df['I-S_resolution'].mean(), 2)])
+table_resolution_stir.add_row(['Max', stir_images_df['R-L_resolution'].max(),
+                            stir_images_df['A-P_resolution'].max(),
+                            stir_images_df['I-S_resolution'].max()])
+table_resolution_stir.add_row(['Min', stir_images_df['R-L_resolution'].min(),
+                            stir_images_df['A-P_resolution'].min(),
+                            stir_images_df['I-S_resolution'].min()])
+table_resolution_stir.add_row(['Median', stir_images_df['R-L_resolution'].median(),
+                            stir_images_df['A-P_resolution'].median(),
+                            stir_images_df['I-S_resolution'].median()])
+table_resolution_stir.add_row(['Std', round(stir_images_df['R-L_resolution'].std(), 2),
+                            round(stir_images_df['A-P_resolution'].std(), 2),
+                            round(stir_images_df['I-S_resolution'].std(), 2)])
+print("STIR Resolution Statistics:")
+print(table_resolution_stir)
+
+# Filter only MP2RAGE images
+mp2rage_images_df = images_df[images_df['contrast'] == 'MP2RAGE']
+# Build a table showing the distribution of resolution
+table_resolution_mp2rage = PrettyTable()
+table_resolution_mp2rage.field_names = ['', 'R-L Resolution', 'A-P Resolution', 'I-S Resolution']
+## In this case we want max, mean, median, min and std of the resolution
+table_resolution_mp2rage.add_row(['Mean', round(mp2rage_images_df['R-L_resolution'].mean(), 2),
+                            round(mp2rage_images_df['A-P_resolution'].mean(), 2),
+                            round(mp2rage_images_df['I-S_resolution'].mean(), 2)])
+table_resolution_mp2rage.add_row(['Max', mp2rage_images_df['R-L_resolution'].max(),
+                            mp2rage_images_df['A-P_resolution'].max(),
+                            mp2rage_images_df['I-S_resolution'].max()])
+table_resolution_mp2rage.add_row(['Min', mp2rage_images_df['R-L_resolution'].min(),
+                            mp2rage_images_df['A-P_resolution'].min(),
+                            mp2rage_images_df['I-S_resolution'].min()])
+table_resolution_mp2rage.add_row(['Median', mp2rage_images_df['R-L_resolution'].median(),
+                            mp2rage_images_df['A-P_resolution'].median(),
+                            mp2rage_images_df['I-S_resolution'].median()])
+table_resolution_mp2rage.add_row(['Std', round(mp2rage_images_df['R-L_resolution'].std(), 2),
+                            round(mp2rage_images_df['A-P_resolution'].std(), 2),
+                            round(mp2rage_images_df['I-S_resolution'].std(), 2)])
+print("MP2RAGE Resolution Statistics:")
+print(table_resolution_mp2rage)
+
 # Save the tables to the output folder in a txt file
 txt_file = os.path.join(output_folder, 'dataset_analysis.txt')
 os.makedirs(output_folder, exist_ok=True)
@@ -121,3 +217,11 @@ with open(txt_file, 'w') as f:
     f.write(str(table_contrast) + "\n\n")
     f.write("Resolution Statistics:\n")
     f.write(str(table_resolution) + "\n")
+    f.write("\nT2w Resolution Statistics:\n")
+    f.write(str(table_resolution_t2) + "\n")
+    f.write("\nPSIR Resolution Statistics:\n")
+    f.write(str(table_resolution_psir) + "\n")
+    f.write("\nSTIR Resolution Statistics:\n")
+    f.write(str(table_resolution_stir) + "\n")
+    f.write("\nMP2RAGE Resolution Statistics:\n")
+    f.write(str(table_resolution_mp2rage) + "\n")
