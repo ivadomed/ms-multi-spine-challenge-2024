@@ -80,7 +80,7 @@ def run_inference(input, output, dataset_id, plans, trainer, configuration, chec
 
     #assert os.system(f"nnUNetv2_predict -i {input_dir} -o {dataset_output}/prediction -d {dataset_id} -p {plans} -tr {trainer} -c {configuration} -f {fold} -chk {checkpoint} ") == 0
 
-    assert os.system(f"nnUNetv2_predict -i {input_dir} -o {dataset_output}/prediction -d {dataset_id} -p {plans} -tr {trainer} -c {configuration} -f {fold} -chk {checkpoint} ") == 0
+    assert os.system(f"nnUNetv2_predict -i {input_dir} -o {dataset_output}/prediction -d {dataset_id} -p {plans} -tr {trainer} -c {configuration} -f {fold} -chk {checkpoint} --save_probabilities") == 0
  
     
             
