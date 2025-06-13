@@ -27,7 +27,7 @@ The instructions were the following: _your method that can be run with two argum
 
 To build the docker: 
 ```console
-docker build --platform linux/amd64 -t ms-inference-cpu ms-multi-spine-challenge-2024/docker-monomodal-model/.
+docker build --platform linux/amd64 -t ms-challenge-monomodal ms-multi-spine-challenge-2024/docker-monomodal-model/.
 ```
 
 > [!NOTE]  
@@ -35,7 +35,7 @@ docker build --platform linux/amd64 -t ms-inference-cpu ms-multi-spine-challenge
 
 To run the docker:
 ```console
-docker run --rm -v ~/Documents/ms-challenge-2025/sub-001:/input -v ~/Documents/ms-challenge-2025/output_sub001:/output  ms-inference-cpu -i /input -o /output
+docker run --rm -v /home/GRAMES.POLYMTL.CA/p119007/duke/temp/plben/ms-challenge-docker/sub-001:/input -v /home/GRAMES.POLYMTL.CA/p119007/duke/temp/plben/ms-challenge-docker/output_sub001:/output  ms-challenge-monomodal -i /input -o /output
 ```
 
 > [!NOTE]  

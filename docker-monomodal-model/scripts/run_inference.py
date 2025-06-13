@@ -43,7 +43,7 @@ def run_inference(input_image, model_path, fold_number, temp_folder):
         tile_step_size=0.5,     # changing it from 0.5 to 0.9 makes inference faster
         use_gaussian=True,                      # applies gaussian noise and gaussian blur
         use_mirroring=True,                    # test time augmentation by mirroring on all axes
-        device=torch.device('cuda'),
+        device=torch.device('cpu'),
         verbose=False,
         verbose_preprocessing=False,
         allow_tqdm=True
