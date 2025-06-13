@@ -58,6 +58,12 @@ def main():
             pred_data_psir = nib.load(str(lesion_mask_psir)).get_fdata()
             label_data = nib.load(str(ground_truth)).get_fdata()
 
+            # Binarize the predictions
+            pred_data_t2 = (pred_data_t2 > 0).astype(np.float32)
+            pred_data_psir = (pred_data_psir > 0).astype(np.float32)
+            # Binarize the label data as well
+            label_data = (label_data > 0).astype(np.float32)
+
             # Get resolution
             resolution = nib.load(str(images[image]["t2w_raw_image"])).header.get_zooms()
 

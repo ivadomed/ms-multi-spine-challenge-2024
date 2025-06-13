@@ -29,7 +29,7 @@ def main():
     testing_images = images_dict["testing"]
     images = {**training_images, **testing_images}
 
-    for thresh in [0.001, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95]:
+    for thresh in [0.00001, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95]:
         # Dict of dice score
         dice_scores = {}
         ppv_scores = {}
@@ -56,13 +56,23 @@ def main():
 
             # Load the predictions and the label
             pred_data = nib.load(str(lesion_mask)).get_fdata()
+            print(np.unique(pred_data))
             label_data = nib.load(str(ground_truth)).get_fdata()
+            # Binarize label data
+            label_data = (label_data > 0).astype(np.uint8)
+            print(np.unique(label_data))
+
+            print("evaluating image:", image)
+            print("pred:", lesion_mask)
+            print("label:", ground_truth)
 
             # Get resolution
             resolution = nib.load(str(images[image]["t2w_raw_image"])).header.get_zooms()
 
             # Compute dice score
             dice = dice_score(pred_data, label_data)
+
+            print(dice)
             ppv = lesion_ppv(label_data, pred_data)
             f1 = lesion_f1_score(label_data, pred_data)
             sensitivity = lesion_sensitivity(label_data, pred_data)

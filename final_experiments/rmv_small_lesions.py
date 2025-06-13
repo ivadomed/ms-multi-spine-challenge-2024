@@ -24,7 +24,9 @@ def main():
     testing_images = images_dict["testing"]
     images = {**training_images, **testing_images}
 
-    for min_volume in [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 25, 27, 30]:
+    lesion_sizes=[]
+
+    for min_volume in [0, 28, 29, 31, 32, 33]:
         print(f"Processing minimum volume: {min_volume} voxels")
 
         # iterate over the images
@@ -37,7 +39,7 @@ def main():
             # print("Subject name", images[image]["subject_name"])
 
             # Build path to the merged lesion mask
-            lesion_mask = os.path.join(sub_folder,"calibration", "merged_segmentation_masked_thresh_0.5.nii.gz")
+            lesion_mask = os.path.join(sub_folder,"calibration_after_rmv_lesion0p8", "merged_segmentation_masked_thresh_0.5.nii.gz")
 
             # Build an output folder
             output_folder = os.path.join(sub_folder, f"output_rmv_small_lesion")
@@ -54,13 +56,38 @@ def main():
                 individual_instances[i-1] = instance_i
             ### For each individual instance, we check the number of voxels in the lesion
             for i in range(1, nb_labels+1):
+                if min_volume ==0:
+                    lesion_sizes.append(np.sum(individual_instances[i-1]))
                 # If the lesion is smaller than the minimum volume, we remove it
                 if np.sum(individual_instances[i-1]) < min_volume:
                     mask_data = mask_data * (1 - individual_instances[i-1])
             ### Save the modified T2w lesion mask
             modified_mask_path = os.path.join(output_folder, f"segmentation_masked_rmvLesion{min_volume}.nii.gz")
             nib.save(nib.Nifti1Image(mask_data, nib.load(lesion_mask).affine), modified_mask_path)
-
+    
+    final_output_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep_rmv_small_lesions_stats"
+    os.makedirs(final_output_folder, exist_ok=True)
+    # Save the csv file file with the lesion sizes
+    lesion_sizes_path = os.path.join(final_output_folder, "lesion_sizes.csv")
+    with open(lesion_sizes_path, 'w') as f:
+        f.write("Lesion Size (voxels)\n")
+        for size in lesion_sizes:
+            f.write(f"{size}\n")
+    # print mean, max, min, std and median in a txt file which we save
+    txt_file = os.path.join(final_output_folder, 'lesion_sizes.txt')
+    with open(txt_file, 'w') as f:
+        f.write(f"Mean: {np.mean(lesion_sizes)}\n")
+        f.write(f"Max: {np.max(lesion_sizes)}\n")
+        f.write(f"Min: {np.min(lesion_sizes)}\n")
+        f.write(f"Std: {np.std(lesion_sizes)}\n")
+        f.write(f"Median: {np.median(lesion_sizes)}\n")
+    # Plot the histogram of the lesion sizes
+    import matplotlib.pyplot as plt
+    plt.hist(lesion_sizes, bins=50, density=True)
+    plt.xlabel("Lesion Size (voxels)")
+    plt.ylabel("Density")
+    plt.title("Histogram of Lesion Sizes")
+    plt.savefig(os.path.join(final_output_folder, "lesion_sizes_histogram.png"))
 
 if __name__ == "__main__":
     main()

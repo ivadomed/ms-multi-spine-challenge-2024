@@ -27,7 +27,6 @@ def main():
     training_images = images_dict["training"]
     testing_images = images_dict["testing"]
     images = {**training_images, **testing_images}
-
     
     # Dict of scores
     dice_scores = {}
@@ -73,6 +72,8 @@ def main():
         pred_data_psir = (pred_data_psir > 0).astype(np.float32)
         pred_data_t2w_postproc = (pred_data_t2w_postproc > 0).astype(np.float32)
         pred_data_psir_postproc = (pred_data_psir_postproc > 0).astype(np.float32)
+        # We need to binarize the mask because it is a instance seg
+        label_data = (label_data > 0).astype(np.float32)
 
         # Get resolution
         resolution = nib.load(str(images[image]["t2w_raw_image"])).header.get_zooms()

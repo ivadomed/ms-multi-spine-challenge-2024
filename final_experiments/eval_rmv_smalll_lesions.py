@@ -29,7 +29,8 @@ def main():
     testing_images = images_dict["testing"]
     images = {**training_images, **testing_images}
 
-    for min_volume in [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 25, 27, 30]:
+    # for min_volume in [0, 28, 29, 31, 32, 33]:
+    for min_volume in [0]:
         print(f"Processing minimum volume: {min_volume} voxels")
 
         # Dict of dice score
@@ -56,13 +57,18 @@ def main():
 
             # Load the predictions and the label
             pred_data = nib.load(str(lesion_mask)).get_fdata()
+            print(np.unique(pred_data))
             label_data = nib.load(str(ground_truth)).get_fdata()
+            # Binarize label data
+            label_data = (label_data > 0).astype(np.uint8)
+            print(np.unique(label_data))
 
             # Get resolution
             resolution = nib.load(str(images[image]["t2w_raw_image"])).header.get_zooms()
 
             # Compute dice score
             dice = dice_score(pred_data, label_data)
+            print(dice)
             ppv = lesion_ppv(label_data, pred_data)
             f1 = lesion_f1_score(label_data, pred_data)
             sensitivity = lesion_sensitivity(label_data, pred_data)
