@@ -41,12 +41,7 @@ def format_segmentation(subj_dict, output_folder):
     lesion_mask_bin = subj_dict['t2_segmentation_file_rmv_small_lesions']
     lesion_mask_soft = subj_dict['soft_mask_rmv_small_lesions']
 
-    # Security registration
-    t2w_raw_image = subj_dict['rawdata_T2']
-    assert os.system(f"sct_register_multimodal -i {lesion_mask_bin} -d {t2w_raw_image} -identity 1 -o {lesion_mask_bin}  ") == 0
-    assert os.system(f"sct_register_multimodal -i {lesion_mask_soft} -d {t2w_raw_image} -identity 1 -o {lesion_mask_soft}  ") == 0
-
-
+    
     # We multiply the soft segmentation mask by the binary mask to keep only the lesions
     lesion_mask_soft_data = nib.load(lesion_mask_soft).get_fdata()
     lesion_mask_bin_data = nib.load(lesion_mask_bin).get_fdata()
@@ -74,8 +69,26 @@ def format_segmentation(subj_dict, output_folder):
         })
 
     # Save the instance segmentation as a NIfTI file
+
+    # Load original image to get affine and header
+    orig_nifti = nib.load(lesion_mask_soft)
+
+    # Create new image with original affine
+    new_img = nib.Nifti1Image(instances, orig_nifti.affine, header=orig_nifti.header.copy())
+
+    # Round pixdim (voxel spacing) to 5 decimal places
+    pixdim = new_img.header.get_zooms()
+    rounded_pixdim = tuple(round(p, 5) for p in pixdim)
+
+    # Update the pixdim in the header
+    new_img.header.set_zooms(rounded_pixdim)
+
+    # Save the instance segmentation as a NIfTI file
     instance_segmentation_path = os.path.join(output_folder, "instance_segmentation.nii.gz")
-    nib.save(nib.Nifti1Image(instances, nib.load(lesion_mask_soft).affine), instance_segmentation_path)
+    nib.save(new_img, instance_segmentation_path)
+
+    #instance_segmentation_path = os.path.join(output_folder, "instance_segmentation.nii.gz")
+    #nib.save(nib.Nifti1Image(instances, nib.load(lesion_mask_soft).affine), instance_segmentation_path)
     
     # Lesion probability should be save in a csv file with a column id and a column p
     output_csv_path = os.path.join(output_folder, "lesion_probabilities.csv")
