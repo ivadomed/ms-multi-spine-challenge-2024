@@ -55,4 +55,4 @@ Then I also created the invocation file miccai2025_challenge_invocation_neuropol
 Finally to validate everything, I did: 
 - Install Boutiques: `pip install boutiques`
 - Validate your descriptor: `bosh validate miccai2025_challenge_descriptor_neuropoly_monomodal.json`
-- Execute the tool: `bosh exec launch miccai2025_challenge_descriptor_neuropoly_monomodal.json miccai2025_challenge_invocation_neuropoly_monomodal.json`x
+- Execute the tool: `bosh exec launch miccai2025_challenge_descriptor_neuropoly_monomodal.json miccai2025_challenge_invocation_neuropoly_monomodal.json`
