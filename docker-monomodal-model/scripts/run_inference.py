@@ -3,7 +3,6 @@ This script runs the inference on the images using the 5 folds of the model.
 
 Input: 
     -subj-dict: path to the subject dictionary
-    -model_path: path to the model folder containing 1 folder per fold
     -output_folder: path to the output folder
 
 Returns: 
@@ -14,27 +13,16 @@ Author: Pierre-Louis Benveniste
 import argparse
 import os
 from pathlib import Path
-import torch
 from image import Image
-
-# We define the environment variables here to avoid a warning from nnunetv2
-os.environ['nnUNet_raw'] = "./nnUNet_raw"
-os.environ['nnUNet_preprocessed'] = "./nnUNet_preprocessed"
-os.environ['nnUNet_results']="./nnUNet_results"
-
-# Import for nnunetv2
-from nnunetv2.inference.predict_from_raw_data import nnUNetPredictor
-from batchgenerators.utilities.file_and_folder_operations import join
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Inference script")
     parser.add_argument("-i", "--input_image", type=str, required=True, help="Path to the input image")
-    parser.add_argument("-m", "--model_path", type=str, required=True, help="Path to the model folder")
     parser.add_argument("-o", "--output_folder", type=str, required=True, help="Path to the output folder")
     return parser.parse_args()
 
 
-def run_inference(input_image, model_path, fold_number, temp_folder):
+def run_inference(input_image,  fold_number, temp_folder):
     """
     This scripts runs the inference on a single image on only one fold at a time.
     """
@@ -42,49 +30,20 @@ def run_inference(input_image, model_path, fold_number, temp_folder):
     temp_folder_fold = os.path.join(temp_folder, f"fold_{fold_number}")
     os.makedirs(temp_folder_fold, exist_ok=True)
 
-    print("A")
-    # Initialize the model 
-    predictor = nnUNetPredictor(
-        tile_step_size=0.5,     # changing it from 0.5 to 0.9 makes inference faster
-        use_gaussian=True,                      # applies gaussian noise and gaussian blur
-        use_mirroring=True,                    # test time augmentation by mirroring on all axes
-        device=torch.device('cuda'),# if torch.cuda.is_available() else 'cpu'),
-        verbose=False,
-        verbose_preprocessing=False,
-        allow_tqdm=True
-    )
-    print("B")
-    # initializes the network architecture, loads the checkpoint
-    predictor.initialize_from_trained_model_folder(
-        model_path,
-        use_folds=[fold_number],
-        checkpoint_name='checkpoint_best.pth',
-    )
-    print("C")
-    # Run inference on the input image
-    predictor.predict_from_files(
-        list_of_lists_or_source_folder=[[input_image]],
-        output_folder_or_list_of_truncated_output_files=temp_folder_fold,
-        save_probabilities=False,
-        overwrite=True,
-        num_processes_preprocessing=1,
-        num_processes_segmentation_export=1,
-        folder_with_segs_from_prev_stage=None,
-        num_parts=1,
-        part_id=0,
-    )
-    print("D")
+    # Run inference
+    assert os.system(f"nnUNetv2_predict -i {input_image} -o {temp_folder_fold} -d 151 -p nnUNetResEncUNetLPlansFinetune -tr nnUNetTrainerDAExt_DiceCELoss_noSmooth_unbalancedSampling_500epochs_fromScratch -c 3d_fullres -f {fold_number} -chk checkpoint_best.pth -device cpu") == 0
+
     # Build output image path (output folder and image name)
     output_image = os.path.join(temp_folder_fold, Path(input_image).name.replace('_file', ''))
 
     # Rename the output image to include the fold number
     output_image_new = output_image.replace('.nii.gz', f'_fold{fold_number}.nii.gz')
     assert os.system(f"mv {output_image} {output_image_new}") == 0
-    print("E")
+
     return output_image_new
 
 
-def run_inference_on_all_images(subj_dict, model_path, output_folder):
+def run_inference_on_all_images(subj_dict, output_folder):
     """
     This scripts runs the inference on all the images of the subject.
     """
@@ -110,10 +69,8 @@ def run_inference_on_all_images(subj_dict, model_path, output_folder):
         ## Inference should be run on the 5 folds of the model
         for fold_nb in range(5):
             print(f"Running inference on the image (fold {fold_nb})...")
-            # Build the path to the model for the fold
-            model_path_fold = os.path.join(model_path, f"model_fold{fold_nb}")
             # Run inference
-            pred_fold_i = run_inference(reorient_inference_file, model_path_fold, fold_nb, temp_folder)
+            pred_fold_i = run_inference(reorient_inference_file, fold_nb, temp_folder)
             # Append the prediction to the list
             file_preds.append(pred_fold_i)
         ## Aggregate the predictions

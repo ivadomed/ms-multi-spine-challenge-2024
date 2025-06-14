@@ -41,5 +41,3 @@ docker run --rm -v /home/GRAMES.POLYMTL.CA/p119007/duke/temp/plben/ms-challenge-
 > [!NOTE]  
 > the `--rm` flag makes sure that the docker is closed at the end  
 > the `-v` flag mounts the volume, so that they are visible to the docker
-
-

@@ -69,14 +69,9 @@ def main():
     ###################
     #### INFERENCE ####
     ###################
-    # Build the path to the model: it is stored in the repo in a folder called "trained-model"
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    parent_dir = os.path.dirname(current_dir)
-    model_path = os.path.join(parent_dir, "trained-model")
-    print(f"Model path: {model_path}")
     
     # 3. Now we perform inference on the preprocessed images
-    subj_dict = run_inference_on_all_images(subj_dict, model_path, temp_folder)
+    subj_dict = run_inference_on_all_images(subj_dict, temp_folder)
 
     #########################
     #### POST-PROCESSING ####
