@@ -38,44 +38,49 @@ def run_inference(input_image, model_path, fold_number, temp_folder):
     """
     This scripts runs the inference on a single image on only one fold at a time.
     """
+    # We create a temp folder for the fold
+    temp_folder_fold = os.path.join(temp_folder, f"fold_{fold_number}")
+    os.makedirs(temp_folder_fold, exist_ok=True)
+
+    print("A")
     # Initialize the model 
     predictor = nnUNetPredictor(
         tile_step_size=0.5,     # changing it from 0.5 to 0.9 makes inference faster
         use_gaussian=True,                      # applies gaussian noise and gaussian blur
         use_mirroring=True,                    # test time augmentation by mirroring on all axes
-        device=torch.device('cuda' if torch.cuda.is_available() else 'cpu'),
+        device=torch.device('cuda'),# if torch.cuda.is_available() else 'cpu'),
         verbose=False,
         verbose_preprocessing=False,
         allow_tqdm=True
     )
-        
+    print("B")
     # initializes the network architecture, loads the checkpoint
     predictor.initialize_from_trained_model_folder(
         model_path,
         use_folds=[fold_number],
         checkpoint_name='checkpoint_best.pth',
     )
-
+    print("C")
     # Run inference on the input image
     predictor.predict_from_files(
         list_of_lists_or_source_folder=[[input_image]],
-        output_folder_or_list_of_truncated_output_files=temp_folder,
+        output_folder_or_list_of_truncated_output_files=temp_folder_fold,
         save_probabilities=False,
         overwrite=True,
-        num_processes_preprocessing=8,
-        num_processes_segmentation_export=8,
+        num_processes_preprocessing=1,
+        num_processes_segmentation_export=1,
         folder_with_segs_from_prev_stage=None,
         num_parts=1,
-        part_id=0
+        part_id=0,
     )
-    
+    print("D")
     # Build output image path (output folder and image name)
-    output_image = os.path.join(temp_folder, Path(input_image).name.replace('_file', ''))
+    output_image = os.path.join(temp_folder_fold, Path(input_image).name.replace('_file', ''))
 
     # Rename the output image to include the fold number
     output_image_new = output_image.replace('.nii.gz', f'_fold{fold_number}.nii.gz')
     assert os.system(f"mv {output_image} {output_image_new}") == 0
-
+    print("E")
     return output_image_new
 
 
@@ -138,6 +143,6 @@ def run_inference_on_all_images(subj_dict, model_path, output_folder):
 
     return subj_dict
 
-if __name__ == "__main__":
-    args = parse_args()
-    subj_dict = run_inference(args.input_image, args.output_folder)
+# if __name__ == "__main__":
+#     args = parse_args()
+#     subj_dict = run_inference(args.input_image, args.output_folder)

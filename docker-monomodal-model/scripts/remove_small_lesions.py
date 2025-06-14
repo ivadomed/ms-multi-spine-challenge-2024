@@ -24,7 +24,7 @@ def parse_args():
     return parser.parse_args()
 
 
-min_volume = 18  # Threshold in voxel unit to remove small lesions
+min_volume = 50  # Threshold in voxel unit to remove small lesions
 
 
 def remove_small_lesions(subj_dict, output_folder):
@@ -64,4 +64,4 @@ def remove_small_lesions(subj_dict, output_folder):
 
 if __name__ == "__main__":
     args = parse_args()
-    updated_subj_dict = binarize_prediction(args.subj_dict, args.output_folder)
+    updated_subj_dict = remove_small_lesions(args.subj_dict, args.output_folder)

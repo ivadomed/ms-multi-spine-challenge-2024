@@ -23,7 +23,7 @@ def parse_args():
     return parser.parse_args()
 
 
-thresh = 0.8  # Threshold to binarize the lesion mask
+thresh = 0.5  # Threshold to binarize the lesion mask
 
 
 def binarize_prediction(subj_dict, output_folder):

@@ -74,13 +74,9 @@ def main():
     parent_dir = os.path.dirname(current_dir)
     model_path = os.path.join(parent_dir, "trained-model")
     print(f"Model path: {model_path}")
-
-    # subj_dict = {'t2_raw': '../sub-001/rawdata/sub-001/11-001_T2.nii.gz', 't2_preproc': '../sub-001/derivatives/preprocessed/sub-001/11-001_T2.nii.gz', 't2_inference_file': '../output_sub-001/temp/t2w_inference.nii.gz', 'other_images': [{'image_raw': '../sub-001/rawdata/sub-001/11-001_STIR.nii.gz', 'image_preproc': '../sub-001/derivatives/preprocessed/sub-001/11-001_STIR.nii.gz', 'contrast': 'STIR', 'inference_file': '../output_sub-001/temp/STIR_inference.nii.gz'}]}
-
+    
     # 3. Now we perform inference on the preprocessed images
     subj_dict = run_inference_on_all_images(subj_dict, model_path, temp_folder)
-
-    # subj_dict = {'t2_raw': '../sub-001/rawdata/sub-001/11-001_T2.nii.gz', 't2_preproc': '../sub-001/derivatives/preprocessed/sub-001/11-001_T2.nii.gz', 't2_inference_file': '../output_sub-001/temp/t2w_inference.nii.gz', 'other_images': [{'image_raw': '../sub-001/rawdata/sub-001/11-001_STIR.nii.gz', 'image_preproc': '../sub-001/derivatives/preprocessed/sub-001/11-001_STIR.nii.gz', 'contrast': 'STIR', 'inference_file': '../output_sub-001/temp/STIR_inference.nii.gz', 'segmentation_file': '../output_sub-001/temp/STIR_segmentation.nii.gz'}], 't2_segmentation_file': '../output_sub-001/temp/t2w_segmentation.nii.gz'}
 
     #########################
     #### POST-PROCESSING ####
@@ -88,12 +84,8 @@ def main():
     # 4. Now we remove lesions outside of the spinal cord
     subj_dict = remove_lesions_outside_sc(subj_dict, temp_folder)
 
-    # subj_dict = {'t2_raw': '../sub-001/rawdata/sub-001/11-001_T2.nii.gz', 't2_preproc': '../sub-001/derivatives/preprocessed/sub-001/11-001_T2.nii.gz', 't2_inference_file': '../output_sub-001/temp/t2w_inference.nii.gz', 'other_images': [{'image_raw': '../sub-001/rawdata/sub-001/11-001_STIR.nii.gz', 'image_preproc': '../sub-001/derivatives/preprocessed/sub-001/11-001_STIR.nii.gz', 'contrast': 'STIR', 'inference_file': '../output_sub-001/temp/STIR_inference.nii.gz', 'segmentation_file': '../output_sub-001/temp/STIR_segmentation.nii.gz', 'segmentation_file_rmv_lesions_outside_sc': '../output_sub-001/temp/STIR_segmentation_rmv_lesions_outside_sc.nii.gz'}], 't2_segmentation_file': '../output_sub-001/temp/t2w_segmentation.nii.gz', 't2_segmentation_file_rmv_lesions_outside_sc': '../output_sub-001/temp/t2w_segmentation_rmv_lesions_outside_sc.nii.gz'}
-
     # 5. Now we remove lesions where max voxel value is below 0.8
     subj_dict = remove_lesions_max_value(subj_dict, temp_folder)
-
-    # subj_dict = {'t2_raw': '../sub-001/rawdata/sub-001/11-001_T2.nii.gz', 't2_preproc': '../sub-001/derivatives/preprocessed/sub-001/11-001_T2.nii.gz', 't2_inference_file': '../output_sub-001/temp/t2w_inference.nii.gz', 'other_images': [{'image_raw': '../sub-001/rawdata/sub-001/11-001_STIR.nii.gz', 'image_preproc': '../sub-001/derivatives/preprocessed/sub-001/11-001_STIR.nii.gz', 'contrast': 'STIR', 'inference_file': '../output_sub-001/temp/STIR_inference.nii.gz', 'segmentation_file': '../output_sub-001/temp/STIR_segmentation.nii.gz', 'segmentation_file_rmv_lesions_outside_sc': '../output_sub-001/temp/STIR_segmentation_rmv_lesions_outside_sc.nii.gz', 'segmentation_file_rmv_lesions_max_value': '../output_sub-001/temp/STIR_segmentation_file_rmv_lesions_max_value.nii.gz'}], 't2_segmentation_file': '../output_sub-001/temp/t2w_segmentation.nii.gz', 't2_segmentation_file_rmv_lesions_outside_sc': '../output_sub-001/temp/t2w_segmentation_rmv_lesions_outside_sc.nii.gz', 't2_segmentation_file_rmv_lesions_max_value': '../output_sub-001/temp/t2w_segmentation_file_rmv_lesions_max_value.nii.gz'}
 
     # 6. Merge predictions across contrasts
     subj_dict = merge_predictions(subj_dict, temp_folder)
@@ -103,8 +95,6 @@ def main():
 
     # 8. Remove small lesions  (less than 18 voxels)
     subj_dict = remove_small_lesions(subj_dict, temp_folder)
-
-    subj_dict = {'t2_raw': '../sub-001/rawdata/sub-001/11-001_T2.nii.gz', 't2_preproc': '../sub-001/derivatives/preprocessed/sub-001/11-001_T2.nii.gz', 't2_inference_file': '../output_sub-001/temp/t2w_inference.nii.gz', 'other_images': [{'image_raw': '../sub-001/rawdata/sub-001/11-001_STIR.nii.gz', 'image_preproc': '../sub-001/derivatives/preprocessed/sub-001/11-001_STIR.nii.gz', 'contrast': 'STIR', 'inference_file': '../output_sub-001/temp/STIR_inference.nii.gz', 'segmentation_file': '../output_sub-001/temp/STIR_segmentation.nii.gz', 'segmentation_file_rmv_lesions_outside_sc': '../output_sub-001/temp/STIR_segmentation_rmv_lesions_outside_sc.nii.gz', 'segmentation_file_rmv_lesions_max_value': '../output_sub-001/temp/STIR_segmentation_file_rmv_lesions_max_value.nii.gz'}], 't2_segmentation_file': '../output_sub-001/temp/t2w_segmentation.nii.gz', 't2_segmentation_file_rmv_lesions_outside_sc': '../output_sub-001/temp/t2w_segmentation_rmv_lesions_outside_sc.nii.gz', 't2_segmentation_file_rmv_lesions_max_value': '../output_sub-001/temp/t2w_segmentation_file_rmv_lesions_max_value.nii.gz', 'merged_lesion_mask': '../output_sub-001/temp/merged_lesion_mask.nii.gz', 'binarized_lesion_mask': '../output_sub-001/temp/binarized_lesion_mask.nii.gz', 'lesion_mask_rmv_small_lesion': '../output_sub-001/temp/lesion_mask_rmv_small_lesion.nii.gz'}
 
     ############################
     #### FORMAT PREDICTIONS ####
