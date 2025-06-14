@@ -36,7 +36,7 @@ RUN pip install -e nnUNet/.
 
 # Download the 5 folds of the model
 ## Create a directory for the trained model
-RUN mkdir -p trained-model
+RUN mkdir -p /opt/trained-model
 ## Downloading the model
 RUN wget https://github.com/plbenveniste/model_repository/releases/download/R2/model_fold0.zip
 RUN wget https://github.com/plbenveniste/model_repository/releases/download/R2/model_fold1.zip
@@ -44,14 +44,17 @@ RUN wget https://github.com/plbenveniste/model_repository/releases/download/R2/m
 RUN wget https://github.com/plbenveniste/model_repository/releases/download/R2/model_fold3.zip
 RUN wget https://github.com/plbenveniste/model_repository/releases/download/R2/model_fold4.zip
 ## Unzip the model files into the trained-model directory
-RUN unzip model_fold0.zip -d trained-model/
-RUN unzip model_fold1.zip -d trained-model/
-RUN unzip model_fold2.zip -d trained-model/
-RUN unzip model_fold3.zip -d trained-model/
-RUN unzip model_fold4.zip -d trained-model/
+RUN unzip model_fold0.zip -d /opt/trained-model/
+RUN unzip model_fold1.zip -d /opt/trained-model/
+RUN unzip model_fold2.zip -d /opt/trained-model/
+RUN unzip model_fold3.zip -d /opt/trained-model/
+RUN unzip model_fold4.zip -d /opt/trained-model/
 
 # Copy the script files into the container
 COPY scripts/ scripts/
+
+# Set the model directory environment variable
+ENV MODEL_DIR="/opt/trained-model"
 
 # Install Python packages from requirements.txt
 RUN pip install -r scripts/requirements.txt
