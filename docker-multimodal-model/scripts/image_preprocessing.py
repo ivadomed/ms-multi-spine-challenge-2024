@@ -77,16 +77,21 @@ def preprocess_images(input_images, output_folder):
         out_image1 = Path(destination_t2)
     if subj_dict["preprocessed_STIR"] is not None:
         file2 = subj_dict["preprocessed_STIR"]
-        t = "STIR"
+        subj_dict['t'] = "STIR"
         out_image2 = Path(destination_stir)
     if subj_dict["preprocessed_PSIR"] is not None:
         file2 = subj_dict["preprocessed_PSIR"]
-        t = "PSIR"
+        subj_dict['t'] = "PSIR"
         out_image2 = Path(destination_psir)
     if subj_dict["preprocessed_MP2RAGE"] is not None:
         file2 = subj_dict["preprocessed_MP2RAGE"]
-        t = "MP2RAGE"
+        subj_dict['t'] = "MP2RAGE"
         out_image2 = Path(destination_mp2rage)
+
+    subj_dict["t2w_raw_image"] = t2w_raw_image
+    subj_dict["input1"] = out_image1
+    subj_dict["input2"] = out_image2
+    subj_dict["seg_path"] = output_folder
 
     print("Input images:", t2w_raw_image)
     print("Files to preprocess:", file1, file2)
@@ -127,7 +132,7 @@ def preprocess_images(input_images, output_folder):
     
 
     # We return a dictionnary with the paths of the preprocessed images
-    return subj_dict, output_folder, t2w_raw_image, t 
+    return subj_dict
 
 
 # Function to extract the coordinates to crop from  
