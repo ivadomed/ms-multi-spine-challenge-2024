@@ -24,13 +24,12 @@ def parse_args():
 
 
 def majority_vote(volumes, t):
-    breakpoint()
     stacked = np.stack(volumes, axis=0)  # Shape: (5, H, W, D)
     vote_sum = np.sum(stacked, axis=0)
     if t == "STIR":
-        return vote_sum, vote_sum #(vote_sum > 0).astype(np.uint8), (vote_sum/5)
+        return (vote_sum > 0.5).astype(np.uint8), (vote_sum/5)
     else : 
-        return (vote_sum >= 3).astype(np.uint8), (vote_sum/5)
+        return (vote_sum >= 2.5).astype(np.uint8), (vote_sum/5)
 
 def postprocess_segmentation(subj_dict):
     # Build a temp folder in the output folder
@@ -62,14 +61,14 @@ def postprocess_segmentation(subj_dict):
         for fold in range(5):
             fold_pred_path = os.path.join(predicted_segmentation, f"fold_{fold}", "prediction", subject_file)
 
-            #assert os.system(f"sct_register_multimodal -i {fold_pred_path} -d {t2w_raw_image} -identity 1 -o {fold_pred_path}  ") == 0
+            assert os.system(f"sct_register_multimodal -i {fold_pred_path} -d {t2w_raw_image} -identity 1 -o {fold_pred_path}  ") == 0
 
 
             if not os.path.exists(fold_pred_path):
                 raise FileNotFoundError(f"Missing prediction for {subject_file} in fold {fold}")
 
             pred_nib = nib.load(fold_pred_path)
-            pred_data = pred_nib.get_fdata().astype(np.uint8)
+            pred_data = pred_nib.get_fdata()
 
 
             if affine is None:

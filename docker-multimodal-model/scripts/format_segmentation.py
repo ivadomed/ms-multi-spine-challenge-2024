@@ -41,6 +41,12 @@ def format_segmentation(subj_dict, output_folder):
     lesion_mask_bin = subj_dict['t2_segmentation_file_rmv_small_lesions']
     lesion_mask_soft = subj_dict['soft_mask_rmv_small_lesions']
 
+    # Security registration
+    t2w_raw_image = subj_dict['rawdata_T2']
+    assert os.system(f"sct_register_multimodal -i {lesion_mask_bin} -d {t2w_raw_image} -identity 1 -o {lesion_mask_bin}  ") == 0
+    assert os.system(f"sct_register_multimodal -i {lesion_mask_soft} -d {t2w_raw_image} -identity 1 -o {lesion_mask_soft}  ") == 0
+
+
     # We multiply the soft segmentation mask by the binary mask to keep only the lesions
     lesion_mask_soft_data = nib.load(lesion_mask_soft).get_fdata()
     lesion_mask_bin_data = nib.load(lesion_mask_bin).get_fdata()
