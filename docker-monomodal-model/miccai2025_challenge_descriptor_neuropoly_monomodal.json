@@ -5,9 +5,9 @@
   "description": "Description of the tool<br />",
   "command-line": "unzip [INPUT_ARCHIVE] -d input; mkdir OUTDIR; python3 scripts/main.py -i input -o OUTDIR && tar -cvzf [OUTPUT_FILE] OUTDIR",
   "schema-version": "0.5",
-   "container-image":{
-	  "type": "docker",
-	  "image": "plbenveniste/ms-challenge-monomodal:1.0"
+  "container-image": {
+    "type": "docker",
+    "image": "plbenveniste/ms-challenge-monomodal:2.0"
   },
   "inputs": [{
       "id": "input_archive",
