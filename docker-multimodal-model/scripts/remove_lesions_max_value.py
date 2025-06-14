@@ -31,7 +31,7 @@ threshold = 0.4  # Threshold for lesion max voxel value
 
 
 
-def remove_lesions_max_value(subj_dict, output_folder, threshold=0.4):
+def remove_lesions_max_value(subj_dict, output_folder, threshold=0.3):
     """
     Remove lesions based on the soft mask's max value. Lesions with max value < threshold
     are removed from both the T2 binary segmentation and the soft segmentation.

@@ -29,7 +29,7 @@ def majority_vote(volumes, t):
     if t == "STIR":
         return (vote_sum > 0.5).astype(np.uint8), (vote_sum/5)
     else : 
-        return (vote_sum >= 2.5).astype(np.uint8), (vote_sum/5)
+        return (vote_sum > 2.5).astype(np.uint8), (vote_sum/5)
 
 def postprocess_segmentation(subj_dict):
     # Build a temp folder in the output folder

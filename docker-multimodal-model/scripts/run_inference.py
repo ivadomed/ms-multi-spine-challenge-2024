@@ -33,18 +33,13 @@ def parse_args():
 
 def run_inference(subj_dict, output_folder):
 
-    # Build a temp folder in the output folder
-    temp_folder = os.path.join(output_folder, "temp_inference")
-    os.makedirs(temp_folder, exist_ok=True)
     
-
     # Step 1: Run inference for each fold
 
     input_image = subj_dict['seg_path']
 
     for fold in range(5):
         # Run inference for the fold
-        print(f"nnUNetv2_predict -i {input_image} -o {output_folder}/fold_{fold}/prediction -d 200 -p nnUNetResEncUNetLPlans -tr nnUNetTrainerDA5_150epochs -c 2d -f {fold} -chk checkpoint_best_{fold}.pth -device cpu")
         assert os.system(f"nnUNetv2_predict -i {input_image} -o {output_folder}/fold_{fold}/prediction -d 200 -p nnUNetResEncUNetLPlans -tr nnUNetTrainerDA5_150epochs -c 2d -f {fold} -chk checkpoint_best_{fold}.pth -device cpu") == 0
     
 

@@ -27,11 +27,7 @@ def parse_args():
 min_volume = 18  # Threshold in voxel unit to remove small lesions
 
 
-
-
-
-
-def remove_small_lesions(subj_dict, output_folder, min_volume=18):
+def remove_small_lesions(subj_dict, output_folder, min_volume=50):
     """
     Removes lesions smaller than `min_volume` voxels from both the binary T2 segmentation
     and the soft segmentation (after lesion max filtering).

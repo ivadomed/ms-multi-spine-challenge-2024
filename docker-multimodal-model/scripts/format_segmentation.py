@@ -77,11 +77,10 @@ def format_segmentation(subj_dict, output_folder):
     new_img = nib.Nifti1Image(instances, orig_nifti.affine, header=orig_nifti.header.copy())
 
     # Round pixdim (voxel spacing) to 5 decimal places
-    pixdim = new_img.header.get_zooms()
-    rounded_pixdim = tuple(round(p, 5) for p in pixdim)
-
+    t2w_raw_image = nib.load(subj_dict['rawdata_T2'])
+    
     # Update the pixdim in the header
-    new_img.header.set_zooms(rounded_pixdim)
+    new_img.header.set_zooms(t2w_raw_image.header.get_zooms())  # Assuming 4th dimension is time or similar
 
     # Save the instance segmentation as a NIfTI file
     instance_segmentation_path = os.path.join(output_folder, "instance_segmentation.nii.gz")

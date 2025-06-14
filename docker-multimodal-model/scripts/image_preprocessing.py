@@ -37,8 +37,6 @@ subj_dict = {
     "preprocessed_MP2RAGE": None,
 }
 
-
-
 def preprocess_images(input_images, output_folder):
 
     

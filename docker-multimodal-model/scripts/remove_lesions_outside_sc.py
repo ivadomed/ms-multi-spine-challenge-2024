@@ -95,9 +95,6 @@ def remove_lesions_outside_sc(subj_dict, output_folder):
     subj_dict['soft_mask_rmv_lesions_outside_sc'] = os.path.join(output_folder, Path(subj_dict["soft_mask"]).name.replace('.nii.gz', '_rmv_lesions_outside_sc.nii.gz'))
     
 
-    # Remove the temporary folder
-    #assert os.system(f"rm -rf {temp_folder}") == 0
-
     return subj_dict
 
 

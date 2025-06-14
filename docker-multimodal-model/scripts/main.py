@@ -25,8 +25,6 @@ from image_preprocessing import preprocess_images
 from run_inference import run_inference
 from remove_lesions_outside_sc import remove_lesions_outside_sc
 from remove_lesions_max_value import remove_lesions_max_value
-from merge_predictions import merge_predictions
-from binarize_prediction import binarize_prediction
 from remove_small_lesions import remove_small_lesions
 from format_segmentation import format_segmentation
 from pred_postprocessing import postprocess_segmentation
