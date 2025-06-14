@@ -22,7 +22,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def run_inference(input_image,  fold_number, temp_folder):
+def run_inference(input_folder, fold_number, temp_folder):
     """
     This scripts runs the inference on a single image on only one fold at a time.
     """
@@ -31,13 +31,14 @@ def run_inference(input_image,  fold_number, temp_folder):
     os.makedirs(temp_folder_fold, exist_ok=True)
 
     # Run inference
-    assert os.system(f"nnUNetv2_predict -i {input_image} -o {temp_folder_fold} -d 151 -p nnUNetResEncUNetLPlansFinetune -tr nnUNetTrainerDAExt_DiceCELoss_noSmooth_unbalancedSampling_500epochs_fromScratch -c 3d_fullres -f {fold_number} -chk checkpoint_best.pth -device cpu") == 0
+    print(f"nnUNetv2_predict -i {input_folder} -o {temp_folder_fold} -d 151 -p nnUNetResEncUNetLPlansFinetune -tr nnUNetTrainerDAExt_DiceCELoss_noSmooth_unbalancedSampling_500epochs_fromScratch -c 3d_fullres -f {fold_number} -chk checkpoint_best.pth -device cpu")
+    assert os.system(f"nnUNetv2_predict -i {input_folder} -o {temp_folder_fold} -d 151 -p nnUNetResEncUNetLPlansFinetune -tr nnUNetTrainerDAExt_DiceCELoss_noSmooth_unbalancedSampling_500epochs_fromScratch -c 3d_fullres -f {fold_number} -chk checkpoint_best.pth -device cpu") == 0
 
-    # Build output image path (output folder and image name)
-    output_image = os.path.join(temp_folder_fold, Path(input_image).name.replace('_file', ''))
+    # output image is the only file in the temp folder_fold
+    output_image = list(Path(temp_folder_fold).rglob("*.nii.gz"))[0]
 
     # Rename the output image to include the fold number
-    output_image_new = output_image.replace('.nii.gz', f'_fold{fold_number}.nii.gz')
+    output_image_new = str(output_image).replace('.nii.gz', f'_fold{fold_number}.nii.gz')
     assert os.system(f"mv {output_image} {output_image_new}") == 0
 
     return output_image_new
@@ -64,20 +65,36 @@ def run_inference_on_all_images(subj_dict, output_folder):
         ## Reorient the inference file to the RPI orientation
         reorient_inference_file = os.path.join(temp_folder, "reorient_inference_file.nii.gz")
         assert os.system(f"sct_image -i {inference_file} -setorient RPI -o {reorient_inference_file}") == 0
+        
         ## Initialize the pred_path list
         file_preds = []
+
+        ## Move inference file to a temp folder
+        temp_inference_nnunet_folder = os.path.join(temp_folder, "nnunet_inference")
+        os.makedirs(temp_inference_nnunet_folder, exist_ok=True)
+        assert os.system(f"cp {reorient_inference_file} {temp_inference_nnunet_folder}/file_0000.nii.gz") == 0
+
+        # print the content of temp_inference_nnunet_folder
+        print("Content of temp_inference_nnunet_folder:")
+        print(os.listdir(temp_inference_nnunet_folder))
+
         ## Inference should be run on the 5 folds of the model
         for fold_nb in range(5):
             print(f"Running inference on the image (fold {fold_nb})...")
             # Run inference
-            pred_fold_i = run_inference(reorient_inference_file, fold_nb, temp_folder)
+            pred_fold_i = run_inference(temp_inference_nnunet_folder, fold_nb, temp_folder)
             # Append the prediction to the list
             file_preds.append(pred_fold_i)
+
+        # Remove the temp_inference_nnunet_folder
+        # assert os.system(f"rm -rf {temp_inference_nnunet_folder}") == 0
+
         ## Aggregate the predictions
         pred_aggregated = os.path.join(temp_folder, "pred_aggregated.nii.gz")
         assert os.system(f"sct_maths -i {file_preds[0]} -add {file_preds[1]} {file_preds[2]} {file_preds[3]} {file_preds[4]} -o {pred_aggregated} -type float64") == 0
         pred_avg = os.path.join(temp_folder, "pred_avg.nii.gz")
         assert os.system(f"sct_maths -i {pred_aggregated} -div 5 -o {pred_avg}") == 0
+
         ## Move the predictions back to the original orientation
         inference_file_orientation = Image(inference_file).orientation
         assert os.system(f"sct_image -i {pred_avg} -setorient {inference_file_orientation} -o {pred_avg}") == 0
@@ -96,7 +113,7 @@ def run_inference_on_all_images(subj_dict, output_folder):
         assert os.system(f"cp {pred_reg} {output_segmentation}") == 0
         
     # Clean up the temporary folder
-    assert os.system(f"rm -rf {temp_folder}") == 0
+    # assert os.system(f"rm -rf {temp_folder}") == 0
 
     return subj_dict
 

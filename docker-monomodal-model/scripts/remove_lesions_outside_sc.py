@@ -98,7 +98,7 @@ def remove_lesions_outside_sc(subj_dict, output_folder):
         other_image['segmentation_file_rmv_lesions_outside_sc'] = other_image['segmentation_file'].replace('.nii.gz', '_rmv_lesions_outside_sc.nii.gz')
 
     # Remove the temporary folder
-    assert os.system(f"rm -rf {temp_folder}") == 0
+    # assert os.system(f"rm -rf {temp_folder}") == 0
 
     return subj_dict
 

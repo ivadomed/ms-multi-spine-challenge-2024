@@ -112,12 +112,12 @@ def preprocess_images(input_images, output_folder):
         subj_dict["other_images"][subj_dict["other_images"].index(other_image)]["inference_file"] = other_image_inference_file
     
     # We remove the temp folder
-    assert os.system(f"rm -rf {temp_folder}") == 0
+    # assert os.system(f"rm -rf {temp_folder}") == 0
 
     # Return the subject dictionary
     return subj_dict
 
 
-if __name__ == "__main__":
-    args = parse_args()
-    subj_dict = preprocess_images(args.input_images, args.output_folder)
+# if __name__ == "__main__":
+#     args = parse_args()
+#     subj_dict = preprocess_images(args.input_images, args.output_folder)

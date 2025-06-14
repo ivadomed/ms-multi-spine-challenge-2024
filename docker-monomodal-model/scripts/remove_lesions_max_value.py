@@ -73,7 +73,7 @@ def remove_lesions_max_value(subj_dict, output_folder):
             subj_dict['other_images'][i-1]['segmentation_file_rmv_lesions_max_value'] = modified_lesion_mask_path
 
     # Remove the temp folder
-    assert os.system(f"rm -rf {temp_folder}") == 0
+    # assert os.system(f"rm -rf {temp_folder}") == 0
 
     return subj_dict
 

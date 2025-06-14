@@ -27,7 +27,7 @@ The instructions were the following: _your method that can be run with two argum
 
 To build the docker: 
 ```console
-docker build --platform linux/amd64 -t ms-challenge-monomodal ms-multi-spine-challenge-2024/docker-monomodal-model/.
+docker build --platform linux/amd64 -t ms-challenge-monomodal:1.0 ms-multi-spine-challenge-2024/docker-monomodal-model/.
 ```
 
 > [!NOTE]  
@@ -35,9 +35,24 @@ docker build --platform linux/amd64 -t ms-challenge-monomodal ms-multi-spine-cha
 
 To run the docker:
 ```console
-docker run --rm -v /home/GRAMES.POLYMTL.CA/p119007/duke/temp/plben/ms-challenge-docker/sub-001:/input -v /home/GRAMES.POLYMTL.CA/p119007/duke/temp/plben/ms-challenge-docker/output_sub001:/output  ms-challenge-monomodal -i /input -o /output
+docker run --rm --ipc=host  -v /home/ge.polymtl.ca/thdaga/docker_pl/sub-001:/input -v /home/ge.polymtl.ca/thdaga/docker_pl/output_sub001:/output  plbenveniste/ms-challenge-monomodal -i /input -o /output
 ```
 
 > [!NOTE]  
 > the `--rm` flag makes sure that the docker is closed at the end  
 > the `-v` flag mounts the volume, so that they are visible to the docker
+> the `--ipc=host` flag allows to prevent bus problem with nnUNet: [issue 40](https://github.com/ivadomed/ms-multi-spine-challenge-2024/issues/40)
+
+Then push the Docker: 
+```console
+docker login -u plbenveniste
+docker push plbenveniste/ms-challenge-monomodal:1.0
+```
+
+Then I created the boutique descriptor of my tool miccai2025_challenge_descriptor_neuropoly_monomodal.json
+Then I also created the invocation file miccai2025_challenge_invocation_neuropoly_monomodal.json
+
+Finally to validate everything, I did: 
+- Install Boutiques: `pip install boutiques`
+- Validate your descriptor: `bosh validate miccai2025_challenge_descriptor_neuropoly_monomodal.json`
+- Execute the tool: `bosh exec launch miccai2025_challenge_descriptor_neuropoly_monomodal.json miccai2025_challenge_invocation_neuropoly_monomodal.json`x
