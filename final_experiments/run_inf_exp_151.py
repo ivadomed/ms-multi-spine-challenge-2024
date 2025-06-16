@@ -1,5 +1,7 @@
 """
-In this script we run the inference for experiment 151.
+In this script we run the inference (for model 151).
+
+Author: Pierre-Louis Benveniste
 """
 import json
 import os
@@ -17,16 +19,16 @@ from image import Image
 def parse_args():
     parser = argparse.ArgumentParser(description="Run inference for experiment 251.")
     parser.add_argument('--gpu', action='store_true', help='GPU to use for inference. Default is 0.')
+    parser.add_argument("--image_dict", type=str, required=True, help="Path to the JSON file containing image metadata.")
+    parser.add_argument("--output_folder", type=str, required=True, help="Path to the output folder where subject folders will be created.")
+    parser.add_argument("--model_path", type=str, required=True, help="Path to the trained model folder.")
     return parser.parse_args()
 
 def main():
     args = parse_args()
-
-    image_dict = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/images_dict.json"
-
-    output_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep"
-
-    model_path ="/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/trained_model_151/Dataset151_MsMultiSpine/nnUNetTrainerDAExt_DiceCELoss_noSmooth_unbalancedSampling_500epochs_fromScratch__nnUNetResEncUNetLPlansFinetune__3d_fullres" 
+    image_dict = args.image_dict
+    output_folder = args.output_folder
+    model_path = args.model_path
 
     # load the json file
     with open(image_dict, "r") as f:

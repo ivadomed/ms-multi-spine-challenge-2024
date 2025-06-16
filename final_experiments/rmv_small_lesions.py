@@ -1,6 +1,8 @@
 """
 This script removes lesions in predictions depending on their sizes (in number of voxels).
 A 0.5 threshold is applied for binarization.
+
+Author: Pierre-Louis Benveniste
 """
 import json
 import os
@@ -8,13 +10,25 @@ import nibabel as nib
 import numpy as np
 from scipy import ndimage
 from tqdm import tqdm
+import argparse
+import matplotlib.pyplot as plt
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Remove small lesions in predictions based on their size.")
+    parser.add_argument('--image_dict', type=str, required=True, help='Path to the JSON file containing image metadata.')
+    parser.add_argument('--pred_folder', type=str, required=True, help='Path to the folder containing predictions.')
+    parser.add_argument('--output_folder', type=str, required=True, help='Path to the output folder where results will be saved.')
+    return parser.parse_args()
 
 
 def main():
 
-    image_dict = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/images_dict.json"
-
-    pred_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep"
+    args = parse_args()
+    # Get the arguments
+    image_dict = args.image_dict
+    pred_folder = args.pred_folder
+    final_output_folder = args.output_folder
 
     # load the json file
     with open(image_dict, "r") as f:
@@ -26,7 +40,7 @@ def main():
 
     lesion_sizes=[]
 
-    for min_volume in [0, 28, 29, 31, 32, 33]:
+    for min_volume in [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]:
         print(f"Processing minimum volume: {min_volume} voxels")
 
         # iterate over the images
@@ -65,7 +79,6 @@ def main():
             modified_mask_path = os.path.join(output_folder, f"segmentation_masked_rmvLesion{min_volume}.nii.gz")
             nib.save(nib.Nifti1Image(mask_data, nib.load(lesion_mask).affine), modified_mask_path)
     
-    final_output_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep_rmv_small_lesions_stats"
     os.makedirs(final_output_folder, exist_ok=True)
     # Save the csv file file with the lesion sizes
     lesion_sizes_path = os.path.join(final_output_folder, "lesion_sizes.csv")
@@ -82,7 +95,6 @@ def main():
         f.write(f"Std: {np.std(lesion_sizes)}\n")
         f.write(f"Median: {np.median(lesion_sizes)}\n")
     # Plot the histogram of the lesion sizes
-    import matplotlib.pyplot as plt
     plt.hist(lesion_sizes, bins=50, density=True)
     plt.xlabel("Lesion Size (voxels)")
     plt.ylabel("Density")

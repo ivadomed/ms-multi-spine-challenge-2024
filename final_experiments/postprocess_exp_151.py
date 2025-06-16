@@ -1,16 +1,27 @@
 """
 This script performs post-processing on the results of experiment 251.
 It removes lesions outside of the spinal cord. 
+
+Author: Pierre-Louis Benveniste
 """
 import json
 import os
 from image import Image, get_dimension
+import argparse
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Post-process results of experiment 251 by removing lesions outside the spinal cord.")
+    parser.add_argument("--image_dict", type=str, required=True, help="Path to the JSON file containing image metadata.")
+    parser.add_argument("--output_folder", type=str, required=True, help="Path to the output folder where subject folders will be created.")
+    return parser.parse_args()
+
 
 def main():
 
-    image_dict = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/images_dict.json"
-
-    output_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep"
+    args = parse_args()
+    image_dict = args.image_dict
+    output_folder = args.output_folder
 
     # load the json file
     with open(image_dict, "r") as f:

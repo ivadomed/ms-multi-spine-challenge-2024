@@ -1,6 +1,7 @@
 """
 In this script, we prepare the experiment (for monomodal 151) by creating folders for each subject with the necessary files for evaluation. This way, we aim at increase the speed of testing. 
 
+Author: Pierre-Louis Benveniste
 """
 import json
 import os

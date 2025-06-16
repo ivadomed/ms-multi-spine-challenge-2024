@@ -1,16 +1,26 @@
 """
 This script performs calibration of the threshold during mask binarization.
+
+Author: Pierre-Louis Benveniste
 """
 import json
 import os
 from tqdm import tqdm
+import argparse
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Perform calibration of the threshold during mask binarization.")
+    parser.add_argument('--image_dict', type=str, required=True, help='Path to the JSON file containing image metadata.')
+    parser.add_argument('--output_folder', type=str, required=True, help='Path to the output folder where results will be saved.')
+    return parser.parse_args()
+
 
 def main():
 
-    image_dict = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/images_dict.json"
-
-    output_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep"
-
+    args = parse_args()
+    image_dict = args.image_dict
+    output_folder = args.output_folder
+    
     # load the json file
     with open(image_dict, "r") as f:
         images_dict = json.load(f)

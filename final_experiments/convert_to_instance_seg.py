@@ -1,5 +1,7 @@
 """
-This scripts computes the lesion_probbaility for each lesion instance. 
+This scripts computes the lesion_probbaility for each lesion instance.
+
+Author: Pierre-Louis Benveniste
 """
 import os
 import nibabel as nib
@@ -7,13 +9,22 @@ from scipy import ndimage
 import numpy as np
 from tqdm import tqdm
 import json
+import argparse
+import matplotlib.pyplot as plt
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Compute lesion probabilities for each lesion instance.")
+    parser.add_argument('--image_dict', type=str, required=True, help='Path to the JSON file containing image metadata.')
+    parser.add_argument('--pred_folder', type=str, required=True, help='Path to the folder containing subject folders with predictions.')
+    return parser.parse_args()
 
 
 def main():
 
-    image_dict = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/images_dict.json"
-
-    pred_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep"
+    args = parse_args()
+    image_dict = args.image_dict
+    pred_folder = args.pred_folder
 
     # load the json file
     with open(image_dict, "r") as f:
@@ -70,15 +81,12 @@ def main():
     list_lesion_probabilities = [lesion["lesion_probability"] for lesion in lesion_probabilities]
     
     # Now we want to plot the histogram of the lesion probabilities
-    import matplotlib.pyplot as plt
     plt.hist(list_lesion_probabilities, bins=50, density=True)
     plt.xlabel("Lesion Probability")
     plt.ylabel("Density")
     plt.title("Histogram of Lesion Probabilities")
     plt.savefig(os.path.join(pred_folder, "lesion_probabilities_histogram.png"))
 
-    # Now we want to obtain a normalized
-    lesion_probabilities_normalized = []
     
 if __name__ == "__main__":
     main()

@@ -1,5 +1,7 @@
 """
 This script removes lesions in predictions if the max value of the lesion mask is below a certain threshold.
+
+Author: Pierre-Louis Benveniste
 """
 import json
 import os
@@ -12,16 +14,16 @@ import argparse
 def parse_args():
     parser = argparse.ArgumentParser(description="Remove lesions in predictions if the max value of the lesion mask is below a certain threshold.")
     parser.add_argument('--thresh', type=float, required=True, help='Threshold for removing lesions.')
+    parser.add_argument('--image_dict', type=str, required=True, help='Path to the JSON file containing image metadata.')
+    parser.add_argument('--pred_folder', type=str, required=True, help='Path to the folder containing predictions.')
     return parser.parse_args()
 
 def main():
 
-    image_dict = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/images_dict.json"
-
-    pred_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep"
-
     args = parse_args()
     thresh = args.thresh
+    image_dict = args.image_dict
+    pred_folder = args.pred_folder
 
     # load the json file
     with open(image_dict, "r") as f:

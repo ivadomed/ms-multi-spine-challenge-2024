@@ -1,5 +1,7 @@
 """
 This script evaluates the performance of the calibration of the model
+
+Author: Pierre-Louis Benveniste
 """
 import json
 import os
@@ -8,17 +10,25 @@ import numpy as np
 from scipy import ndimage
 from utils import dice_score, lesion_ppv, lesion_f1_score, lesion_sensitivity, normalised_surface_distance
 from tqdm import tqdm
+import argparse
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Evaluate the performance of the removal of small lesions in predictions based on their size.")
+    parser.add_argument('--image_dict', type=str, required=True, help='Path to the JSON file containing image metadata.')
+    parser.add_argument('--input_folder', type=str, required=True, help='Path to the folder containing subject folders with predictions.')
+    parser.add_argument('--output_folder', type=str, required=True, help='Path to the output folder where results will be saved.')
+    return parser.parse_args()
 
 
 def main():
 
-    image_dict = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/images_dict.json"
+    args = parse_args()
+    image_dict = args.image_dict
+    input_folder = args.input_folder
+    output_folder = args.output_folder
 
-    input_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep"
-
-    output_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep_remv_small_lesions"
-
-    # bUild the output folder
+    # Build the output folder
     os.makedirs(output_folder, exist_ok=True)
 
     # load the json file
@@ -30,7 +40,7 @@ def main():
     images = {**training_images, **testing_images}
 
     # for min_volume in [0, 28, 29, 31, 32, 33]:
-    for min_volume in [0]:
+    for min_volume in [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]:
         print(f"Processing minimum volume: {min_volume} voxels")
 
         # Dict of dice score
@@ -57,18 +67,15 @@ def main():
 
             # Load the predictions and the label
             pred_data = nib.load(str(lesion_mask)).get_fdata()
-            print(np.unique(pred_data))
             label_data = nib.load(str(ground_truth)).get_fdata()
             # Binarize label data
             label_data = (label_data > 0).astype(np.uint8)
-            print(np.unique(label_data))
 
             # Get resolution
             resolution = nib.load(str(images[image]["t2w_raw_image"])).header.get_zooms()
 
             # Compute dice score
             dice = dice_score(pred_data, label_data)
-            print(dice)
             ppv = lesion_ppv(label_data, pred_data)
             f1 = lesion_f1_score(label_data, pred_data)
             sensitivity = lesion_sensitivity(label_data, pred_data)
@@ -88,6 +95,7 @@ def main():
         with open(os.path.join(output_folder, f"rmv_small_{min_volume}", f"dice_scores.txt"), "w") as f:
             for key, value in dice_scores.items():
                 f.write(f"{key}: {value}\n")
+        print("Dices saved at", os.path.join(output_folder, f"rmv_small_{min_volume}", f"dice_scores.txt"))
         with open(os.path.join(output_folder, f"rmv_small_{min_volume}", f"ppv_scores.txt"), "w") as f:
             for key, value in ppv_scores.items():
                 f.write(f"{key}: {value}\n")

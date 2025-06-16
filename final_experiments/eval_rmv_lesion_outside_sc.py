@@ -1,5 +1,7 @@
 """
 This script evaluates the performance increase of the post-processing step which removes the lesions outside the spinal cord.
+
+Author: Pierre-Louis Benveniste
 """
 import json
 import os
@@ -8,14 +10,23 @@ import numpy as np
 from scipy import ndimage
 from utils import dice_score, lesion_ppv, lesion_f1_score, lesion_sensitivity, normalised_surface_distance
 from tqdm import tqdm
+import argparse
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Evaluate the performance increase of the post-processing step which removes the lesions outside the spinal cord.")
+    parser.add_argument("--image_dict", type=str, required=True, help="Path to the JSON file containing image metadata.")
+    parser.add_argument("--input_folder", type=str, required=True, help="Path to the input folder containing subject folders with predictions.")
+    parser.add_argument("--output_folder", type=str, required=True, help="Path to the output folder where results will be saved.")
+    return parser.parse_args()
+
 
 def main():
 
-    image_dict = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/images_dict.json"
-
-    input_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep"
-
-    output_folder = "/home/plbenveniste/net/challenge-multi-spine/final_compute_canada_results/exp_151_prep_rmv_lesion_outside_spinal_cord"
+    args = parse_args()
+    image_dict = args.image_dict
+    input_folder = args.input_folder
+    output_folder = args.output_folder
 
     # bUild the output folder
     os.makedirs(output_folder, exist_ok=True)
