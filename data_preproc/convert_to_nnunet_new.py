@@ -9,6 +9,7 @@ Input:
     --task-name: Name of the task for nnUNet.
     --task-number: Number of the task for nnUnet (it has to be 3 digits).
     --dataset-type: Number corresponding to the dataset type we want to create. 
+    --no-test: If set, all the data will be put in the training set and no test set will be created.
 
 Output:
     None
@@ -33,6 +34,7 @@ def parse_arguments():
     parser.add_argument("--task-name", type=str, default="MsMultiSpine", help="Name of the task for nnUNet.")
     parser.add_argument("--task-number", type=str, required=True, help="Number of the task for nnUnet (it has to be 3 digits).")
     parser.add_argument("--dataset-type", type=int, required=True, help="Number corresponding to the dataset type we want to create.")
+    parser.add_argument("--no-test", action='store_true', help="If set, all the data will be put in the training set and no test set will be created.")
     args = parser.parse_args()
     return args
 
@@ -126,7 +128,7 @@ def get_nonzero_bbox(image_data):
     return max_idx, min_idx
 
 
-def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, task_number, dataset_type):
+def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, task_number, dataset_type, no_test):
     """
     This function converts the aggregated data to the nnUNet format.
     """
@@ -162,6 +164,11 @@ def convert_to_nnUNet_format(agg_data, output_dir, path_data_split, task_name, t
     # Split into the training and testing
     training_subjects = data_split_yml['TRAINING']
     testing_subjects = data_split_yml['TESTING']
+
+    if no_test:
+        # If no test set, we put all the data in the training set
+        training_subjects = training_subjects + testing_subjects
+        testing_subjects = []
 
     if dataset_type in [16,17] :
         input1_data, input2_data = agg_data
@@ -443,7 +450,7 @@ def main():
     aggregated_data = agg_data(args.data, args.dataset_type)
 
     # Then we convert it to the nnUnet format
-    image_label_dict = convert_to_nnUNet_format(aggregated_data, args.output, args.path_data_split, args.task_name, args.task_number, args.dataset_type)
+    image_label_dict = convert_to_nnUNet_format(aggregated_data, args.output, args.path_data_split, args.task_name, args.task_number, args.dataset_type, args.no_test)
     
     print("Conversion done.")
 
