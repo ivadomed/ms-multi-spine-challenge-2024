@@ -1,13 +1,13 @@
 {
   "name": "Neuropoly Multimodal Model for MS Multi-Spine Challenge 2024",
-  "tool-version": "0.1",
+  "tool-version": "2.0",
   "author": "Neuropoly",
   "description": "Multimodal model for the MS Multi-Spine Challenge 2024. This model processes input data and generates segmentation results with probability.",
-  "command-line": "unzip [INPUT_ARCHIVE] -d input; mkdir OUTDIR; python3 scripts/main.py -i input -o OUTDIR && tar -cvzf [OUTPUT_FILE] OUTDIR",
+  "command-line": "unzip [INPUT_ARCHIVE] -d input; mkdir outdir; python3 scripts/main.py -i input -o outdir;  tar -cvzf [OUTPUT_FILE] outdir",
   "schema-version": "0.5",
    "container-image":{
 	  "type": "docker",
-	  "image": "tomdag25/ms-seg-challenge2025-multimodal:1.1"
+	  "image": "tomdag25/ms-seg-challenge2025-multimodal:2.0"
   },
   "inputs": [{
       "id": "input_archive",
