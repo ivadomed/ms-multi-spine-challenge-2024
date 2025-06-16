@@ -1,0 +1,28 @@
+{
+  "name": "Neuropoly Multimodal Model for MS Multi-Spine Challenge 2024",
+  "tool-version": "2.0",
+  "author": "Neuropoly",
+  "description": "Multimodal model for the MS Multi-Spine Challenge 2024. This model processes input data and generates segmentation results with probability.",
+  "command-line": "unzip [INPUT_ARCHIVE] -d input; mkdir outdir; python3 scripts/main.py -i input -o outdir;  tar -cvzf [OUTPUT_FILE] outdir",
+  "schema-version": "0.5",
+   "container-image":{
+	  "type": "docker",
+	  "image": "tomdag25/ms-seg-challenge2025-multimodal:2.0"
+  },
+  "inputs": [{
+      "id": "input_archive",
+      "name": "Input archive",
+      "type": "File",
+      "description": "Input archive containing all files available for one patient",
+      "value-key": "[INPUT_ARCHIVE]"
+    }
+  ],
+  "output-files": [{
+      "description" : "Tarball containing results. Results are expected under the form of a .nii and a .csv file, both written in the OUTDIR",
+      "id" : "outarchive",
+      "name" : "Output archive",
+      "path-template": "[INPUT_ARCHIVE]_output.tgz",
+	  "path-template-stripped-extensions": [".zip"],
+      "value-key": "[OUTPUT_FILE]"
+    }]
+}
