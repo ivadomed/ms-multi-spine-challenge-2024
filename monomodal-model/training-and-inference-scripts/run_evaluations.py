@@ -1,5 +1,5 @@
 """
-This script runs the evaluation of the predictions. It uses the script evaluate_semantic_pred.py in the evaluation branch.
+This script runs the evaluation of the predictions. It uses the script evaluate_predictions.py in the evaluation branch.
 
 Input: 
     -pred-folder: The folder containing the predictions.
