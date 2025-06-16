@@ -2,12 +2,15 @@
 In this script we perform postprocessing of the predicted segmentations. 
 
 Input: 
-    -predicted-segmentation: path to the predicted segmentation
-    -subj-dict: dictionary with the paths of the images of the subject
+    -subj_dict: the dictionnary of the subject
+    -output_folder: the output folder where the segmentation masks will be saved
 
-Returns:
-    -postprocessed-segmentation: path to the postprocessed segmentation
+Output:
+    -subj_dict: the updated dictionnary of the subject with the segmentation masks updated
+
+Author: Thomas Dagonneau Pierre-Louis Benveniste
 """
+
 import argparse
 import os
 from pathlib import Path

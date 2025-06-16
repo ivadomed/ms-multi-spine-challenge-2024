@@ -1,6 +1,8 @@
 """
 This script performs the preprocessing: 
-    - for now we don't do anything as this will depend on the specific requirements of the model chosen.
+    - preproc images are all registered to the T2w raw image
+    - images are cropped to the non-zero bounding box of the registered T2w preprocessed image
+    - images are renamed to match the nnUNet naming convention 
 
 Input: 
     -input-images: all the images corresponding to the subject of interest
@@ -8,9 +10,8 @@ Input:
 
 Returns:
     -subj_dict: a dictionary with the paths of the preprocessed images
-    -preprocessed-images: the path of the preprocessed images
 
-Author: Pierre-Louis Benveniste
+Author: Thomas Dagonneau & Pierre-Louis Benveniste
 """
 import argparse
 import os
