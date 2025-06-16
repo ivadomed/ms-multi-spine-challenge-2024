@@ -1,0 +1,114 @@
+"""
+This script evaluates the performance of the calibration of the model
+
+Author: Pierre-Louis Benveniste
+"""
+import json
+import os
+import nibabel as nib
+import numpy as np
+from scipy import ndimage
+from utils import dice_score, lesion_ppv, lesion_f1_score, lesion_sensitivity, normalised_surface_distance
+from tqdm import tqdm
+import argparse
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Evaluate the performance of the removal of small lesions in predictions based on their size.")
+    parser.add_argument('--image_dict', type=str, required=True, help='Path to the JSON file containing image metadata.')
+    parser.add_argument('--input_folder', type=str, required=True, help='Path to the folder containing subject folders with predictions.')
+    parser.add_argument('--output_folder', type=str, required=True, help='Path to the output folder where results will be saved.')
+    return parser.parse_args()
+
+
+def main():
+
+    args = parse_args()
+    image_dict = args.image_dict
+    input_folder = args.input_folder
+    output_folder = args.output_folder
+
+    # Build the output folder
+    os.makedirs(output_folder, exist_ok=True)
+
+    # load the json file
+    with open(image_dict, "r") as f:
+        images_dict = json.load(f)
+
+    training_images = images_dict["training"]
+    testing_images = images_dict["testing"]
+    images = {**training_images, **testing_images}
+
+    # for min_volume in [0, 28, 29, 31, 32, 33]:
+    for min_volume in [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]:
+        print(f"Processing minimum volume: {min_volume} voxels")
+
+        # Dict of dice score
+        dice_scores = {}
+        ppv_scores = {}
+        f1_scores = {}
+        sensitivity_scores = {}
+        nsd_scores = {}
+
+        # iterate over the images
+        for image in tqdm(images):
+            # If contrast is T2, we skip
+            if images[image]["contrast"] == "T2w":
+                continue
+            # Build a folder for each subject
+            sub_folder = os.path.join(input_folder, images[image]["subject_name"])
+            # print("Subject name", images[image]["subject_name"])
+
+            # Build the path to the lesion mask
+            lesion_mask = os.path.join(sub_folder, "output_rmv_small_lesion", f"segmentation_masked_rmvLesion{min_volume}.nii.gz")
+
+            # Build path to the ground truth
+            ground_truth = images[image]["t2w_raw_label_file"]
+
+            # Load the predictions and the label
+            pred_data = nib.load(str(lesion_mask)).get_fdata()
+            label_data = nib.load(str(ground_truth)).get_fdata()
+            # Binarize label data
+            label_data = (label_data > 0).astype(np.uint8)
+
+            # Get resolution
+            resolution = nib.load(str(images[image]["t2w_raw_image"])).header.get_zooms()
+
+            # Compute dice score
+            dice = dice_score(pred_data, label_data)
+            ppv = lesion_ppv(label_data, pred_data)
+            f1 = lesion_f1_score(label_data, pred_data)
+            sensitivity = lesion_sensitivity(label_data, pred_data)
+            nsd = normalised_surface_distance(pred_data, label_data, resolution)
+
+            image_name = image.replace(f"_{images[image]['contrast']}", "_T2w")
+
+            # Save the dice score
+            dice_scores[image_name] = dice
+            ppv_scores[image_name] = ppv
+            f1_scores[image_name] = f1
+            sensitivity_scores[image_name] = sensitivity
+            nsd_scores[image_name] = nsd
+
+        # Save the results
+        os.makedirs(os.path.join(output_folder, f"rmv_small_{min_volume}"), exist_ok=True)
+        with open(os.path.join(output_folder, f"rmv_small_{min_volume}", f"dice_scores.txt"), "w") as f:
+            for key, value in dice_scores.items():
+                f.write(f"{key}: {value}\n")
+        print("Dices saved at", os.path.join(output_folder, f"rmv_small_{min_volume}", f"dice_scores.txt"))
+        with open(os.path.join(output_folder, f"rmv_small_{min_volume}", f"ppv_scores.txt"), "w") as f:
+            for key, value in ppv_scores.items():
+                f.write(f"{key}: {value}\n")
+        with open(os.path.join(output_folder, f"rmv_small_{min_volume}", f"f1_scores.txt"), "w") as f:
+            for key, value in f1_scores.items():
+                f.write(f"{key}: {value}\n")
+        with open(os.path.join(output_folder, f"rmv_small_{min_volume}", f"sensitivity_scores.txt"), "w") as f:
+            for key, value in sensitivity_scores.items():
+                f.write(f"{key}: {value}\n")
+        with open(os.path.join(output_folder, f"rmv_small_{min_volume}", f"nsd_scores.txt"), "w") as f:
+            for key, value in nsd_scores.items():
+                f.write(f"{key}: {value}\n")
+
+
+if __name__ == "__main__":
+    main()
