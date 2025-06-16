@@ -8,3 +8,4 @@ To perform inference we also used the built-in `nnUNetv2_predict` function.
 More information on how to use these functions can be found on this repo. 
 In particular the trainers we used are available in the branch `my_trainers`. 
 For the challenge we used the DA5_150_epochs. 
+For the challenge we used dataset 170 (cf preprocessing). 
