@@ -8,7 +8,7 @@ Input:
 Output:
     -subj_dict: the updated dictionnary of the subject with the segmentation masks updated
 
-Author: Pierre-Louis Benveniste
+Author: Thomas Dagonneau & Pierre-Louis Benveniste
 """
 import argparse
 import os
@@ -27,7 +27,7 @@ def parse_args():
 min_volume = 18  # Threshold in voxel unit to remove small lesions
 
 
-def remove_small_lesions(subj_dict, output_folder, min_volume=50):
+def remove_small_lesions(subj_dict, output_folder, min_volume=18):
     """
     Removes lesions smaller than `min_volume` voxels from both the binary T2 segmentation
     and the soft segmentation (after lesion max filtering).

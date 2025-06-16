@@ -8,7 +8,7 @@ Input:
 Output:
     -subj_dict: the updated dictionnary of the subject with the segmentation masks updated
 
-Author: Pierre-Louis Benveniste
+Author: Thomas Dagonneau Pierre-Louis Benveniste
 """
 import argparse
 import os
@@ -25,9 +25,6 @@ def parse_args():
 
 
 threshold = 0.4  # Threshold for lesion max voxel value
-
-
-
 
 
 
