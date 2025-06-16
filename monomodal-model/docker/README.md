@@ -27,7 +27,7 @@ The instructions were the following: _your method that can be run with two argum
 
 To build the docker: 
 ```console
-docker build -t plbenveniste/ms-challenge-monomodal:2.0 ms-multi-spine-challenge-2024/docker-monomodal-model/.
+docker build -t plbenveniste/ms-challenge-monomodal:2.0 ms-multi-spine-challenge-2024/monomodal-model/docker.
 ```
 
 > [!NOTE]  
