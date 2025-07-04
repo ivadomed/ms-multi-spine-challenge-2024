@@ -27,7 +27,7 @@ The instructions were the following: _your method that can be run with two argum
 
 To build the docker: 
 ```console
-docker build -t plbenveniste/ms-challenge-monomodal:2.0 ms-multi-spine-challenge-2024/monomodal-model/docker.
+docker build -t plbenveniste/ms-challenge-monomodal:3.0 ms-multi-spine-challenge-2024/monomodal-model/docker
 ```
 
 > [!NOTE]  
@@ -35,7 +35,7 @@ docker build -t plbenveniste/ms-challenge-monomodal:2.0 ms-multi-spine-challenge
 
 To run the docker:
 ```console
-docker run --rm -it  -v /home/ge.polymtl.ca/thdaga/docker_pl/sub-001:/input -v /home/ge.polymtl.ca/thdaga/docker_pl/output_sub001:/output  plbenveniste/ms-challenge-monomodal:2.0 -i /input -o /output
+docker run --rm -it  -v /home/ge.polymtl.ca/thdaga/docker_pl/sub-001:/input -v /home/ge.polymtl.ca/thdaga/docker_pl/output_sub001:/output  plbenveniste/ms-challenge-monomodal:3.0 -i /input -o /output
 ```
 
 > [!NOTE]  
@@ -45,7 +45,7 @@ docker run --rm -it  -v /home/ge.polymtl.ca/thdaga/docker_pl/sub-001:/input -v /
 Then push the Docker: 
 ```console
 docker login -u plbenveniste
-docker push plbenveniste/ms-challenge-monomodal:2.0
+docker push plbenveniste/ms-challenge-monomodal:3.0
 ```
 
 Then I created the boutique descriptor of my tool miccai2025_challenge_descriptor_neuropoly_monomodal.json
@@ -55,3 +55,7 @@ Finally to validate everything, I did:
 - Install Boutiques: `pip install boutiques`
 - Validate your descriptor: `bosh validate miccai2025_challenge_descriptor_neuropoly_monomodal.json`
 - Execute the tool: `bosh exec launch miccai2025_challenge_descriptor_neuropoly_monomodal.json miccai2025_challenge_invocation_neuropoly_monomodal.json`
+
+> [!NOTE]  
+> the code was run on SCT version: `ae939b1c3be5f9def829562c82a45cb9dda8dabb`
+> the code was run on nnUnet (from our fork) on commit: `e41816198fb267a94456dc891ecda76394af2921`
