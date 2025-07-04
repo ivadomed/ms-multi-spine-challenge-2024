@@ -62,6 +62,12 @@ def format_segmentation(subj_dict, output_folder):
     for i in range(1, nb_labels + 1):
         # Compute the lesion probability as the mean value of the soft segmentation mask
         lesion_probability = np.mean(individual_instances[i - 1][individual_instances[i - 1] > 0])
+        # This is VERY DIRTY: but in case it happens, there won't be any problem at least
+        # if the lesion probability is NaN, we set it to 0, if the lesion probability is greater than 1, we set it to 0.5
+        if np.isnan(lesion_probability):
+            lesion_probability = 0.2
+        elif lesion_probability > 1:
+            lesion_probability = 0.5
         lesion_probabilities.append({
             "lesion_id": i,
             "lesion_probability": float(lesion_probability)

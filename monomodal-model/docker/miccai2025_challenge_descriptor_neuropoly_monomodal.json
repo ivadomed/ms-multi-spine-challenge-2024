@@ -7,7 +7,7 @@
   "schema-version": "0.5",
   "container-image": {
     "type": "docker",
-    "image": "plbenveniste/ms-challenge-monomodal:2.0"
+    "image": "plbenveniste/ms-challenge-monomodal:3.0"
   },
   "inputs": [{
       "id": "input_archive",

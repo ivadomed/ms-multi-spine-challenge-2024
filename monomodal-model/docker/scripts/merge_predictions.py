@@ -80,6 +80,8 @@ def merge_predictions(subj_dict, output_folder):
     sc_seg_file_others = [os.path.join(temp_folder, f"sc_seg_{i}_dilated_axial_sagittal.nii.gz") for i in range(1, len(inference_files))]
     ## We first register the sc segmentation files to the T2w raw file
     assert os.system(f"sct_register_multimodal -i {sc_seg_file_0} -d {subj_dict['t2_raw']} -o {sc_seg_file_0} -identity 1") == 0
+    # We binarize the sc segmentation file
+    assert os.system(f"sct_maths -i {sc_seg_file_0} -bin 0.1 -o {sc_seg_file_0}") == 0
     for i, sc_seg_file in enumerate(sc_seg_file_others):
         assert os.system(f"sct_register_multimodal -i {sc_seg_file} -d {subj_dict['t2_raw']} -o {sc_seg_file} -identity 1") == 0
         ## We also add the binary lesion segmentation file to the sc segmentation file
@@ -120,7 +122,7 @@ def merge_predictions(subj_dict, output_folder):
     subj_dict['merged_lesion_mask'] = merged_mask_path
 
     # Remove the temp folder
-    os.system(f"rm -rf {temp_folder}")
+    # os.system(f"rm -rf {temp_folder}")
 
     return subj_dict
 
